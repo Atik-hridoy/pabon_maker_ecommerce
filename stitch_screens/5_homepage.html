@@ -1,0 +1,490 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Pabon Maker | Precision in Education</title>
+<!-- Tailwind & Google Fonts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Space+Grotesk:wght@500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#e7eeff",
+                    "primary-container": "#0052ff",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-primary-container": "#dfe3ff",
+                    "surface": "#f9f9ff",
+                    "on-secondary-fixed": "#002113",
+                    "secondary-fixed": "#6ffbbe",
+                    "inverse-surface": "#263143",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#434656",
+                    "tertiary-container": "#5153de",
+                    "on-primary-fixed": "#001452",
+                    "on-background": "#111c2d",
+                    "primary": "#003ec7",
+                    "inverse-on-surface": "#ecf1ff",
+                    "tertiary": "#3737c5",
+                    "tertiary-fixed": "#e1e0ff",
+                    "primary-fixed-dim": "#b7c4ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "surface-bright": "#f9f9ff",
+                    "on-surface": "#111c2d",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#006c49",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#004ced",
+                    "secondary-container": "#6cf8bb",
+                    "surface-variant": "#d8e3fb",
+                    "on-primary-fixed-variant": "#0038b6",
+                    "on-tertiary-container": "#e3e2ff",
+                    "outline-variant": "#c3c5d9",
+                    "primary-fixed": "#dde1ff",
+                    "on-tertiary-fixed": "#07006c",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "outline": "#737688",
+                    "error": "#ba1a1a",
+                    "background": "#f9f9ff",
+                    "inverse-primary": "#b7c4ff",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "surface-dim": "#cfdaf2",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f0f3ff",
+                    "surface-container-high": "#dee8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "max-width": "1440px",
+                    "margin-desktop": "64px",
+                    "unit": "4px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "title-sm": ["Space Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-md-mobile": ["Space Grotesk"],
+                    "display-lg": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "code-label": ["JetBrains Mono"],
+                    "headline-md": ["Space Grotesk"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "title-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-label": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .circuit-trace {
+            background-image: radial-gradient(circle, #003ec7 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .bento-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: #003ec7;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-fixed-dim selection:text-on-primary-fixed">
+<!-- TopNavBar Shell -->
+<nav class="fixed top-0 w-full backdrop-blur-xl bg-surface/80 z-50 border-b border-outline-variant/30">
+<div class="max-w-max-width mx-auto flex justify-between items-center px-margin-desktop h-20">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2"><img src="https://lh3.googleusercontent.com/aida/AP1WRLtbjd3JvAlcFvA5h5MHPfo1G2ERzqVmwDwWoKK0FnfYfHrp5nIfWkoC7y1XHwbfPNKQIl63vHHYDx7NIqExKMBweOxsXgtH0XtL6gQMCOciQHm529whq9F8ySG5RrxNQCvlPjMFviBnQ5XHnRwTKo50zHK3s2d-R9PLFrVl33AkyhrfRGuMjbAeyV1Xz10JYGm3zbVbEZHnyD8XYbmpQsUasrXL8JEPy_6xNK42hcQ4dU3fTBHo2TaeAPc" alt="Pabon Maker Logo" class="h-10 w-auto object-contain"></div>
+<div class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary transition-all duration-100 ease-in-out" href="#">Circuits</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Components</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Tutorials</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Workshops</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container border border-outline-variant px-4 py-2 rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:outline-none w-64 transition-all" placeholder="Search components..." type="text">
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-outline">search</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[80vh] flex items-center overflow-hidden bg-surface-container-low">
+<!-- Background Decoration -->
+<div class="absolute inset-0 circuit-trace opacity-20"></div>
+<div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="max-w-max-width mx-auto px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center relative z-10">
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-primary-container/10 border border-primary/20 rounded-full">
+<span class="font-code-label text-code-label text-primary">VERSION 4.2 NOW LIVE</span>
+<div class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
+</div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-none">
+                        Engineer Your <span class="text-primary italic">Ideas.</span><br>
+                        Master the Circuit.
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+                        Premium electronic components and industry-grade learning pathways. From basic Arduino kits to advanced IoT architecture, we provide the precision you need.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-4 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary/90 transition-all flex items-center gap-2">
+                            Explore Components
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="px-8 py-4 border border-outline text-primary font-bold rounded-lg hover:bg-primary/5 transition-all">
+                            Learning Hub
+                        </button>
+</div>
+</div>
+<div class="hidden lg:block relative">
+<div class="relative z-10 rounded-2xl overflow-hidden border border-outline-variant shadow-2xl">
+<img class="w-full aspect-square object-cover" data-alt="A professional studio photograph of a highly complex, futuristic printed circuit board with glowing electric blue LED paths and high-end macro details. The background is a clean, minimalist laboratory setting with soft focus on precision tools. The lighting is crisp and cold, emphasizing the metallic textures and engineering excellence of the hardware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT_45k-03IFAjsz2iAhk9-QbPC3s0gS3crpl8F2W6TIlcW1kkxbs96bihGnA1mX13E7FYx_ayfeY9-fBjtrh33XCrCJjgjoLqEArQBuFn9fz-RzbNQhefCeWCi3WRcefEw4VxULhqABmcbjbIlfXAu3kdugEXbRO6X3JobRfph0UGtj4uQbGOpLBz-Y9gztRvfmKuEwOllW1Es0Rb9vjHkvkd-WOLFWxtTiR9ushXZ6EdRfyTH-dCRMHvbKamo1hcecr_h8_HCO9iE">
+</div>
+<!-- Floating Tech Spec -->
+<div class="absolute -bottom-8 -left-8 glass-panel p-6 rounded-xl border border-outline-variant/30 shadow-xl z-20 max-w-[240px]">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">developer_board</span>
+<span class="font-code-label text-code-label uppercase">Module Alpha-9</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center text-caption font-caption">
+<span class="text-on-surface-variant">Voltage</span>
+<span class="text-primary">3.3V - 5V</span>
+</div>
+<div class="border-t border-dotted border-outline-variant w-full"></div>
+<div class="flex justify-between items-center text-caption font-caption">
+<span class="text-on-surface-variant">Interface</span>
+<span class="text-primary">I2C / SPI</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories Bento Grid -->
+<section class="py-24 bg-surface">
+<div class="max-w-max-width mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div>
+<span class="font-code-label text-code-label text-primary uppercase tracking-widest">Inventory</span>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-2">Hardware Categories</h2>
+</div>
+<a class="text-primary font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                        View All Collections <span class="material-symbols-outlined">trending_flat</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-gutter h-[800px] md:h-[600px]">
+<!-- Arduino Large Card -->
+<div class="md:col-span-2 md:row-span-2 bento-card relative overflow-hidden rounded-2xl border border-outline-variant group transition-all duration-700 opacity-100">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A macro shot of an Arduino Uno board resting on a pristine white surface. Soft overhead lighting highlights the blue solder mask and the silver metallic headers. The composition is artistic and minimalist, emphasizing the iconic design of the microcontroller in a clean-room aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCigePqxRUPrByroq9y8eQwpWurus09r2wVof2itSlDxIaH67KgWfSJA9X53l583NuBhP47nRBJ9gc_NCOZKdoygBPuzbzswQfBN43vS9mNCkxNufMJHkNKdAcb-n9rbbrz-1RL6YygW8SBs-dHIHjAKmX2JfO_J7L5sqA_nXk3EBqNj4cin7tmnbn8Fa7EoSPVWYciaiZTc3qpxzGvHDSh1L_BnSKi7qWOSKXoeCv0p2a9P62SqaQmEuKXPVscKjl1gn_I18oU_w2A')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+<div class="absolute bottom-0 p-8">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Arduino Ecosystem</h3>
+<p class="text-on-surface-variant mb-6 max-w-sm">From Uno to Portenta, find every controller for your next automation project.</p>
+<button class="px-6 py-3 bg-surface-container-highest text-primary font-bold rounded hover:bg-primary hover:text-on-primary transition-colors">Browse Kits</button>
+</div>
+</div>
+<!-- IoT Card -->
+<div class="md:col-span-2 bento-card relative overflow-hidden rounded-2xl border border-outline-variant group bg-surface-container transition-all duration-700 opacity-100">
+<div class="flex h-full p-8 items-center gap-8">
+<div class="flex-1">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-2">IoT &amp; Connectivity</h3>
+<p class="text-caption font-caption text-on-surface-variant">ESP32, LoRaWAN, and Zigbee modules for seamless networking.</p>
+</div>
+<div class="w-32 h-32 rounded-lg overflow-hidden border border-outline-variant/30 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up of a modern ESP32 wifi module with its distinctive silver shielding and tiny antenna, laid out on a blueprint design background. Corporate tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMRhWO_CMAWBECMvGo56Kmj0er-tQgMYL3WOE7Ec-rs0CPz9wtfJWG7rtbWwW8JQBzZJLC28Jv8gyapOYkhhOjOhiNq8TEFnqD3NP9gbt6uJ2vu-AT8Lq3PBiuSY1jSOuhXbCJ_9H5pGn5_geI0b1u3HCtBqRPBoij_lf_K8zn62B3XnzTQjHvBy6NhJgmmVCdEKQHXrtIkj2Pa6Ew8a1WwjD6VPXtGa5JPGfH1gc4yGlu8m6XVjHz7VwpZiRtOzd2q8gA4iGoQQ9G">
+</div>
+</div>
+</div>
+<!-- Power Electronics -->
+<div class="md:col-span-1 bento-card flex flex-col p-8 rounded-2xl border border-outline-variant bg-surface-container-lowest justify-between transition-all duration-700 opacity-100">
+<div class="w-12 h-12 bg-primary-container/20 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">bolt</span>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface mb-1">Power</h3>
+<p class="text-caption font-caption text-on-surface-variant">Regulators, Buck converters, LiPo management.</p>
+</div>
+</div>
+<!-- Sensors -->
+<div class="md:col-span-1 bento-card flex flex-col p-8 rounded-2xl border border-outline-variant bg-inverse-surface text-inverse-on-surface justify-between transition-all duration-700 opacity-100">
+<div class="w-12 h-12 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">sensors</span>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm mb-1">Sensors</h3>
+<p class="text-caption font-caption opacity-70">IMUs, LiDAR, and environmental probes.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- New Component Arrivals -->
+<section class="py-24 bg-surface-container-lowest">
+<div class="max-w-max-width mx-auto px-margin-desktop">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<span class="font-code-label text-code-label text-primary">JUST LANDED</span>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-2">New Component Arrivals</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Product 1 -->
+<div class="group">
+<div class="relative aspect-square rounded-xl overflow-hidden bg-surface-container border border-outline-variant mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="High resolution product shot of a high-power MOSFET driver module. Precise soldering, clean traces, and industrial design. White background, neutral studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfsZ_JvwnXnTgdZDEyscfi1FzEghX_OuQzBPR6pS8r4IaC_22kHqUVdQvXhqZrf3rXEoMHM4G82KaIdIcnqPas1mqph1p5E0aFapwjUi04I2Fl9qSAD-YzPsk5JAW9-QRjCgnEwdInkTe-2vSHVUOItd-CxVaiS7I8ncpEZ4vCVUNQYf2D17W3jTYxpnaZEps5h4-Scb6gqpnF9R1vTOpsNFcumfRc_jUNvK8ix2HRfXT_kavHIuD87BuAZ6dOMSuxgaGYqLXtKgmP">
+<div class="absolute top-4 left-4 bg-primary text-on-primary px-2 py-1 text-caption font-caption rounded">NEW</div>
+</div>
+<span class="font-code-label text-caption text-outline mb-1 block uppercase">Power Management</span>
+<h4 class="font-title-sm text-title-sm text-on-surface mb-2">High-Side MOSFET Driver</h4>
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-primary">$12.50</span>
+<button class="p-2 border border-outline-variant rounded-full hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group">
+<div class="relative aspect-square rounded-xl overflow-hidden bg-surface-container border border-outline-variant mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A tiny camera module for microcontrollers with a visible lens and gold-plated pins. Professional electronic photography style, crisp and detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDopdluKcxzpZtYRiS5NuHv_irdaDWY25DMDWNOyqxwebqN24fWNEU2sFi5-xDritx8X6fJ0QOCTm4i5uzxIM5AyX2al3CT6Q-usNCO9gF61__DzQtUGu_swrVsDOUUBsrxO21DM8ZELCM-8eL3EsxCzp5rqzAihCsisOpYa5PKg5ANuc9VvuPa98N_rc-HDbWz0wOgzWbHGnJpHwJjxQuB_85SZKpIL2s6R79p8dohfl9013-W5tDJ1rMIzC5xO9diFyN_3edDI2Dj">
+</div>
+<span class="font-code-label text-caption text-outline mb-1 block uppercase">Vision Systems</span>
+<h4 class="font-title-sm text-title-sm text-on-surface mb-2">Micro-CMOS Cam Module</h4>
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-primary">$24.99</span>
+<button class="p-2 border border-outline-variant rounded-full hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group">
+<div class="relative aspect-square rounded-xl overflow-hidden bg-surface-container border border-outline-variant mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A precision OLED display panel with vibrant blue text showing diagnostic data. The panel is mounted on a small breakout board. Dark tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpBV-vBZquwvV0QhXUL7glekKXNANdB67KMXlc-ddHJ6tcRCal2j9NmSaJKvjjGYVjpyQkddaBdNORgVB2CBg_um8px5OIcHqw4H2EGLeT_2eOd3tJyg-NaP-eWyqWn4HW3gf1C1HWznlZTzmi6fcmHMt5ChYUP5_W-cJEsceTz2PvzUeDqGRNV_ZHsk4aTzJwieSowyIp-vsq_qOmJWcCjsa7RosjjHu-jMwxLQMlV06VjGjg0-vW3zCX-498Ibtq5_z-JEYE55zd">
+</div>
+<span class="font-code-label text-caption text-outline mb-1 block uppercase">Displays</span>
+<h4 class="font-title-sm text-title-sm text-on-surface mb-2">0.96" OLED I2C Display</h4>
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-primary">$8.20</span>
+<button class="p-2 border border-outline-variant rounded-full hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group">
+<div class="relative aspect-square rounded-xl overflow-hidden bg-surface-container border border-outline-variant mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="A high-precision barometric pressure sensor on a purple PCB with delicate gold pads. Macro electronic components photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAORUCVgm6Jrtcrkzu5DJYV1fdpXkAvUTcnmC-NIVpcsXhQO58ECUNEsQZPRtDmMEwMyTrGwna5GxVSBnLRxFY3ZcThdhrIC9T48JskHwrfUSQ8Yzb_kpn_47tW4S-oUd2v0EsEuyRBef9oUvFQkLGjMJ83pJ5wC4kC0CiIFYg0DRGOa_io3N1sd8h7B_lGP4VqNnRWkcyZ1AToL8MdBPb8JAzTNCQfHfejoiOAA9iKLeedd1-vETOhc4uLLOe1dE1-Tm4z75AUgm7U">
+</div>
+<span class="font-code-label text-caption text-outline mb-1 block uppercase">Sensors</span>
+<h4 class="font-title-sm text-title-sm text-on-surface mb-2">Precision Altimeter IC</h4>
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-primary">$15.75</span>
+<button class="p-2 border border-outline-variant rounded-full hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Top Learning Guides -->
+<section class="py-24 bg-surface relative overflow-hidden">
+<div class="absolute right-0 top-0 w-1/3 h-full bg-primary/5 -skew-x-12 transform origin-top translate-x-20"></div>
+<div class="max-w-max-width mx-auto px-margin-desktop relative z-10">
+<div class="flex items-center justify-between mb-16">
+<h2 class="font-headline-md text-headline-md text-on-surface">Top Learning Guides</h2>
+<button class="text-primary font-bold flex items-center gap-2">
+                        Browse Academy
+                        <span class="material-symbols-outlined">school</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Guide 1 -->
+<div class="group cursor-pointer">
+<div class="overflow-hidden rounded-xl mb-6 relative">
+<img class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A top-down view of an organized workbench with an oscilloscope, a soldering iron, and several schematic diagrams spread out. The scene is lit with warm workstation lamps, creating a focused, educational atmosphere for electronics beginners." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9Kfa9khPE3X0aBHYGMR84F0AfY_VqnhAGdaiKG5wiamvAAs5WghlMLDSrDczkeIQIm-mHsd5yV9FUcMeNKsEczsPF9wYKwW5Tp6XFBILT_zBHc7zsGP6ArRbVgIKv69yxlvhxPavVxNaiyzNZDf6Mcxz---L7DLDWrEhQjmXLxfuusZ7VFSQg3UUlkUxV817KzC8qmXhOrv4G4WL_mSW5TtBfybQGBBRDdtWm0m8xvP7MoWl1HMaGBa1jnoYiCltXYQ2oT5UQedYf">
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full text-caption font-code-label">BEGINNER</span>
+</div>
+</div>
+<h3 class="font-title-sm text-title-sm text-on-surface group-hover:text-primary transition-colors mb-2">Foundations of Circuit Design</h3>
+<p class="text-on-surface-variant font-body-md line-clamp-2">Master Ohm's Law and basic schematic reading in this comprehensive 12-part series.</p>
+</div>
+<!-- Guide 2 -->
+<div class="group cursor-pointer">
+<div class="overflow-hidden rounded-xl mb-6 relative">
+<img class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A dark-themed workspace showing a laptop screen with C++ code next to an illuminated ESP32 board. The RGB LEDs on the board are glowing in a spectrum, reflecting the IoT coding theme. High-tech and modern vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9W2P2ppJibytT_BBaZro4OIGM2Oy1JLYvK2DmjGPF9xYsEuuQG2fgDuak3PFNa5I8QKC9pMcOIL-0Ui-ylpj0MtDDL1OMedXFRvNcmbqskqzEC_91KDHz-6bqa1X6kfBzWNAWlUL6ynBt9hnJEafE74EPPgqBNgzdXQb72KALSbOEx8RVeno2emUAW9GgIRzZbPp805AZF8M3GH39xE-HZ_-72zDgX-NROC6Y3us_sRLf-ymm7ePjOOEFcfeEiTaud0241Dt90yeC">
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-tertiary text-on-tertiary px-3 py-1 rounded-full text-caption font-code-label">ADVANCED</span>
+</div>
+</div>
+<h3 class="font-title-sm text-title-sm text-on-surface group-hover:text-primary transition-colors mb-2">Mastering IoT with ESP32</h3>
+<p class="text-on-surface-variant font-body-md line-clamp-2">Connect your devices to the cloud using MQTT and custom dashboarding.</p>
+</div>
+<!-- Guide 3 -->
+<div class="group cursor-pointer">
+<div class="overflow-hidden rounded-xl mb-6 relative">
+<img class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional 3D CAD rendering of a multi-layer PCB layout. Transparent layers show copper traces, vias, and component footprints in a complex, beautiful engineering pattern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgmK1NzZPYi6UV8y9owAwbsMywv51zPKichDF-oNcRGquyNK2c_FYh4lp6Q1duwYDza43tESNFpbH7W0Hv6HJDmvlA0yIniBUXZFWLByyJh7YxfZ9O_CvuB2e6MxGOlyDnqjgRH9uYJue45uk--IMt0ssZnsRjYK58By9mQQkTZEBww40dIV-k1bxN9SolWWHmMTxVEWdZi6ufZQbE9XLUSm3I1SH3CwaJU_Pyo5SPBfexxt9QvzXTJcZoE45_tiwJdXDoThuYEn5H">
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-caption font-code-label">INTERMEDIATE</span>
+</div>
+</div>
+<h3 class="font-title-sm text-title-sm text-on-surface group-hover:text-primary transition-colors mb-2">PCB Layout Best Practices</h3>
+<p class="text-on-surface-variant font-body-md line-clamp-2">Learn to design noise-free, manufacturable boards using industry-standard tools.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter CTA -->
+<section class="max-w-max-width mx-auto px-margin-desktop mb-24">
+<div class="bg-inverse-surface rounded-2xl p-12 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div>
+<h2 class="font-headline-md text-headline-md text-inverse-on-surface mb-4">Stay Synchronized</h2>
+<p class="text-inverse-on-surface opacity-70 font-body-lg">Get bi-weekly updates on new components, technical teardowns, and exclusive community discounts.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<input class="flex-1 bg-surface/10 border border-outline-variant/30 text-inverse-on-surface px-6 py-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="engineer@example.com" type="email">
+<button class="px-8 py-4 bg-primary text-on-primary font-bold rounded-lg hover:bg-primary-container transition-all">Subscribe Now</button>
+</div>
+</div>
+<!-- Abstract circuit pattern overlay -->
+<div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[300px]" style="font-variation-settings: 'wght' 100;">memory</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full mt-auto bg-surface-container border-t border-outline-variant">
+<div class="max-w-max-width mx-auto grid grid-cols-2 md:grid-cols-4 gap-gutter px-margin-desktop py-12">
+<div class="col-span-2 md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<img alt="Pabon Maker Logo" class="h-6 w-auto grayscale brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgL_7xFVQCCX3W-I5l43iXOdps6xHCVs4wmGpUOa8g7uLdCScskI1boxIBRdqthpbQkTnWwFUtAdKzswWQxN1-sY-aF0dGCijFkhP-sGzKlS5Uo4-rwOmnwWgRkWTXvG-fezQW5jp-w63y0oqU_1PZ6TfNCnMs3104YQRX4jWNsDKN0va6hptluaCQkgJOw7em-kPmcj0053HjdUG6fgdaEZ4zWFmZVUPyDgo86ep3XrIk5nF3-GFdk0ivQbGYY_YLeKeXenMbOMTp">
+<span class="font-title-sm text-title-sm text-primary">Pabon Maker</span>
+</div>
+<p class="text-caption font-caption text-on-surface-variant mb-6">Precision engineering for the modern creator. From prototype to production.</p>
+</div>
+<div>
+<h5 class="font-title-sm text-on-surface mb-4">Resources</h5>
+<ul class="space-y-2">
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary opacity-100 hover:opacity-80 transition-opacity" href="#">Community Forum</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary opacity-100 hover:opacity-80 transition-opacity" href="#">Technical Documentation</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary opacity-100 hover:opacity-80 transition-opacity" href="#">Support Center</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-title-sm text-on-surface mb-4">Account</h5>
+<ul class="space-y-2">
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary opacity-100 hover:opacity-80 transition-opacity" href="#">Order Tracking</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary opacity-100 hover:opacity-80 transition-opacity" href="#">Careers</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary opacity-100 hover:opacity-80 transition-opacity" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<h5 class="font-title-sm text-on-surface mb-4">Follow Us</h5>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-primary-container/10 transition-colors">
+<span class="material-symbols-outlined text-body-md">share</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-primary-container/10 transition-colors">
+<span class="material-symbols-outlined text-body-md">hub</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center hover:bg-primary-container/10 transition-colors">
+<span class="material-symbols-outlined text-body-md">forum</span>
+</button>
+</div>
+</div>
+</div>
+<div class="max-w-max-width mx-auto px-margin-desktop py-6 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant">© 2024 Pabon Maker. Precision in Education.</span>
+<div class="flex gap-6">
+<span class="font-caption text-caption text-on-surface-variant">Terms of Service</span>
+<span class="font-caption text-caption text-on-surface-variant">Cookie Policy</span>
+</div>
+</div>
+</footer>
+<!-- FAB -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-40 group">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform">help</span>
+<div class="absolute right-20 bg-inverse-surface text-inverse-on-surface px-4 py-2 rounded-lg text-caption font-caption whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Chat with an Engineer
+        </div>
+</button>
+<script>
+        // Smooth scroll implementation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple intersection observer for reveal animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.bento-card').forEach(el => {
+            el.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700');
+            observer.observe(el);
+        });
+    </script>
+
+
+</body></html>

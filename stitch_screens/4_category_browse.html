@@ -1,0 +1,383 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Browse Categories | Pabon Maker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#e7eeff",
+                    "primary-container": "#0052ff",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-primary-container": "#dfe3ff",
+                    "surface": "#f9f9ff",
+                    "on-secondary-fixed": "#002113",
+                    "secondary-fixed": "#6ffbbe",
+                    "inverse-surface": "#263143",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#434656",
+                    "tertiary-container": "#5153de",
+                    "on-primary-fixed": "#001452",
+                    "on-background": "#111c2d",
+                    "primary": "#003ec7",
+                    "inverse-on-surface": "#ecf1ff",
+                    "tertiary": "#3737c5",
+                    "tertiary-fixed": "#e1e0ff",
+                    "primary-fixed-dim": "#b7c4ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "surface-bright": "#f9f9ff",
+                    "on-surface": "#111c2d",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#006c49",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#004ced",
+                    "secondary-container": "#6cf8bb",
+                    "surface-variant": "#d8e3fb",
+                    "on-primary-fixed-variant": "#0038b6",
+                    "on-tertiary-container": "#e3e2ff",
+                    "outline-variant": "#c3c5d9",
+                    "primary-fixed": "#dde1ff",
+                    "on-tertiary-fixed": "#07006c",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "outline": "#737688",
+                    "error": "#ba1a1a",
+                    "background": "#f9f9ff",
+                    "inverse-primary": "#b7c4ff",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "surface-dim": "#cfdaf2",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f0f3ff",
+                    "surface-container-high": "#dee8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "max-width": "1440px",
+                    "margin-desktop": "64px",
+                    "unit": "4px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "title-sm": ["Space Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-md-mobile": ["Space Grotesk"],
+                    "display-lg": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "code-label": ["JetBrains Mono"],
+                    "headline-md": ["Space Grotesk"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "title-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-label": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .circuit-line {
+            background-image: radial-gradient(circle at 1px 1px, #003ec7 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .bento-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full backdrop-blur-xl bg-surface/80 border-b border-outline-variant/30 z-50 h-20">
+<nav class="max-w-max-width mx-auto flex justify-between items-center px-margin-desktop h-full">
+<div class="flex items-center gap-8">
+<a class="font-display-lg text-display-lg text-primary tracking-tighter" href="#"><img src="https://lh3.googleusercontent.com/aida/AP1WRLtbjd3JvAlcFvA5h5MHPfo1G2ERzqVmwDwWoKK0FnfYfHrp5nIfWkoC7y1XHwbfPNKQIl63vHHYDx7NIqExKMBweOxsXgtH0XtL6gQMCOciQHm529whq9F8ySG5RrxNQCvlPjMFviBnQ5XHnRwTKo50zHK3s2d-R9PLFrVl33AkyhrfRGuMjbAeyV1Xz10JYGm3zbVbEZHnyD8XYbmpQsUasrXL8JEPy_6xNK42hcQ4dU3fTBHo2TaeAPc" alt="Pabon Maker Logo" class="h-10 w-auto object-contain"></a>
+<div class="hidden md:flex items-center gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Circuits</a>
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary" href="#">Components</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Tutorials</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Workshops</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-2 border border-outline-variant/20">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64 ml-2" placeholder="Search components..." type="text">
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all duration-100 ease-in-out">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all duration-100 ease-in-out">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+</header>
+<main class="mt-20 flex-grow flex flex-col md:flex-row max-w-max-width mx-auto w-full px-margin-desktop py-8 gap-gutter relative">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 shrink-0 space-y-8">
+<section>
+<h3 class="font-title-sm text-title-sm mb-4">Filters</h3>
+<div class="space-y-6">
+<!-- Difficulty -->
+<div>
+<span class="font-code-label text-code-label uppercase text-outline mb-3 block">Difficulty Level</span>
+<div class="space-y-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+<span class="font-body-md text-on-surface-variant group-hover:text-primary">Beginner</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+<span class="font-body-md text-on-surface-variant group-hover:text-primary">Intermediate</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary focus:ring-primary" type="checkbox">
+<span class="font-body-md text-on-surface-variant group-hover:text-primary">Advanced</span>
+</label>
+</div>
+</div>
+<!-- Price Range -->
+<div>
+<span class="font-code-label text-code-label uppercase text-outline mb-3 block">Price Range</span>
+<div class="px-2">
+<input class="w-full h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" type="range">
+<div class="flex justify-between mt-2 font-caption text-caption text-outline">
+<span class="">$0</span>
+<span class="">$500+</span>
+</div>
+</div>
+</div>
+<!-- Brand / Tags -->
+<div>
+<span class="font-code-label text-code-label uppercase text-outline mb-3 block">Quick Filters</span>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-caption rounded-full hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">Arduino</span>
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-caption rounded-full hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">Raspberry Pi</span>
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-caption rounded-full hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">IoT</span>
+<span class="px-3 py-1 bg-surface-container text-on-surface-variant text-caption rounded-full hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">ESP32</span>
+</div>
+</div>
+</div>
+</section>
+</aside>
+<!-- Main Content Area -->
+<section class="flex-grow">
+<header class="mb-8">
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Category Browse</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Precision components for your next breakthrough. Explore our laboratory-grade categories curated for hobbyists and professional engineers.</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Category Card 1: Microcontrollers -->
+<div class="bento-card group bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 relative overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A professional studio product photography of a high-end microcontroller chip mounted on a sleek dark blue PCB circuit board. The lighting is crisp and surgical, highlighting the intricate gold and copper circuit traces. The background is a clean, neutral laboratory gray with a slight gradient. The overall aesthetic is professional, technical, and high-tech." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgCE6J-HfOGnlFEnbn1NUAX8_wgn55nSUv3XhepoewsO0VM4ESqE3nYOczZQB87_m2vma-RHH6adloz-k9HcQrnuPUMVlHERVQYG8WpJ8cfrZnBjR9yxzHVVswFGkgxzGkJgC9EnwvkB5zfsXxF2wMiB1ecIekIoQLeQVvrVMoFEhW-v3JI2H0-tbKpRBSlwy77xntXLZpk5r1nUahXsRk-3rgyeBebPSvYhffp4XojOQQWrKmCX_jh4iP4-BF30hj2uORtNR2PqKD">
+<div class="absolute top-4 right-4 bg-primary text-on-primary font-code-label text-caption px-3 py-1 rounded-full">Essential</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h2 class="font-title-sm text-title-sm text-on-surface mb-2">Microcontrollers</h2>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow">The brain of your project. High-performance AVR, ARM, and ESP32 boards for rapid prototyping.</p>
+<div class="flex items-center justify-between">
+<span class="font-code-label text-code-label text-primary">124 Items</span>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-title-sm text-caption hover:opacity-90 transition-opacity">
+                                Learn &amp; Shop
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Category Card 2: Sensors -->
+<div class="bento-card group bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 relative overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A macro shot of professional environmental and optical sensors arranged in a precise grid layout on a clean white surface. The lighting is bright and even, casting soft shadows. Electric blue highlights reflect off the metallic surfaces of the sensors. The mood is scientific and meticulously organized, emphasizing precision engineering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjTEKiY3rZ08kgrPEOlsalSaoWuvv_Igbm4mmJbU0r1ESCf23H6OnzrH-hVdf8zQWsElDzJcflFJpfapssW0LZ0HFsgyvubKWsjLa8N4BLkUDc6mn7FZ6wqQKJkjlgALcRvFlHG9RpjkscPNge--YUG3qVoOY2nIwgRNqNO7vg_dwWLdmu5Ngh4Nkmc5Eunlc_-btbZmMYCTnX0zSTWNCpWb-k1vr4lUEMcttbwivYuMwoma7O5vYb9R3SCwPislREvQ6OhOI7dffe">
+<div class="absolute top-4 right-4 bg-secondary text-on-secondary font-code-label text-caption px-3 py-1 rounded-full">New Arrival</div>
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h2 class="font-title-sm text-title-sm text-on-surface mb-2">Sensors</h2>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow">Capture the world. High-precision modules for motion, environment, light, and biometrics.</p>
+<div class="flex items-center justify-between">
+<span class="font-code-label text-code-label text-primary">89 Items</span>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-title-sm text-caption hover:opacity-90 transition-opacity">
+                                Learn &amp; Shop
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Category Card 3: Robotics -->
+<div class="bento-card group bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 relative overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A sophisticated robotic actuator arm assembly with precision machined aluminum parts and exposed silver wiring. The component sits on a sleek black reflective surface under high-key technical lighting. Minimalist electric blue circuit board lines are faintly visible in the background, reinforcing a high-tech corporate modern engineering brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvtwF-yBpM4A4_wV7vRl5d-yBWelwHcK_ExlSgF6cG20d8z0vuWcYtLlqtnEStzX9spCYdprLBYAs6w_g8lLB2_UI858AgUyj7dtWj7xtTHWbAc4SRpzBYE1vjoL2oX_aebpqX6YkHeRBM6LIt2cO9InJdDDy_iRXhPgtXwtXdHGUJNZ5zoKIeBPIvbOjCzRFHckAuo9GlzEOP3YhGHiJcFxDsT2ywdOT-U8Q2H0wT-75OlSzmZ8YkRKWrI1DGeP2vjzHB_3hkTFlM">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h2 class="font-title-sm text-title-sm text-on-surface mb-2">Robotics</h2>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow">Motion and mechanics. Servos, stepper motors, and mechanical frameworks for automation.</p>
+<div class="flex items-center justify-between">
+<span class="font-code-label text-code-label text-primary">56 Items</span>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-title-sm text-caption hover:opacity-90 transition-opacity">
+                                Learn &amp; Shop
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Category Card 4: Wireless & IoT -->
+<div class="bento-card group bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 relative overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Modern wireless communication modules and Wi-Fi chips with glowing blue LED indicators on a technical blueprint background. The shot is angled to show depth, with soft bokeh in the distance. The color palette is composed of cool blues and greys, representing connectivity and cloud-integrated electronics manufacturing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz-pLt2gGaP2amE54PBxufsoampQv1JbB8A0t0Z4K0ZEzwBLaEr0_Zgu_yhpz2-UsHMfXmg4n-SWRK1CM_D08SbYLZcs6K92238nkO3h2P8eGT9gY8NPWvM5zo5_Z7Izwy1wEhs_yfF4C1bixWTFMnt58xjUNtm6cWpXTZ_0r1pR8axVkguMNbcNyQ0uIDaDaq04-8Ewz71MI24rlWxyEicxE5GdXIszskY5ZiDP2d3bSrQFJyxS3FBV6bI-scduET5VStIPFdckCN">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h2 class="font-title-sm text-title-sm text-on-surface mb-2">Wireless &amp; IoT</h2>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow">Connect everything. LoRa, Bluetooth, and Wi-Fi modules for distributed systems.</p>
+<div class="flex items-center justify-between">
+<span class="font-code-label text-code-label text-primary">74 Items</span>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-title-sm text-caption hover:opacity-90 transition-opacity">
+                                Learn &amp; Shop
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Category Card 5: Power Systems -->
+<div class="bento-card group bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 relative overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="High-quality industrial power supply modules and voltage regulators arranged elegantly. The hardware features thick copper coils and robust capacitors. The lighting is dramatic and technical, with a focus on reliability and industrial strength. The setting is a clean, modern electronics workshop with a primary blue and white theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0yQEAMUfaAMa7caEIDB6un-IzHj4_p0pyML8niDq_pmNrhZ3wGLFg9txh7GRj_S6Db5w_s_Fypk81DB0TgBmi_P55w_jbrfhnQzj8MKj6hXknH7zM_KRAp3MwRTn0yfX_Sc-6lsVeR6cv2YXvwtTc8q3o37xdbhr3dwnRx4E85VoGD_0TeZzfNIMZuI8NUIVZlG09DxSEGLY7ayzaDLG2OdhzscITTceKpoauM549nZS2gfCWx2l9tcbRDbbVMoNtdeoSu8_OETm7">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h2 class="font-title-sm text-title-sm text-on-surface mb-2">Power Systems</h2>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow">Reliable energy. LiPo chargers, voltage regulators, and industrial power supplies.</p>
+<div class="flex items-center justify-between">
+<span class="font-code-label text-code-label text-primary">42 Items</span>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-title-sm text-caption hover:opacity-90 transition-opacity">
+                                Learn &amp; Shop
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Category Card 6: Prototyping Gear -->
+<div class="bento-card group bg-surface-container-low border border-outline-variant/30 rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 relative overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A collection of professional breadboards, multicolored jumper wires, and precision soldering tools arranged artistically on a clean slate work surface. The composition is clean and technical, suggesting an environment of creative engineering. Subtle glassmorphic reflections dance across the smooth surfaces. The aesthetic is modern corporate with a focus on education." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8yLVXL69MbdVTCvhDvaWJJi5lt2eJLaB903V5puTcRI41hOyJEeuUT2UpCdxHT5LJUmIIYEPrWcyw1Zb8m0u9gP2LZhsRND6K2v3lGHiW-zukwclWfZlDM835IxsbdFkE5TIX6YYoHPRb5IVMUvgk5yopRi4Od9njaHEytRu48RPVdPTJWmK61cUJyttjqWTcf3_ZHZuobE0GQ6F_kZY9dvVsVLPgFm5rRr6r6cU4slBVQX3EB838HTjI5uwd0Lj6mvx-q641VtkE">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<h2 class="font-title-sm text-title-sm text-on-surface mb-2">Prototyping Gear</h2>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow">From breadboards to PCBs. Everything you need to go from idea to hardware reality.</p>
+<div class="flex items-center justify-between">
+<span class="font-code-label text-code-label text-primary">210 Items</span>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-title-sm text-caption hover:opacity-90 transition-opacity">
+                                Learn &amp; Shop
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Technical Specification Banner -->
+<div class="bg-primary py-12 mt-16 overflow-hidden relative">
+<div class="absolute inset-0 circuit-line opacity-10"></div>
+<div class="max-w-max-width mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center relative z-10 gap-8">
+<div class="text-on-primary">
+<h2 class="font-headline-md text-headline-md mb-2">Need a custom PCB?</h2>
+<p class="font-body-lg text-body-lg opacity-80">Our precision manufacturing lab can turn your schematics into professional hardware in 48 hours.</p>
+</div>
+<button class="bg-white text-primary px-8 py-4 rounded-full font-title-sm text-title-sm hover:bg-surface-container-lowest transition-colors shadow-lg">
+                Get a Quote
+            </button>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full bg-surface-container border-t border-outline-variant mt-auto">
+<div class="max-w-max-width mx-auto px-margin-desktop py-12">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-12">
+<div class="col-span-2 md:col-span-1">
+<h4 class="font-title-sm text-title-sm text-primary mb-6">Pabon Maker</h4>
+<p class="font-caption text-caption text-on-surface-variant pr-4">Precision in Education. Empowering the next generation of electrical engineers through quality components and documentation.</p>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-code-label text-code-label text-primary uppercase">Resources</span>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100 hover:opacity-80" href="#">Community Forum</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100 hover:opacity-80" href="#">Technical Documentation</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100 hover:opacity-80" href="#">Support Center</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-code-label text-code-label text-primary uppercase">Company</span>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100 hover:opacity-80" href="#">Careers</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100 hover:opacity-80" href="#">Privacy Policy</a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100 hover:opacity-80" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-code-label text-code-label text-primary uppercase">Contact</span>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100 hover:opacity-80" href="#">Order Tracking</a>
+<div class="flex gap-4 mt-2">
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">language</span>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">terminal</span>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">hub</span>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant">© 2024 Pabon Maker. Precision in Education.</span>
+<div class="flex gap-6">
+<span class="font-caption text-caption text-outline">System Status: <span class="text-secondary">Normal</span></span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for category cards
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.querySelector('img').classList.add('scale-110');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.querySelector('img').classList.remove('scale-110');
+            });
+        });
+
+        // Simple Search Toggle (Visual only)
+        const searchInput = document.querySelector('input[placeholder="Search components..."]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20', 'border-primary');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20', 'border-primary');
+        });
+    </script>
+
+
+</body></html>

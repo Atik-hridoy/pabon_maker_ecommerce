@@ -1,0 +1,359 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shopping Cart | Pabon Maker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#e7eeff",
+                    "primary-container": "#0052ff",
+                    "surface-container-highest": "#d8e3fb",
+                    "on-primary-container": "#dfe3ff",
+                    "surface": "#f9f9ff",
+                    "on-secondary-fixed": "#002113",
+                    "secondary-fixed": "#6ffbbe",
+                    "inverse-surface": "#263143",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#434656",
+                    "tertiary-container": "#5153de",
+                    "on-primary-fixed": "#001452",
+                    "on-background": "#111c2d",
+                    "primary": "#003ec7",
+                    "inverse-on-surface": "#ecf1ff",
+                    "tertiary": "#3737c5",
+                    "tertiary-fixed": "#e1e0ff",
+                    "primary-fixed-dim": "#b7c4ff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#00714d",
+                    "surface-bright": "#f9f9ff",
+                    "on-surface": "#111c2d",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#006c49",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#004ced",
+                    "secondary-container": "#6cf8bb",
+                    "surface-variant": "#d8e3fb",
+                    "on-primary-fixed-variant": "#0038b6",
+                    "on-tertiary-container": "#e3e2ff",
+                    "outline-variant": "#c3c5d9",
+                    "primary-fixed": "#dde1ff",
+                    "on-tertiary-fixed": "#07006c",
+                    "secondary-fixed-dim": "#4edea3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "outline": "#737688",
+                    "error": "#ba1a1a",
+                    "background": "#f9f9ff",
+                    "inverse-primary": "#b7c4ff",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "surface-dim": "#cfdaf2",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f0f3ff",
+                    "surface-container-high": "#dee8ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "max-width": "1440px",
+                    "margin-desktop": "64px",
+                    "unit": "4px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "title-sm": ["Space Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-md-mobile": ["Space Grotesk"],
+                    "display-lg": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "code-label": ["JetBrains Mono"],
+                    "headline-md": ["Space Grotesk"],
+                    "caption": ["Inter"]
+            },
+            "fontSize": {
+                    "title-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-label": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .circuit-line {
+            background-image: linear-gradient(90deg, #c3c5d9 50%, transparent 50%);
+            background-size: 8px 1px;
+            background-repeat: repeat-x;
+        }
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 w-full backdrop-blur-xl bg-surface/80 z-50 border-b border-outline-variant/30">
+<div class="max-w-max-width mx-auto flex justify-between items-center px-margin-desktop h-20">
+<div class="flex items-center gap-8">
+<a class="font-display-lg text-display-lg text-primary tracking-tighter flex items-center gap-2" href="#"><img src="https://lh3.googleusercontent.com/aida/AP1WRLtbjd3JvAlcFvA5h5MHPfo1G2ERzqVmwDwWoKK0FnfYfHrp5nIfWkoC7y1XHwbfPNKQIl63vHHYDx7NIqExKMBweOxsXgtH0XtL6gQMCOciQHm529whq9F8ySG5RrxNQCvlPjMFviBnQ5XHnRwTKo50zHK3s2d-R9PLFrVl33AkyhrfRGuMjbAeyV1Xz10JYGm3zbVbEZHnyD8XYbmpQsUasrXL8JEPy_6xNK42hcQ4dU3fTBHo2TaeAPc" alt="Pabon Maker Logo" class="h-10 w-auto object-contain"></a>
+<nav class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Circuits</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Components</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Tutorials</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Workshops</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container-low border border-outline-variant rounded-full px-6 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-body-md" placeholder="Search components..." type="text">
+<span class="material-symbols-outlined absolute right-4 top-2 text-on-surface-variant">search</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute top-0 right-0 w-4 h-4 bg-primary text-white text-[10px] flex items-center justify-center rounded-full">2</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="mt-32 max-w-max-width mx-auto px-margin-desktop w-full flex-grow">
+<h1 class="font-headline-md text-headline-md mb-8">Shopping Cart <span class="text-on-surface-variant font-normal text-title-sm">(2 items)</span></h1>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start pb-24">
+<!-- Cart Items List -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 group transition-all hover:shadow-sm">
+<div class="flex gap-6">
+<div class="w-32 h-32 bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional high-resolution studio photograph of a blue Arduino-compatible microcontroller board on a clean white surface with sharp shadows, showing intricate circuit traces and golden pins. The lighting is laboratory-clean and emphasizes the technical precision of the component." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdINrRxw74_UnY31_ScGWM0F1WAp3GuhG8_1G7uL6cl6-gI6VahjHToqigkk31JLZX-hZb7WPqGuyEOT8w6B7M5sbMu0NnzbbUkwME3CDeE3w4SkwkaqNgGmB90Nbrj1NgAdLfy5zTRU6T3iQjblVK_6pecB0SGReoOM0NG9SI1YxezcagSE1m54AxMNz0lX7vWSAg3J07beiSTaNGJj5RoY7zrjvLZuoBozm9WWhT2iGP-WINe9w6BWXz8SU6J4CjjV2b0XKr344A">
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-code-label text-code-label text-primary bg-primary-fixed px-2 py-0.5 rounded-sm">MICROCONTROLLER</span>
+<h3 class="font-title-sm text-title-sm mt-1">ATmega328P Development Board</h3>
+<p class="text-on-surface-variant font-caption text-caption mt-1">SKU: PM-ATM-328P-V3</p>
+</div>
+<span class="font-title-sm text-title-sm text-primary">$24.99</span>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex items-center border border-outline-variant rounded-full overflow-hidden">
+<button class="px-4 py-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm leading-none">remove</span></button>
+<span class="px-4 py-2 font-code-label border-x border-outline-variant min-w-[48px] text-center">01</span>
+<button class="px-4 py-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm leading-none">add</span></button>
+</div>
+<button class="flex items-center gap-2 text-error font-caption hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-base">delete</span>
+                                    Remove
+                                </button>
+</div>
+</div>
+</div>
+<!-- Recommended Bundle -->
+<div class="mt-6 pt-6 border-t border-outline-variant/30">
+<div class="bg-surface-container-low p-4 rounded flex items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<div>
+<span class="font-code-label text-[10px] text-on-surface-variant tracking-widest uppercase">Learning Recommendation</span>
+<p class="font-body-md text-sm font-semibold">Starter Circuitry Bundle: LEDs, Resistors &amp; Breadboard</p>
+</div>
+</div>
+<button class="px-4 py-2 bg-primary text-white font-code-label text-xs hover:bg-on-primary-fixed-variant transition-colors whitespace-nowrap">
+                                Add Bundle +$12.00
+                            </button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 group transition-all hover:shadow-sm">
+<div class="flex gap-6">
+<div class="w-32 h-32 bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro shot of professional-grade copper-braided jumper wires with gold-plated connectors, neatly coiled. The background is a soft blue-grey gradient. The image style is clean, modern, and commercial, highlighting the quality of the technical hardware components." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKmRJzRg9twp1PZthjIGg_dmkqIjmTyZ6cL-tkiPG7SWiLyETQqXJyAgJW8DU5jSahHT5V1bZjz9l_9BnYdRRPJCKj59mENR0V6Z1bOzoCdU5fAk7aS1G-OHZa6lpQqp9ClLKTNQyeHnZ9G5Ec9MfkFj2mXjJIA2De_6vV9vaOssnzv2VIVio3Np2nLT0V2K3kKTUdlYbFaFzS7Y1WA2qNyKH1ICp-J0464ZMWa6JUY-KV3ZAYk84T7bzdyi4ROK121_SiAU5Frpgc">
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-code-label text-code-label text-secondary bg-secondary-fixed px-2 py-0.5 rounded-sm">PROTOTYPING</span>
+<h3 class="font-title-sm text-title-sm mt-1">Premium Jumper Wire Pack (65pcs)</h3>
+<p class="text-on-surface-variant font-caption text-caption mt-1">SKU: PM-JW-65P-MULTI</p>
+</div>
+<span class="font-title-sm text-title-sm text-primary">$8.50</span>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex items-center border border-outline-variant rounded-full overflow-hidden">
+<button class="px-4 py-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm leading-none">remove</span></button>
+<span class="px-4 py-2 font-code-label border-x border-outline-variant min-w-[48px] text-center">02</span>
+<button class="px-4 py-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-sm leading-none">add</span></button>
+</div>
+<button class="flex items-center gap-2 text-error font-caption hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-base">delete</span>
+                                    Remove
+                                </button>
+</div>
+</div>
+</div>
+<!-- Recommended Bundle -->
+<div class="mt-6 pt-6 border-t border-outline-variant/30">
+<div class="bg-surface-container-low p-4 rounded flex items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<div>
+<span class="font-code-label text-[10px] text-on-surface-variant tracking-widest uppercase">Learning Recommendation</span>
+<p class="font-body-md text-sm font-semibold">Prototyping Mastery Workshop (Digital Access)</p>
+</div>
+</div>
+<button class="px-4 py-2 bg-primary text-white font-code-label text-xs hover:bg-on-primary-fixed-variant transition-colors whitespace-nowrap">
+                                Add Access +$15.00
+                            </button>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<a class="flex items-center gap-2 text-primary font-body-md hover:underline transition-all" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+                        Continue Shopping
+                    </a>
+</div>
+</div>
+<!-- Summary Sidebar -->
+<aside class="lg:col-span-4 sticky top-28 space-y-6">
+<div class="bg-surface-container border border-outline-variant rounded-lg p-8">
+<h2 class="font-headline-md text-2xl mb-8">Order Summary</h2>
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<span class="text-on-surface-variant font-body-md">Subtotal</span>
+<div class="flex-grow mx-2 h-px circuit-line opacity-30 mb-1"></div>
+<span class="font-code-label">$41.99</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-on-surface-variant font-body-md">Shipping</span>
+<div class="flex-grow mx-2 h-px circuit-line opacity-30 mb-1"></div>
+<span class="font-code-label text-secondary">Calculated at checkout</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-on-surface-variant font-body-md">Estimated Tax</span>
+<div class="flex-grow mx-2 h-px circuit-line opacity-30 mb-1"></div>
+<span class="font-code-label">$3.45</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t-2 border-outline-variant space-y-8">
+<div class="flex justify-between items-center">
+<span class="font-title-sm text-title-sm">Total</span>
+<span class="font-display-lg text-3xl text-primary">$45.44</span>
+</div>
+<div class="space-y-4">
+<button class="w-full bg-primary text-white font-title-sm py-4 rounded-sm hover:bg-on-primary-fixed-variant transition-all flex items-center justify-center gap-3 group">
+                                Proceed to Checkout
+                                <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+<div class="flex items-center justify-center gap-2 text-on-surface-variant font-caption py-2 border border-outline-variant/30 rounded">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                                Secure 256-bit SSL Encrypted Payment
+                            </div>
+</div>
+</div>
+<div class="mt-12 space-y-4">
+<p class="font-code-label text-xs uppercase tracking-widest text-on-surface-variant">We Accept</p>
+<div class="flex gap-4 opacity-60">
+<span class="material-symbols-outlined text-3xl">credit_card</span>
+<span class="material-symbols-outlined text-3xl">account_balance_wallet</span>
+<span class="material-symbols-outlined text-3xl">payments</span>
+</div>
+</div>
+</div>
+<!-- Shipping Message -->
+<div class="bg-primary/5 border border-primary/20 p-4 rounded-lg flex gap-4">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+<div>
+<p class="font-body-md text-sm font-semibold">Free shipping eligibility</p>
+<p class="text-on-surface-variant font-caption">Add $58.01 more to your cart to qualify for free express shipping.</p>
+<div class="w-full bg-surface-container h-1 mt-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 42%"></div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full mt-auto bg-surface-container border-t border-outline-variant">
+<div class="max-w-max-width mx-auto grid grid-cols-2 md:grid-cols-4 gap-gutter px-margin-desktop py-12">
+<div class="col-span-2 md:col-span-1">
+<p class="font-title-sm text-title-sm text-primary mb-6">Pabon Maker</p>
+<p class="text-on-surface-variant text-caption max-w-[240px]">Architecting the future of electronics education through precision-engineered components and curated learning pathways.</p>
+</div>
+<div>
+<p class="font-code-label text-xs mb-6 uppercase tracking-widest text-primary">Resources</p>
+<ul class="space-y-4">
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100" href="#">Community Forum</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100" href="#">Technical Documentation</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100" href="#">Support Center</a></li>
+</ul>
+</div>
+<div>
+<p class="font-code-label text-xs mb-6 uppercase tracking-widest text-primary">Account</p>
+<ul class="space-y-4">
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100" href="#">Order Tracking</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100" href="#">Privacy Policy</a></li>
+<li class=""><a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-opacity opacity-100" href="#">Careers</a></li>
+</ul>
+</div>
+<div class="flex flex-col justify-between">
+<p class="font-caption text-caption text-on-surface-variant">© 2024 Pabon Maker. Precision in Education.</p>
+<div class="flex gap-4 mt-8">
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant rounded-full text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">share</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant rounded-full text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">mail</span>
+</button>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple quantity micro-interaction example
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (btn.innerText.includes('add') || btn.innerText.includes('remove')) {
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('absolute', 'inset-0', 'bg-primary/5', 'rounded-full', 'animate-ping');
+                    btn.style.position = 'relative';
+                    btn.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 400);
+                }
+            });
+        });
+    </script>
+
+
+</body></html>
