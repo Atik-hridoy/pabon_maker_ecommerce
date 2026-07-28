@@ -6,6 +6,7 @@ import CategoryBrowse from './pages/CategoryBrowse/index.jsx';
 import LearningCenter from './pages/LearningCenter/index.jsx';
 import ProductDetails from './pages/ProductDetails/index.jsx';
 import ShoppingCart from './pages/ShoppingCart/index.jsx';
+import BestSellers from './pages/BestSellers/index.jsx';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/category" element={<CategoryBrowse />} />
+        <Route path="/best-sellers" element={<BestSellers />} />
         <Route path="/learning" element={<LearningCenter />} />
         <Route path="/product" element={<ProductDetails />} />
         <Route path="/cart" element={<ShoppingCart />} />
