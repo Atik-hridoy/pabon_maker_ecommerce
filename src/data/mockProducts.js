@@ -1,0 +1,283 @@
+export const mockProducts = [
+  // Microcontrollers & SOCs
+  {
+    id: 'mc-01',
+    title: 'MK-Ultra 32-bit SoC Dev Board',
+    description: '3.3V - 5V | Dual Core',
+    price: 24.99,
+    rating: 5,
+    reviews: 48,
+    category: 'Microcontrollers & SOCs',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBviCHEDJ3V0nHRlAPoLNQJpHicu0X5hPxQYmuTrHqtbF2A0Ek-FL0UoHZxqzK8IeJYjBH6MNGhH62I8nuNuuQynt_ldN_AJ75eHqpLmVT3YiynT0nNYTZVmIjpMesO922vWTYESkZIRfXOje1feq0kdwDkSbcWtmd4--VZ1SW1ftS1rdaPaJv-ZI_zURq6qXWE8_h5B1jQdWhbeSNzBxs76Smdk8L5KCiYKT9kXqD73cmVgQi-DuZb0DZCKfOoza5pk0zwOBckifTG',
+    isNew: true
+  },
+  {
+    id: 'mc-02',
+    title: 'Nano Core v3 Mini MCU',
+    description: '5V | 16MHz | 32KB Flash',
+    price: 8.50,
+    rating: 4,
+    reviews: 120,
+    category: 'Microcontrollers & SOCs',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjb6tp314KD3SQLvUm5vv8VUwmJcROtdaTsqvD1sj-uY1XRmvGu4Uy5EUbGj-4aOwRb00XG_ca3zi3apLTkHLm1IenmqOzkPIbU1rV5DJh4tymPfSD6Y-JwYo94NnBI2XmsD-vM9m-lvSaThYYTrVREFMrdNRs4IrealV-mBYn-YvuBLJ_I5O_1MqvhF14yy18trHKx8CkhCILFNHpayHHdtpuuYQuHlKBKp8jjsv1r2_ij_MYjgnfP4DpACqnI8DQaE7ETgDQ6Z56',
+    isNew: false
+  },
+  {
+    id: 'mc-03',
+    title: 'ProMaker ARM Cortex M4',
+    description: '3.3V | 120MHz | FPU',
+    price: 18.00,
+    rating: 5,
+    reviews: 75,
+    category: 'Microcontrollers & SOCs',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUQRqm5yAb71B0Y8tojtZJzugfUu92RbLyQP_kZCrNApGrgzUvnCm_xAo3yesgcRobu1BPV2d5nb5o8DibH3AEl5LI1YuBEtb2g3MINA5EWHaeQ6CZEZX8S3u6uESM5ly_WhJHVn5vjOFHtxdKQp6_AG-ey4bmVJx4bV2exLqLdoZ-ty2ETF0FWQxhXUGNl5qZQ7dba3YJNu3eUvY55B78MI9ugWo4AGi6yK3DqVGd6XFsru5cEvlXM8lhv-mHlLWVbfoDS6rhtYF2',
+    isNew: false
+  },
+  {
+    id: 'mc-04',
+    title: 'UltraLow Power Cortex M0+',
+    description: '1.8V - 3.6V | 48MHz',
+    price: 12.50,
+    rating: 4,
+    reviews: 32,
+    category: 'Microcontrollers & SOCs',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjb6tp314KD3SQLvUm5vv8VUwmJcROtdaTsqvD1sj-uY1XRmvGu4Uy5EUbGj-4aOwRb00XG_ca3zi3apLTkHLm1IenmqOzkPIbU1rV5DJh4tymPfSD6Y-JwYo94NnBI2XmsD-vM9m-lvSaThYYTrVREFMrdNRs4IrealV-mBYn-YvuBLJ_I5O_1MqvhF14yy18trHKx8CkhCILFNHpayHHdtpuuYQuHlKBKp8jjsv1r2_ij_MYjgnfP4DpACqnI8DQaE7ETgDQ6Z56',
+    isSale: true,
+    oldPrice: 15.00
+  },
+  
+  // Sensors & Modules
+  {
+    id: 'sm-01',
+    title: 'Laser-Precision ToF Sensor Module',
+    description: '5V DC | 0.1mm Accuracy',
+    price: 18.50,
+    rating: 4,
+    reviews: 102,
+    category: 'Sensors & Modules',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDd32I9bq6A7RVh9YWUD0StycQcfKspSBe34SKSEWt1Vxxtgk1mP_WRubPrW5gbLHKzDDv3DFg7LOHoWAnucRD6QMpOAWMdXYYE2IwhKla1s_cFfoQizDmK2JxLGwkFu3JZhPV0C7ow0EwMJ0L4Vje4n12v06LX1t3Tr4jgK_bNhbKGB8mR45VUlQHEqQdDXvbi3enKNzs0dKB1YFGQM1FuF2mIFQhpRCGFtqfrB_UlEWhbibXBSTKMI745hy8o0KL6MwDtIB_qifUP',
+    isNew: false
+  },
+  {
+    id: 'sm-02',
+    title: '9-DoF IMU Precision Sensor',
+    description: 'I2C/SPI | Accelerometer/Gyro/Mag',
+    price: 22.00,
+    rating: 5,
+    reviews: 88,
+    category: 'Sensors & Modules',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCn4VqL7OALZhJa63buK2FaEdkD4gz9THGsjLOZUtKi54mAIHWdOL2k-iGnEVAUYBFMKrPE5Q6VBlj4g6g_d7MC9vR8vBQybs9AFRNKQ8xWjmuAQUAvsqAb383pdufiENVjtWqhL5GYPULFE7akYuaMzfChAfEgL8X5XBXFnxzBx4qt4nClqKyFsyk0YXwf9hIQmeBsGxr-y-P4kFJ74C2CkKjElsrsUzulB4DvLm5HBCej8D1_5nNOrtVfcKB9v5hE0CoBBRiGeejs',
+    isNew: true
+  },
+  {
+    id: 'sm-03',
+    title: 'High-Temp Thermocouple Amp',
+    description: 'Type K | SPI Interface',
+    price: 14.99,
+    rating: 4,
+    reviews: 45,
+    category: 'Sensors & Modules',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDd32I9bq6A7RVh9YWUD0StycQcfKspSBe34SKSEWt1Vxxtgk1mP_WRubPrW5gbLHKzDDv3DFg7LOHoWAnucRD6QMpOAWMdXYYE2IwhKla1s_cFfoQizDmK2JxLGwkFu3JZhPV0C7ow0EwMJ0L4Vje4n12v06LX1t3Tr4jgK_bNhbKGB8mR45VUlQHEqQdDXvbi3enKNzs0dKB1YFGQM1FuF2mIFQhpRCGFtqfrB_UlEWhbibXBSTKMI745hy8o0KL6MwDtIB_qifUP',
+    isNew: false
+  },
+  {
+    id: 'sm-04',
+    title: 'Optical Dust Sensor',
+    description: 'PM2.5 | UART',
+    price: 28.50,
+    rating: 3,
+    reviews: 14,
+    category: 'Sensors & Modules',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCn4VqL7OALZhJa63buK2FaEdkD4gz9THGsjLOZUtKi54mAIHWdOL2k-iGnEVAUYBFMKrPE5Q6VBlj4g6g_d7MC9vR8vBQybs9AFRNKQ8xWjmuAQUAvsqAb383pdufiENVjtWqhL5GYPULFE7akYuaMzfChAfEgL8X5XBXFnxzBx4qt4nClqKyFsyk0YXwf9hIQmeBsGxr-y-P4kFJ74C2CkKjElsrsUzulB4DvLm5HBCej8D1_5nNOrtVfcKB9v5hE0CoBBRiGeejs',
+    isSale: true,
+    oldPrice: 35.00
+  },
+  
+  // Power Supplies
+  {
+    id: 'ps-01',
+    title: 'Benchtop DC Power Supply',
+    description: '0-30V | 0-5A | Dual Channel',
+    price: 125.00,
+    rating: 5,
+    reviews: 210,
+    category: 'Power Supplies',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
+    isNew: false
+  },
+  {
+    id: 'ps-02',
+    title: 'Compact Buck Converter',
+    description: '4.5-40V In | 1.5-35V Out',
+    price: 6.99,
+    rating: 4,
+    reviews: 350,
+    category: 'Power Supplies',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
+    isSale: true,
+    oldPrice: 9.99
+  },
+  {
+    id: 'ps-03',
+    title: 'LiPo Battery Charger Module',
+    description: '5V Micro USB | 1A Charge Rate',
+    price: 3.50,
+    rating: 5,
+    reviews: 185,
+    category: 'Power Supplies',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
+    isNew: false
+  },
+  {
+    id: 'ps-04',
+    title: 'Industrial DIN Rail PSU',
+    description: '24V DC | 120W | Mountable',
+    price: 45.00,
+    rating: 5,
+    reviews: 55,
+    category: 'Power Supplies',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
+    isNew: true
+  },
+
+  // IoT & Wireless
+  {
+    id: 'iot-01',
+    title: 'IoT Connect Pro WiFi/BLE Chip',
+    description: 'Ultra Low Power | 2.4GHz',
+    price: 7.99,
+    rating: 5,
+    reviews: 215,
+    category: 'IoT & Wireless',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWvwrNFgo6k6IqX5KMcnsUXJWtCJeuDYqvJA4HbfmaWVK5ar0zeHESwsWZU2CeSK0k3p8pikA9VW2uS68NsH6GFjhZ1MMK-S19Y6CwmurxBPTKkmVmcFJYgPAYhyZsQgdd5qGqUpj7pVzlBOIfiD2Pm_QTYc5eD8amRyVwrzErNLADUPSWByz3BqJN4ywbRLCzWaRB4BR5BNK8CbVobA6cGbZPV2g0fJo2lK0r5jAqBVCCLa4zsSot88jt8mY36l22VpgoQJSw_wYD',
+    isSale: true,
+    oldPrice: 12.00
+  },
+  {
+    id: 'iot-02',
+    title: 'LoRaWAN Long Range Module',
+    description: '868/915MHz | Up to 15km',
+    price: 24.50,
+    rating: 4,
+    reviews: 130,
+    category: 'IoT & Wireless',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCY109R2x6yUwmyxGVVnrsDQicEeRiCGJKxYT9ToAreRHmqc7HWo8krT2_uyibKkFoRcKkJYCfw9lS4WxJ0w_zA1d4Nt6eG7PaUlWd0tYSgb7iJpHWx51h_JDZtgxbvPE059VhyR-vfHipvZ7IgktdYWzpsWNm4q3t2OBYJR0pY70S6HZAe-mDontEl-jRvnNpj4i3vHIbvMEn8NMJ9zhCOWjj5nksY94AScD4HSCu5kmbOxCcLxebXWsBQB_tqrYdxMCjSCjIIQfK-',
+    isNew: true
+  },
+  {
+    id: 'iot-03',
+    title: 'Zigbee 3.0 Mesh Node',
+    description: 'Smart Home Ready | Low Power',
+    price: 15.00,
+    rating: 4,
+    reviews: 95,
+    category: 'IoT & Wireless',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWvwrNFgo6k6IqX5KMcnsUXJWtCJeuDYqvJA4HbfmaWVK5ar0zeHESwsWZU2CeSK0k3p8pikA9VW2uS68NsH6GFjhZ1MMK-S19Y6CwmurxBPTKkmVmcFJYgPAYhyZsQgdd5qGqUpj7pVzlBOIfiD2Pm_QTYc5eD8amRyVwrzErNLADUPSWByz3BqJN4ywbRLCzWaRB4BR5BNK8CbVobA6cGbZPV2g0fJo2lK0r5jAqBVCCLa4zsSot88jt8mY36l22VpgoQJSw_wYD',
+    isNew: false
+  },
+  {
+    id: 'iot-04',
+    title: 'Cellular NB-IoT Shield',
+    description: 'Global Bands | GPS Included',
+    price: 55.00,
+    rating: 5,
+    reviews: 40,
+    category: 'IoT & Wireless',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCY109R2x6yUwmyxGVVnrsDQicEeRiCGJKxYT9ToAreRHmqc7HWo8krT2_uyibKkFoRcKkJYCfw9lS4WxJ0w_zA1d4Nt6eG7PaUlWd0tYSgb7iJpHWx51h_JDZtgxbvPE059VhyR-vfHipvZ7IgktdYWzpsWNm4q3t2OBYJR0pY70S6HZAe-mDontEl-jRvnNpj4i3vHIbvMEn8NMJ9zhCOWjj5nksY94AScD4HSCu5kmbOxCcLxebXWsBQB_tqrYdxMCjSCjIIQfK-',
+    isNew: false
+  },
+
+  // Robotics & Actuators
+  {
+    id: 'ra-01',
+    title: 'Precision NEMA 17 Stepper Motor',
+    description: '1.8° Step | 12-24V DC',
+    price: 32.00,
+    rating: 5,
+    reviews: 63,
+    category: 'Robotics & Actuators',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-4V5HZhlCgjUjhhjeq3OTIas00jLs8P-WpXGBSl5flOoJ4AeG-tj0_Qf6ZBx7P_xuGtQDWnszeYQop93CXK7uNPd0SSndS5D0MesTrbr4YIa90qz-QEGRPME-WnGohpRi9DIFo8N_rErrCXuRWQZzIOb7c2YavaZip4DoqNf6RjC_jvn-iGBQOrv1uR4QpPTnep_I6khxfmlSzPppVw_mpCANaDIquCxgw8RmFYs0P3OsX28Una3pjT3bi8Wus0RIQ_1rbGsCDQO_',
+    isNew: false
+  },
+  {
+    id: 'ra-02',
+    title: 'High-Torque Metal Gear Servo',
+    description: '20kg/cm | 6V-8.4V',
+    price: 25.50,
+    rating: 4,
+    reviews: 145,
+    category: 'Robotics & Actuators',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuADjroi-O617y6-_ra7KBuTW_7pQVmQdmr-VAMiB_qOifwZGquCtVVs7rdpHOnU0QSEil10W6yUk2fR9NEhc4GSYWojxHbjGqklNxk5XES8dmVY0GTxnB-SvBwm2X_HJWaq1MczQOvTkJVnAdGGGu3Ogjh-pNbZubQZJJUBGlImCBP2k8KU8y6Z6GAt_hTLRY414GTAwWyq4g3wTGSwd4jZQRvRCsIKBy8O6j1ASTV8miEwThVBl_duVGW5PK8c7xAFhrMghJ7c7ibD',
+    isNew: true
+  },
+  {
+    id: 'ra-03',
+    title: 'Linear Actuator 12V 50mm',
+    description: '150N Push/Pull | IP54',
+    price: 45.00,
+    rating: 5,
+    reviews: 72,
+    category: 'Robotics & Actuators',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-4V5HZhlCgjUjhhjeq3OTIas00jLs8P-WpXGBSl5flOoJ4AeG-tj0_Qf6ZBx7P_xuGtQDWnszeYQop93CXK7uNPd0SSndS5D0MesTrbr4YIa90qz-QEGRPME-WnGohpRi9DIFo8N_rErrCXuRWQZzIOb7c2YavaZip4DoqNf6RjC_jvn-iGBQOrv1uR4QpPTnep_I6khxfmlSzPppVw_mpCANaDIquCxgw8RmFYs0P3OsX28Una3pjT3bi8Wus0RIQ_1rbGsCDQO_',
+    isNew: false
+  },
+  {
+    id: 'ra-04',
+    title: 'Micro BLDC Motor with Encoder',
+    description: '24V | 3000 RPM | Hall Sensor',
+    price: 68.00,
+    rating: 4,
+    reviews: 28,
+    category: 'Robotics & Actuators',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuADjroi-O617y6-_ra7KBuTW_7pQVmQdmr-VAMiB_qOifwZGquCtVVs7rdpHOnU0QSEil10W6yUk2fR9NEhc4GSYWojxHbjGqklNxk5XES8dmVY0GTxnB-SvBwm2X_HJWaq1MczQOvTkJVnAdGGGu3Ogjh-pNbZubQZJJUBGlImCBP2k8KU8y6Z6GAt_hTLRY414GTAwWyq4g3wTGSwd4jZQRvRCsIKBy8O6j1ASTV8miEwThVBl_duVGW5PK8c7xAFhrMghJ7c7ibD',
+    isSale: true,
+    oldPrice: 80.00
+  },
+
+  // Passive Components
+  {
+    id: 'pc-01',
+    title: 'Ceramic Capacitor Kit',
+    description: '10pF to 10uF | 600 Pcs',
+    price: 15.99,
+    rating: 5,
+    reviews: 320,
+    category: 'Passive Components',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
+    isNew: false
+  },
+  {
+    id: 'pc-02',
+    title: '1/4W Metal Film Resistor Assortment',
+    description: '1% Tolerance | 1000 Pcs',
+    price: 12.50,
+    rating: 5,
+    reviews: 415,
+    category: 'Passive Components',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
+    isNew: false
+  },
+  {
+    id: 'pc-03',
+    title: 'SMD Inductor Reel',
+    description: '10uH | 0805 Size | 3000 Pcs',
+    price: 45.00,
+    rating: 4,
+    reviews: 80,
+    category: 'Passive Components',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
+    isSale: true,
+    oldPrice: 55.00
+  },
+  {
+    id: 'pc-04',
+    title: 'High-Voltage Electrolytic Cap',
+    description: '450V 470uF | Snap-in',
+    price: 8.99,
+    rating: 5,
+    reviews: 55,
+    category: 'Passive Components',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
+    isNew: true
+  }
+];
