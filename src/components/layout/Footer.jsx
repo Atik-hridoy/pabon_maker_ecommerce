@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-container dark:bg-black">
+    <footer className="bg-primary-container dark:bg-black" id="contact">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop py-stack-lg max-w-container-max mx-auto">
         <div className="col-span-1 lg:col-span-2 space-y-6">
           <a className="font-display-lg-mobile text-display-lg-mobile text-on-primary dark:text-inverse-primary font-black tracking-tighter" href="#">
