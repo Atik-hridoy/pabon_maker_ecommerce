@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { mockProducts } from '../../../data/mockProducts';
 
 export default function ProductDisplay({ selectedCategory }) {
+  const navigate = useNavigate();
+
   // If a category is selected, filter by it. Otherwise, show 8 random products.
   const displayedProducts = useMemo(() => {
     if (selectedCategory) {
@@ -31,7 +34,11 @@ export default function ProductDisplay({ selectedCategory }) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
             {displayedProducts.map((product) => (
-              <div key={product.id} className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative">
+              <div 
+                key={product.id} 
+                onClick={() => navigate(`/product/${product.id}`)}
+                className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative block cursor-pointer"
+              >
                 
                 {/* Badges */}
                 {product.isNew && (
@@ -80,7 +87,14 @@ export default function ProductDisplay({ selectedCategory }) {
                         ${product.price.toFixed(2)}
                       </span>
                     </div>
-                    <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors">
+                    <button 
+                      className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        // Add to cart logic here
+                      }}
+                    >
                       <span className="material-symbols-outlined">shopping_cart</span>
                     </button>
                   </div>

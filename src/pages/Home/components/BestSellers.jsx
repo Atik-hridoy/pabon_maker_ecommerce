@@ -1,6 +1,7 @@
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 export default function BestSellers() {
+  const navigate = useNavigate();
   return (
     <section className="py-20 bg-white">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -16,7 +17,7 @@ export default function BestSellers() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
           {/* Product Card 1 */}
-          <div className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative">
+          <div onClick={() => navigate('/product/mc-01')} className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative block cursor-pointer">
             <div className="absolute top-4 left-4 z-10">
               <span className="bg-secondary-container text-white px-2 py-1 text-[10px] font-black rounded uppercase">New</span>
             </div>
@@ -36,14 +37,14 @@ export default function BestSellers() {
               <p className="font-technical-data text-technical-data text-on-primary-container">3.3V - 5V | Dual Core</p>
               <div className="flex items-center justify-between pt-4">
                 <span className="text-headline-md font-black text-on-surface">$24.99</span>
-                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors">
+                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
                   <span className="material-symbols-outlined">shopping_cart</span>
                 </button>
               </div>
             </div>
           </div>
           {/* Product Card 2 */}
-          <div className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative">
+          <div onClick={() => navigate('/product/sm-01')} className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative block cursor-pointer">
             <div className="aspect-square mb-6 overflow-hidden flex items-center justify-center p-4">
               <img className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" data-alt="A high-precision optical distance sensor module with a sleek black housing and visible lens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDd32I9bq6A7RVh9YWUD0StycQcfKspSBe34SKSEWt1Vxxtgk1mP_WRubPrW5gbLHKzDDv3DFg7LOHoWAnucRD6QMpOAWMdXYYE2IwhKla1s_cFfoQizDmK2JxLGwkFu3JZhPV0C7ow0EwMJ0L4Vje4n12v06LX1t3Tr4jgK_bNhbKGB8mR45VUlQHEqQdDXvbi3enKNzs0dKB1YFGQM1FuF2mIFQhpRCGFtqfrB_UlEWhbibXBSTKMI745hy8o0KL6MwDtIB_qifUP"/>
             </div>
@@ -60,14 +61,14 @@ export default function BestSellers() {
               <p className="font-technical-data text-technical-data text-on-primary-container">5V DC | 0.1mm Accuracy</p>
               <div className="flex items-center justify-between pt-4">
                 <span className="text-headline-md font-black text-on-surface">$18.50</span>
-                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors">
+                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
                   <span className="material-symbols-outlined">shopping_cart</span>
                 </button>
               </div>
             </div>
           </div>
           {/* Product Card 3 */}
-          <div className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative">
+          <div onClick={() => navigate('/product/iot-01')} className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative block cursor-pointer">
             <div className="absolute top-4 left-4 z-10">
               <span className="bg-error text-white px-2 py-1 text-[10px] font-black rounded uppercase">Sale</span>
             </div>
@@ -90,14 +91,14 @@ export default function BestSellers() {
                   <span className="text-outline line-through text-xs">$12.00</span>
                   <span className="text-headline-md font-black text-secondary">$7.99</span>
                 </div>
-                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors">
+                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
                   <span className="material-symbols-outlined">shopping_cart</span>
                 </button>
               </div>
             </div>
           </div>
           {/* Product Card 4 */}
-          <div className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative">
+          <div onClick={() => navigate('/product/ra-01')} className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative block cursor-pointer">
             <div className="aspect-square mb-6 overflow-hidden flex items-center justify-center p-4">
               <img className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" data-alt="A detailed mechanical render of a NEMA 17 stepper motor with a precision-ground shaft and rugged metal housing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-4V5HZhlCgjUjhhjeq3OTIas00jLs8P-WpXGBSl5flOoJ4AeG-tj0_Qf6ZBx7P_xuGtQDWnszeYQop93CXK7uNPd0SSndS5D0MesTrbr4YIa90qz-QEGRPME-WnGohpRi9DIFo8N_rErrCXuRWQZzIOb7c2YavaZip4DoqNf6RjC_jvn-iGBQOrv1uR4QpPTnep_I6khxfmlSzPppVw_mpCANaDIquCxgw8RmFYs0P3OsX28Una3pjT3bi8Wus0RIQ_1rbGsCDQO_"/>
             </div>
@@ -114,7 +115,7 @@ export default function BestSellers() {
               <p className="font-technical-data text-technical-data text-on-primary-container">1.8° Step | 12-24V DC</p>
               <div className="flex items-center justify-between pt-4">
                 <span className="text-headline-md font-black text-on-surface">$32.00</span>
-                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors">
+                <button className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
                   <span className="material-symbols-outlined">shopping_cart</span>
                 </button>
               </div>
