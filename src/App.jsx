@@ -1,23 +1,23 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Homepage from './pages/Homepage/index.jsx';
-import CategoryBrowse from './pages/CategoryBrowse/index.jsx';
-import LearningCenter from './pages/LearningCenter/index.jsx';
-import ProductDetails from './pages/ProductDetails/index.jsx';
-import ShoppingCart from './pages/ShoppingCart/index.jsx';
+import Home from './pages/Home/index.jsx';
+import Categories from './pages/Categories/index.jsx';
+import Resources from './pages/Resources/index.jsx';
+import Components from './pages/Components/index.jsx';
+import Cart from './pages/Cart/index.jsx';
 import BestSellers from './pages/BestSellers/index.jsx';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/category" element={<CategoryBrowse />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/categories" element={<Categories />} />
         <Route path="/best-sellers" element={<BestSellers />} />
-        <Route path="/learning" element={<LearningCenter />} />
-        <Route path="/product" element={<ProductDetails />} />
-        <Route path="/cart" element={<ShoppingCart />} />
+        <Route path="/resources" element={<Resources />} />
+        <Route path="/components" element={<Components />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
   );

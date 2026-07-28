@@ -31,13 +31,13 @@ export default function Navbar() {
                 Home
               </NavLink>
               <NavLink 
-                to="/product" 
+                to="/components" 
                 className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
               >
                 Components
               </NavLink>
               <NavLink 
-                to="/category" 
+                to="/categories" 
                 className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
               >
                 Categories
@@ -49,7 +49,7 @@ export default function Navbar() {
                 Best Sellers
               </NavLink>
               <NavLink 
-                to="/learning" 
+                to="/resources" 
                 className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
               >
                 Resources
@@ -94,14 +94,14 @@ export default function Navbar() {
                 Home
               </NavLink>
               <NavLink 
-                to="/product" 
+                to="/components" 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
               >
                 Components
               </NavLink>
               <NavLink 
-                to="/category" 
+                to="/categories" 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
               >
@@ -115,7 +115,7 @@ export default function Navbar() {
                 Best Sellers
               </NavLink>
               <NavLink 
-                to="/learning" 
+                to="/resources" 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
               >
