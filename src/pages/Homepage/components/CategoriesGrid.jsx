@@ -2,59 +2,57 @@ import React from 'react';
 
 export default function CategoriesGrid() {
   return (
-    <section className="py-24 bg-surface">
-      <div className="max-w-max-width mx-auto px-margin-desktop">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+    <section className="py-20 bg-surface">
+      <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <div className="flex justify-between items-end mb-12">
           <div>
-            <span className="font-code-label text-code-label text-primary uppercase tracking-widest">Inventory</span>
-            <h2 className="font-headline-md text-headline-md text-on-surface mt-2">Hardware Categories</h2>
+            <p className="text-secondary font-label-caps text-label-caps tracking-widest mb-2 uppercase">Precision Modules</p>
+            <h2 className="font-headline-md text-headline-md text-on-surface">SHOP BY CATEGORY</h2>
           </div>
-          <a className="text-primary font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
-            View All Collections <span className="material-symbols-outlined">trending_flat</span>
-          </a>
+          <a className="text-secondary font-bold font-label-caps text-label-caps hover:underline" href="#">VIEW ALL CATEGORIES</a>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-gutter h-[800px] md:h-[600px]">
-          {/* Arduino Large Card */}
-          <div className="md:col-span-2 md:row-span-2 bento-card relative overflow-hidden rounded-2xl border border-outline-variant group transition-all duration-700 opacity-100">
-            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A macro shot of an Arduino Uno board resting on a pristine white surface. Soft overhead lighting highlights the blue solder mask and the silver metallic headers. The composition is artistic and minimalist, emphasizing the iconic design of the microcontroller in a clean-room aesthetic." style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCigePqxRUPrByroq9y8eQwpWurus09r2wVof2itSlDxIaH67KgWfSJA9X53l583NuBhP47nRBJ9gc_NCOZKdoygBPuzbzswQfBN43vS9mNCkxNufMJHkNKdAcb-n9rbbrz-1RL6YygW8SBs-dHIHjAKmX2JfO_J7L5sqA_nXk3EBqNj4cin7tmnbn8Fa7EoSPVWYciaiZTc3qpxzGvHDSh1L_BnSKi7qWOSKXoeCv0p2a9P62SqaQmEuKXPVscKjl1gn_I18oU_w2A')" }}></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
-            <div className="absolute bottom-0 p-8">
-              <h3 className="font-headline-md text-headline-md text-on-surface mb-2">Arduino Ecosystem</h3>
-              <p className="text-on-surface-variant mb-6 max-w-sm">From Uno to Portenta, find every controller for your next automation project.</p>
-              <button className="px-6 py-3 bg-surface-container-highest text-primary font-bold rounded hover:bg-primary hover:text-on-primary transition-colors">Browse Kits</button>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
+          <div className="group cursor-pointer flex flex-col items-center gap-4">
+            <div className="w-full aspect-square bg-white border border-outline-variant rounded-full flex items-center justify-center p-8 group-hover:border-secondary transition-all">
+              <img className="w-full h-full object-contain" alt="Microcontrollers &amp; SOCs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUQRqm5yAb71B0Y8tojtZJzugfUu92RbLyQP_kZCrNApGrgzUvnCm_xAo3yesgcRobu1BPV2d5nb5o8DibH3AEl5LI1YuBEtb2g3MINA5EWHaeQ6CZEZX8S3u6uESM5ly_WhJHVn5vjOFHtxdKQp6_AG-ey4bmVJx4bV2exLqLdoZ-ty2ETF0FWQxhXUGNl5qZQ7dba3YJNu3eUvY55B78MI9ugWo4AGi6yK3DqVGd6XFsru5cEvlXM8lhv-mHlLWVbfoDS6rhtYF2" />
             </div>
+            <p className="font-label-caps text-label-caps text-on-surface text-center font-bold">Microcontrollers &amp; SOCs</p>
           </div>
-          {/* IoT Card */}
-          <div className="md:col-span-2 bento-card relative overflow-hidden rounded-2xl border border-outline-variant group bg-surface-container transition-all duration-700 opacity-100">
-            <div className="flex h-full p-8 items-center gap-8">
-              <div className="flex-1">
-                <h3 className="font-title-sm text-title-sm text-on-surface mb-2">IoT &amp; Connectivity</h3>
-                <p className="text-caption font-caption text-on-surface-variant">ESP32, LoRaWAN, and Zigbee modules for seamless networking.</p>
-              </div>
-              <div className="w-32 h-32 rounded-lg overflow-hidden border border-outline-variant/30 flex-shrink-0">
-                <img className="w-full h-full object-cover" data-alt="Close up of a modern ESP32 wifi module with its distinctive silver shielding and tiny antenna, laid out on a blueprint design background. Corporate tech aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMRhWO_CMAWBECMvGo56Kmj0er-tQgMYL3WOE7Ec-rs0CPz9wtfJWG7rtbWwW8JQBzZJLC28Jv8gyapOYkhhOjOhiNq8TEFnqD3NP9gbt6uJ2vu-AT8Lq3PBiuSY1jSOuhXbCJ_9H5pGn5_geI0b1u3HCtBqRPBoij_lf_K8zn62B3XnzTQjHvBy6NhJgmmVCdEKQHXrtIkj2Pa6Ew8a1WwjD6VPXtGa5JPGfH1gc4yGlu8m6XVjHz7VwpZiRtOzd2q8gA4iGoQQ9G" />
-              </div>
+          
+          <div className="group cursor-pointer flex flex-col items-center gap-4">
+            <div className="w-full aspect-square bg-white border border-outline-variant rounded-full flex items-center justify-center p-8 group-hover:border-secondary transition-all">
+              <img className="w-full h-full object-contain" alt="Sensors &amp; Modules" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn4VqL7OALZhJa63buK2FaEdkD4gz9THGsjLOZUtKi54mAIHWdOL2k-iGnEVAUYBFMKrPE5Q6VBlj4g6g_d7MC9vR8vBQybs9AFRNKQ8xWjmuAQUAvsqAb383pdufiENVjtWqhL5GYPULFE7akYuaMzfChAfEgL8X5XBXFnxzBx4qt4nClqKyFsyk0YXwf9hIQmeBsGxr-y-P4kFJ74C2CkKjElsrsUzulB4DvLm5HBCej8D1_5nNOrtVfcKB9v5hE0CoBBRiGeejs" />
             </div>
+            <p className="font-label-caps text-label-caps text-on-surface text-center font-bold">Sensors &amp; Modules</p>
           </div>
-          {/* Power Electronics */}
-          <div className="md:col-span-1 bento-card flex flex-col p-8 rounded-2xl border border-outline-variant bg-surface-container-lowest justify-between transition-all duration-700 opacity-100">
-            <div className="w-12 h-12 bg-primary-container/20 rounded flex items-center justify-center">
-              <span className="material-symbols-outlined text-primary">bolt</span>
+          
+          <div className="group cursor-pointer flex flex-col items-center gap-4">
+            <div className="w-full aspect-square bg-white border border-outline-variant rounded-full flex items-center justify-center p-8 group-hover:border-secondary transition-all">
+              <img className="w-full h-full object-contain" alt="Power Supplies" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF" />
             </div>
-            <div>
-              <h3 className="font-title-sm text-title-sm text-on-surface mb-1">Power</h3>
-              <p className="text-caption font-caption text-on-surface-variant">Regulators, Buck converters, LiPo management.</p>
-            </div>
+            <p className="font-label-caps text-label-caps text-on-surface text-center font-bold">Power Supplies</p>
           </div>
-          {/* Sensors */}
-          <div className="md:col-span-1 bento-card flex flex-col p-8 rounded-2xl border border-outline-variant bg-inverse-surface text-inverse-on-surface justify-between transition-all duration-700 opacity-100">
-            <div className="w-12 h-12 bg-primary rounded flex items-center justify-center">
-              <span className="material-symbols-outlined text-on-primary">sensors</span>
+          
+          <div className="group cursor-pointer flex flex-col items-center gap-4">
+            <div className="w-full aspect-square bg-white border border-outline-variant rounded-full flex items-center justify-center p-8 group-hover:border-secondary transition-all">
+              <img className="w-full h-full object-contain" alt="IoT &amp; Wireless" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY109R2x6yUwmyxGVVnrsDQicEeRiCGJKxYT9ToAreRHmqc7HWo8krT2_uyibKkFoRcKkJYCfw9lS4WxJ0w_zA1d4Nt6eG7PaUlWd0tYSgb7iJpHWx51h_JDZtgxbvPE059VhyR-vfHipvZ7IgktdYWzpsWNm4q3t2OBYJR0pY70S6HZAe-mDontEl-jRvnNpj4i3vHIbvMEn8NMJ9zhCOWjj5nksY94AScD4HSCu5kmbOxCcLxebXWsBQB_tqrYdxMCjSCjIIQfK-" />
             </div>
-            <div>
-              <h3 className="font-title-sm text-title-sm mb-1">Sensors</h3>
-              <p className="text-caption font-caption opacity-70">IMUs, LiDAR, and environmental probes.</p>
+            <p className="font-label-caps text-label-caps text-on-surface text-center font-bold">IoT &amp; Wireless</p>
+          </div>
+          
+          <div className="group cursor-pointer flex flex-col items-center gap-4">
+            <div className="w-full aspect-square bg-white border border-outline-variant rounded-full flex items-center justify-center p-8 group-hover:border-secondary transition-all">
+              <img className="w-full h-full object-contain" alt="Robotics &amp; Actuators" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADjroi-O617y6-_ra7KBuTW_7pQVmQdmr-VAMiB_qOifwZGquCtVVs7rdpHOnU0QSEil10W6yUk2fR9NEhc4GSYWojxHbjGqklNxk5XES8dmVY0GTxnB-SvBwm2X_HJWaq1MczQOvTkJVnAdGGGu3Ogjh-pNbZubQZJJUBGlImCBP2k8KU8y6Z6GAt_hTLRY414GTAwWyq4g3wTGSwd4jZQRvRCsIKBy8O6j1ASTV8miEwThVBl_duVGW5PK8c7xAFhrMghJ7c7ibD" />
             </div>
+            <p className="font-label-caps text-label-caps text-on-surface text-center font-bold">Robotics &amp; Actuators</p>
+          </div>
+          
+          <div className="group cursor-pointer flex flex-col items-center gap-4">
+            <div className="w-full aspect-square bg-white border border-outline-variant rounded-full flex items-center justify-center p-8 group-hover:border-secondary transition-all">
+              <img className="w-full h-full object-contain" alt="Passive Components" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi" />
+            </div>
+            <p className="font-label-caps text-label-caps text-on-surface text-center font-bold">Passive Components</p>
           </div>
         </div>
       </div>
