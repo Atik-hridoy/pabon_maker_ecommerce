@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { mockProducts } from '../../../data/mockProducts';
 
 export default function ProductDisplay({ selectedCategory }) {
-  // If a category is selected, filter by it. Otherwise, show all.
-  const displayedProducts = selectedCategory 
-    ? mockProducts.filter(product => product.category === selectedCategory)
-    : mockProducts;
+  // If a category is selected, filter by it. Otherwise, show 8 random products.
+  const displayedProducts = useMemo(() => {
+    if (selectedCategory) {
+      return mockProducts.filter(product => product.category === selectedCategory);
+    }
+    // Randomize for default view
+    return [...mockProducts].sort(() => 0.5 - Math.random()).slice(0, 8);
+  }, [selectedCategory]);
 
   return (
     <section className="py-12 bg-white min-h-[400px]">

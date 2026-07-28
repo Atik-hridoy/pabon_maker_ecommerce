@@ -9,7 +9,7 @@ import Metrics from './components/Metrics';
 import Testimonials from './components/Testimonials';
 
 export default function Homepage() {
-  const [selectedCategory, setSelectedCategory] = useState('Microcontrollers & SOCs');
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
     <MainLayout>
