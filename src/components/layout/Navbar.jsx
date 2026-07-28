@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 export default function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <>
-      <div className="bg-primary-container text-white py-2 px-margin-mobile md:px-margin-desktop flex justify-center items-center">
-        <p className="font-body-sm text-body-sm tracking-wide">FREE GLOBAL SHIPPING ON ORDERS OVER $150 — EXPERT TECHNICAL SUPPORT AVAILABLE</p>
+      <div className="bg-primary-container text-white py-2 px-margin-mobile md:px-margin-desktop flex justify-center items-center text-center">
+        <p className="font-body-sm text-xs md:text-body-sm tracking-wide">FREE GLOBAL SHIPPING ON ORDERS OVER $150 — EXPERT TECHNICAL SUPPORT AVAILABLE</p>
       </div>
-      <header className="sticky top-0 z-50 bg-surface border-b border-outline-variant shadow-sm">
+      <header className="sticky top-0 z-50 bg-surface border-b border-outline-variant shadow-sm relative">
         <nav className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-stack-md max-w-container-max mx-auto">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
+            <button 
+              className="md:hidden p-2 text-on-surface-variant hover:text-secondary transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <span className="material-symbols-outlined">{isMobileMenuOpen ? 'close' : 'menu'}</span>
+            </button>
             <Link to="/" className="font-display-lg text-display-lg-mobile md:text-display-lg font-black tracking-tighter text-on-surface">
-              <img src="https://lh3.googleusercontent.com/aida/AP1WRLtbjd3JvAlcFvA5h5MHPfo1G2ERzqVmwDwWoKK0FnfYfHrp5nIfWkoC7y1XHwbfPNKQIl63vHHYDx7NIqExKMBweOxsXgtH0XtL6gQMCOciQHm529whq9F8ySG5RrxNQCvlPjMFviBnQ5XHnRwTKo50zHK3s2d-R9PLFrVl33AkyhrfRGuMjbAeyV1Xz10JYGm3zbVbEZHnyD8XYbmpQsUasrXL8JEPy_6xNK42hcQ4dU3fTBHo2TaeAPc" alt="Pabon Maker Logo" className="h-8 md:h-10 w-auto object-contain" />
+              <img src="https://lh3.googleusercontent.com/aida/AP1WRLtbjd3JvAlcFvA5h5MHPfo1G2ERzqVmwDwWoKK0FnfYfHrp5nIfWkoC7y1XHwbfPNKQIl63vHHYDx7NIqExKMBweOxsXgtH0XtL6gQMCOciQHm529whq9F8ySG5RrxNQCvlPjMFviBnQ5XHnRwTKo50zHK3s2d-R9PLFrVl33AkyhrfRGuMjbAeyV1Xz10JYGm3zbVbEZHnyD8XYbmpQsUasrXL8JEPy_6xNK42hcQ4dU3fTBHo2TaeAPc" alt="Pabon Maker Logo" className="h-6 md:h-10 w-auto object-contain" />
             </Link>
+            
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6">
               <NavLink 
                 to="/" 
@@ -40,11 +50,11 @@ export default function Navbar() {
               </NavLink>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="p-2 text-on-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
+          <div className="flex items-center gap-2 md:gap-4">
+            <button className="hidden sm:block p-2 text-on-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
               <span className="material-symbols-outlined">person</span>
             </button>
-            <button className="p-2 text-on-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
+            <button className="hidden sm:block p-2 text-on-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
               <span className="material-symbols-outlined">favorite</span>
             </button>
             <Link to="/cart" className="p-2 text-on-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95 relative block">
@@ -53,6 +63,50 @@ export default function Navbar() {
             </Link>
           </div>
         </nav>
+
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 w-full bg-surface border-b border-outline-variant shadow-lg z-40">
+            <div className="flex flex-col px-margin-mobile py-4 space-y-4">
+              <NavLink 
+                to="/" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary font-bold' : 'text-on-surface-variant font-medium'}`}
+              >
+                Home
+              </NavLink>
+              <NavLink 
+                to="/product" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary font-bold' : 'text-on-surface-variant font-medium'}`}
+              >
+                Components
+              </NavLink>
+              <NavLink 
+                to="/category" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary font-bold' : 'text-on-surface-variant font-medium'}`}
+              >
+                Categories
+              </NavLink>
+              <NavLink 
+                to="/learning" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary font-bold' : 'text-on-surface-variant font-medium'}`}
+              >
+                Resources
+              </NavLink>
+              <div className="border-t border-outline-variant/30 pt-4 flex gap-4">
+                <button className="flex items-center gap-2 text-on-surface-variant text-sm font-medium hover:text-secondary">
+                  <span className="material-symbols-outlined text-[20px]">person</span> Account
+                </button>
+                <button className="flex items-center gap-2 text-on-surface-variant text-sm font-medium hover:text-secondary">
+                  <span className="material-symbols-outlined text-[20px]">favorite</span> Wishlist
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
     </>
   );
