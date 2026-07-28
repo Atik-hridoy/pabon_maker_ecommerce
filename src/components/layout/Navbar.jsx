@@ -5,10 +5,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <>
-      <div className="bg-secondary-container text-white py-2 px-margin-mobile md:px-margin-desktop flex justify-center items-center text-center">
-        <p className="font-label-caps text-label-caps tracking-wide">SYSTEM UPDATE: Precision Engineering components now shipping worldwide. Order within 4h for same-day dispatch.</p>
-      </div>
+
       <header className="sticky top-0 z-50 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none relative">
         <nav className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-stack-md max-w-container-max mx-auto">
           <div className="flex items-center gap-4 md:gap-8">
@@ -31,12 +28,6 @@ export default function Navbar() {
                 Home
               </NavLink>
               <NavLink 
-                to="/components" 
-                className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
-              >
-                Components
-              </NavLink>
-              <NavLink 
                 to="/categories" 
                 className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
               >
@@ -47,12 +38,6 @@ export default function Navbar() {
                 className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
               >
                 Best Sellers
-              </NavLink>
-              <NavLink 
-                to="/resources" 
-                className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
-              >
-                Resources
               </NavLink>
               <NavLink 
                 to="/#contact" 
@@ -94,13 +79,6 @@ export default function Navbar() {
                 Home
               </NavLink>
               <NavLink 
-                to="/components" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
-              >
-                Components
-              </NavLink>
-              <NavLink 
                 to="/categories" 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
@@ -113,13 +91,6 @@ export default function Navbar() {
                 className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
               >
                 Best Sellers
-              </NavLink>
-              <NavLink 
-                to="/resources" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
-              >
-                Resources
               </NavLink>
               <NavLink 
                 to="/#contact" 
@@ -148,6 +119,6 @@ export default function Navbar() {
           </div>
         )}
       </header>
-    </>
+
   );
 }

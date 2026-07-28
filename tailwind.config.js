@@ -63,7 +63,7 @@ export default {
               "full": "9999px"
       },
       "spacing": {
-              "container-max": "1280px",
+              "container-max": "100%",
               "margin-desktop": "48px",
               "stack-lg": "32px",
               "stack-md": "16px",
