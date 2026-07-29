@@ -1,3 +1,4 @@
+// Expanded mock dataset for electronic components
 export const mockProducts = [
   // Microcontrollers & SOCs
   {
@@ -9,7 +10,10 @@ export const mockProducts = [
     reviews: 48,
     category: 'Microcontrollers & SOCs',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBviCHEDJ3V0nHRlAPoLNQJpHicu0X5hPxQYmuTrHqtbF2A0Ek-FL0UoHZxqzK8IeJYjBH6MNGhH62I8nuNuuQynt_ldN_AJ75eHqpLmVT3YiynT0nNYTZVmIjpMesO922vWTYESkZIRfXOje1feq0kdwDkSbcWtmd4--VZ1SW1ftS1rdaPaJv-ZI_zURq6qXWE8_h5B1jQdWhbeSNzBxs76Smdk8L5KCiYKT9kXqD73cmVgQi-DuZb0DZCKfOoza5pk0zwOBckifTG',
-    isNew: true
+    isNew: true,
+    voltage: '5V',
+    packageSize: 'Module',
+    color: 'Black'
   },
   {
     id: 'mc-02',
@@ -20,7 +24,10 @@ export const mockProducts = [
     reviews: 120,
     category: 'Microcontrollers & SOCs',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjb6tp314KD3SQLvUm5vv8VUwmJcROtdaTsqvD1sj-uY1XRmvGu4Uy5EUbGj-4aOwRb00XG_ca3zi3apLTkHLm1IenmqOzkPIbU1rV5DJh4tymPfSD6Y-JwYo94NnBI2XmsD-vM9m-lvSaThYYTrVREFMrdNRs4IrealV-mBYn-YvuBLJ_I5O_1MqvhF14yy18trHKx8CkhCILFNHpayHHdtpuuYQuHlKBKp8jjsv1r2_ij_MYjgnfP4DpACqnI8DQaE7ETgDQ6Z56',
-    isNew: false
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'DIP28',
+    color: 'Blue'
   },
   {
     id: 'mc-03',
@@ -31,7 +38,10 @@ export const mockProducts = [
     reviews: 75,
     category: 'Microcontrollers & SOCs',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUQRqm5yAb71B0Y8tojtZJzugfUu92RbLyQP_kZCrNApGrgzUvnCm_xAo3yesgcRobu1BPV2d5nb5o8DibH3AEl5LI1YuBEtb2g3MINA5EWHaeQ6CZEZX8S3u6uESM5ly_WhJHVn5vjOFHtxdKQp6_AG-ey4bmVJx4bV2exLqLdoZ-ty2ETF0FWQxhXUGNl5qZQ7dba3YJNu3eUvY55B78MI9ugWo4AGi6yK3DqVGd6XFsru5cEvlXM8lhv-mHlLWVbfoDS6rhtYF2',
-    isNew: false
+    isNew: false,
+    voltage: '3.3V',
+    packageSize: 'Module',
+    color: 'Red'
   },
   {
     id: 'mc-04',
@@ -43,7 +53,38 @@ export const mockProducts = [
     category: 'Microcontrollers & SOCs',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjb6tp314KD3SQLvUm5vv8VUwmJcROtdaTsqvD1sj-uY1XRmvGu4Uy5EUbGj-4aOwRb00XG_ca3zi3apLTkHLm1IenmqOzkPIbU1rV5DJh4tymPfSD6Y-JwYo94NnBI2XmsD-vM9m-lvSaThYYTrVREFMrdNRs4IrealV-mBYn-YvuBLJ_I5O_1MqvhF14yy18trHKx8CkhCILFNHpayHHdtpuuYQuHlKBKp8jjsv1r2_ij_MYjgnfP4DpACqnI8DQaE7ETgDQ6Z56',
     isSale: true,
-    oldPrice: 15.00
+    oldPrice: 15.00,
+    voltage: '1.8V',
+    packageSize: 'QFN32',
+    color: 'Black'
+  },
+  {
+    id: 'mc-05',
+    title: 'ATmega328P Bare Chip',
+    description: '5V | 16MHz | 32KB Flash',
+    price: 3.50,
+    rating: 5,
+    reviews: 500,
+    category: 'Microcontrollers & SOCs',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjb6tp314KD3SQLvUm5vv8VUwmJcROtdaTsqvD1sj-uY1XRmvGu4Uy5EUbGj-4aOwRb00XG_ca3zi3apLTkHLm1IenmqOzkPIbU1rV5DJh4tymPfSD6Y-JwYo94NnBI2XmsD-vM9m-lvSaThYYTrVREFMrdNRs4IrealV-mBYn-YvuBLJ_I5O_1MqvhF14yy18trHKx8CkhCILFNHpayHHdtpuuYQuHlKBKp8jjsv1r2_ij_MYjgnfP4DpACqnI8DQaE7ETgDQ6Z56',
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'DIP28',
+    color: 'Black'
+  },
+  {
+    id: 'mc-06',
+    title: 'ESP32-S3 WiFi+BLE Module',
+    description: '3.3V | Dual Core 240MHz',
+    price: 6.50,
+    rating: 5,
+    reviews: 320,
+    category: 'Microcontrollers & SOCs',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBviCHEDJ3V0nHRlAPoLNQJpHicu0X5hPxQYmuTrHqtbF2A0Ek-FL0UoHZxqzK8IeJYjBH6MNGhH62I8nuNuuQynt_ldN_AJ75eHqpLmVT3YiynT0nNYTZVmIjpMesO922vWTYESkZIRfXOje1feq0kdwDkSbcWtmd4--VZ1SW1ftS1rdaPaJv-ZI_zURq6qXWE8_h5B1jQdWhbeSNzBxs76Smdk8L5KCiYKT9kXqD73cmVgQi-DuZb0DZCKfOoza5pk0zwOBckifTG',
+    isNew: true,
+    voltage: '3.3V',
+    packageSize: 'SMD Module',
+    color: 'Silver'
   },
   
   // Sensors & Modules
@@ -56,7 +97,10 @@ export const mockProducts = [
     reviews: 102,
     category: 'Sensors & Modules',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDd32I9bq6A7RVh9YWUD0StycQcfKspSBe34SKSEWt1Vxxtgk1mP_WRubPrW5gbLHKzDDv3DFg7LOHoWAnucRD6QMpOAWMdXYYE2IwhKla1s_cFfoQizDmK2JxLGwkFu3JZhPV0C7ow0EwMJ0L4Vje4n12v06LX1t3Tr4jgK_bNhbKGB8mR45VUlQHEqQdDXvbi3enKNzs0dKB1YFGQM1FuF2mIFQhpRCGFtqfrB_UlEWhbibXBSTKMI745hy8o0KL6MwDtIB_qifUP',
-    isNew: false
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'Module',
+    color: 'Blue'
   },
   {
     id: 'sm-02',
@@ -67,7 +111,10 @@ export const mockProducts = [
     reviews: 88,
     category: 'Sensors & Modules',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCn4VqL7OALZhJa63buK2FaEdkD4gz9THGsjLOZUtKi54mAIHWdOL2k-iGnEVAUYBFMKrPE5Q6VBlj4g6g_d7MC9vR8vBQybs9AFRNKQ8xWjmuAQUAvsqAb383pdufiENVjtWqhL5GYPULFE7akYuaMzfChAfEgL8X5XBXFnxzBx4qt4nClqKyFsyk0YXwf9hIQmeBsGxr-y-P4kFJ74C2CkKjElsrsUzulB4DvLm5HBCej8D1_5nNOrtVfcKB9v5hE0CoBBRiGeejs',
-    isNew: true
+    isNew: true,
+    voltage: '3.3V',
+    packageSize: 'Module',
+    color: 'Blue'
   },
   {
     id: 'sm-03',
@@ -78,7 +125,10 @@ export const mockProducts = [
     reviews: 45,
     category: 'Sensors & Modules',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDd32I9bq6A7RVh9YWUD0StycQcfKspSBe34SKSEWt1Vxxtgk1mP_WRubPrW5gbLHKzDDv3DFg7LOHoWAnucRD6QMpOAWMdXYYE2IwhKla1s_cFfoQizDmK2JxLGwkFu3JZhPV0C7ow0EwMJ0L4Vje4n12v06LX1t3Tr4jgK_bNhbKGB8mR45VUlQHEqQdDXvbi3enKNzs0dKB1YFGQM1FuF2mIFQhpRCGFtqfrB_UlEWhbibXBSTKMI745hy8o0KL6MwDtIB_qifUP',
-    isNew: false
+    isNew: false,
+    voltage: '3.3V',
+    packageSize: 'Module',
+    color: 'Blue'
   },
   {
     id: 'sm-04',
@@ -90,7 +140,38 @@ export const mockProducts = [
     category: 'Sensors & Modules',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCn4VqL7OALZhJa63buK2FaEdkD4gz9THGsjLOZUtKi54mAIHWdOL2k-iGnEVAUYBFMKrPE5Q6VBlj4g6g_d7MC9vR8vBQybs9AFRNKQ8xWjmuAQUAvsqAb383pdufiENVjtWqhL5GYPULFE7akYuaMzfChAfEgL8X5XBXFnxzBx4qt4nClqKyFsyk0YXwf9hIQmeBsGxr-y-P4kFJ74C2CkKjElsrsUzulB4DvLm5HBCej8D1_5nNOrtVfcKB9v5hE0CoBBRiGeejs',
     isSale: true,
-    oldPrice: 35.00
+    oldPrice: 35.00,
+    voltage: '5V',
+    packageSize: 'Module',
+    color: 'Silver'
+  },
+  {
+    id: 'sm-05',
+    title: 'DHT22 Temp & Humidity Sensor',
+    description: 'Digital | High Precision',
+    price: 4.50,
+    rating: 5,
+    reviews: 620,
+    category: 'Sensors & Modules',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDd32I9bq6A7RVh9YWUD0StycQcfKspSBe34SKSEWt1Vxxtgk1mP_WRubPrW5gbLHKzDDv3DFg7LOHoWAnucRD6QMpOAWMdXYYE2IwhKla1s_cFfoQizDmK2JxLGwkFu3JZhPV0C7ow0EwMJ0L4Vje4n12v06LX1t3Tr4jgK_bNhbKGB8mR45VUlQHEqQdDXvbi3enKNzs0dKB1YFGQM1FuF2mIFQhpRCGFtqfrB_UlEWhbibXBSTKMI745hy8o0KL6MwDtIB_qifUP',
+    isNew: false,
+    voltage: '3.3V',
+    packageSize: 'Through-Hole',
+    color: 'White'
+  },
+  {
+    id: 'sm-06',
+    title: 'Ultrasonic Distance Sensor HC-SR04',
+    description: '2cm - 400cm | 5V',
+    price: 1.99,
+    rating: 4,
+    reviews: 1200,
+    category: 'Sensors & Modules',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCn4VqL7OALZhJa63buK2FaEdkD4gz9THGsjLOZUtKi54mAIHWdOL2k-iGnEVAUYBFMKrPE5Q6VBlj4g6g_d7MC9vR8vBQybs9AFRNKQ8xWjmuAQUAvsqAb383pdufiENVjtWqhL5GYPULFE7akYuaMzfChAfEgL8X5XBXFnxzBx4qt4nClqKyFsyk0YXwf9hIQmeBsGxr-y-P4kFJ74C2CkKjElsrsUzulB4DvLm5HBCej8D1_5nNOrtVfcKB9v5hE0CoBBRiGeejs',
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'Module',
+    color: 'Blue'
   },
   
   // Power Supplies
@@ -103,30 +184,39 @@ export const mockProducts = [
     reviews: 210,
     category: 'Power Supplies',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
-    isNew: false
+    isNew: false,
+    voltage: '24V',
+    packageSize: 'Desktop',
+    color: 'White'
   },
   {
     id: 'ps-02',
-    title: 'Compact Buck Converter',
+    title: 'Compact Buck Converter LM2596',
     description: '4.5-40V In | 1.5-35V Out',
-    price: 6.99,
+    price: 2.99,
     rating: 4,
     reviews: 350,
     category: 'Power Supplies',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
     isSale: true,
-    oldPrice: 9.99
+    oldPrice: 4.99,
+    voltage: '12V',
+    packageSize: 'Module',
+    color: 'Blue'
   },
   {
     id: 'ps-03',
-    title: 'LiPo Battery Charger Module',
+    title: 'LiPo Battery Charger TP4056',
     description: '5V Micro USB | 1A Charge Rate',
-    price: 3.50,
+    price: 1.50,
     rating: 5,
     reviews: 185,
     category: 'Power Supplies',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
-    isNew: false
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'Module',
+    color: 'Blue'
   },
   {
     id: 'ps-04',
@@ -137,7 +227,24 @@ export const mockProducts = [
     reviews: 55,
     category: 'Power Supplies',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
-    isNew: true
+    isNew: true,
+    voltage: '24V',
+    packageSize: 'DIN Rail',
+    color: 'Silver'
+  },
+  {
+    id: 'ps-05',
+    title: 'Step-Up Boost Converter MT3608',
+    description: '2-24V In | 5-28V Out',
+    price: 1.80,
+    rating: 4,
+    reviews: 420,
+    category: 'Power Supplies',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF',
+    isNew: false,
+    voltage: '12V',
+    packageSize: 'Module',
+    color: 'Blue'
   },
 
   // IoT & Wireless
@@ -151,7 +258,10 @@ export const mockProducts = [
     category: 'IoT & Wireless',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWvwrNFgo6k6IqX5KMcnsUXJWtCJeuDYqvJA4HbfmaWVK5ar0zeHESwsWZU2CeSK0k3p8pikA9VW2uS68NsH6GFjhZ1MMK-S19Y6CwmurxBPTKkmVmcFJYgPAYhyZsQgdd5qGqUpj7pVzlBOIfiD2Pm_QTYc5eD8amRyVwrzErNLADUPSWByz3BqJN4ywbRLCzWaRB4BR5BNK8CbVobA6cGbZPV2g0fJo2lK0r5jAqBVCCLa4zsSot88jt8mY36l22VpgoQJSw_wYD',
     isSale: true,
-    oldPrice: 12.00
+    oldPrice: 12.00,
+    voltage: '3.3V',
+    packageSize: 'Module',
+    color: 'Black'
   },
   {
     id: 'iot-02',
@@ -162,7 +272,10 @@ export const mockProducts = [
     reviews: 130,
     category: 'IoT & Wireless',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCY109R2x6yUwmyxGVVnrsDQicEeRiCGJKxYT9ToAreRHmqc7HWo8krT2_uyibKkFoRcKkJYCfw9lS4WxJ0w_zA1d4Nt6eG7PaUlWd0tYSgb7iJpHWx51h_JDZtgxbvPE059VhyR-vfHipvZ7IgktdYWzpsWNm4q3t2OBYJR0pY70S6HZAe-mDontEl-jRvnNpj4i3vHIbvMEn8NMJ9zhCOWjj5nksY94AScD4HSCu5kmbOxCcLxebXWsBQB_tqrYdxMCjSCjIIQfK-',
-    isNew: true
+    isNew: true,
+    voltage: '3.3V',
+    packageSize: 'Module',
+    color: 'Green'
   },
   {
     id: 'iot-03',
@@ -173,7 +286,10 @@ export const mockProducts = [
     reviews: 95,
     category: 'IoT & Wireless',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWvwrNFgo6k6IqX5KMcnsUXJWtCJeuDYqvJA4HbfmaWVK5ar0zeHESwsWZU2CeSK0k3p8pikA9VW2uS68NsH6GFjhZ1MMK-S19Y6CwmurxBPTKkmVmcFJYgPAYhyZsQgdd5qGqUpj7pVzlBOIfiD2Pm_QTYc5eD8amRyVwrzErNLADUPSWByz3BqJN4ywbRLCzWaRB4BR5BNK8CbVobA6cGbZPV2g0fJo2lK0r5jAqBVCCLa4zsSot88jt8mY36l22VpgoQJSw_wYD',
-    isNew: false
+    isNew: false,
+    voltage: '3.3V',
+    packageSize: 'Module',
+    color: 'Green'
   },
   {
     id: 'iot-04',
@@ -184,7 +300,24 @@ export const mockProducts = [
     reviews: 40,
     category: 'IoT & Wireless',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCY109R2x6yUwmyxGVVnrsDQicEeRiCGJKxYT9ToAreRHmqc7HWo8krT2_uyibKkFoRcKkJYCfw9lS4WxJ0w_zA1d4Nt6eG7PaUlWd0tYSgb7iJpHWx51h_JDZtgxbvPE059VhyR-vfHipvZ7IgktdYWzpsWNm4q3t2OBYJR0pY70S6HZAe-mDontEl-jRvnNpj4i3vHIbvMEn8NMJ9zhCOWjj5nksY94AScD4HSCu5kmbOxCcLxebXWsBQB_tqrYdxMCjSCjIIQfK-',
-    isNew: false
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'Shield',
+    color: 'Blue'
+  },
+  {
+    id: 'iot-05',
+    title: 'NRF24L01+ 2.4GHz Transceiver',
+    description: 'SPI Interface | 100m Range',
+    price: 1.20,
+    rating: 4,
+    reviews: 800,
+    category: 'IoT & Wireless',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCY109R2x6yUwmyxGVVnrsDQicEeRiCGJKxYT9ToAreRHmqc7HWo8krT2_uyibKkFoRcKkJYCfw9lS4WxJ0w_zA1d4Nt6eG7PaUlWd0tYSgb7iJpHWx51h_JDZtgxbvPE059VhyR-vfHipvZ7IgktdYWzpsWNm4q3t2OBYJR0pY70S6HZAe-mDontEl-jRvnNpj4i3vHIbvMEn8NMJ9zhCOWjj5nksY94AScD4HSCu5kmbOxCcLxebXWsBQB_tqrYdxMCjSCjIIQfK-',
+    isNew: false,
+    voltage: '3.3V',
+    packageSize: 'Module',
+    color: 'Black'
   },
 
   // Robotics & Actuators
@@ -197,18 +330,24 @@ export const mockProducts = [
     reviews: 63,
     category: 'Robotics & Actuators',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-4V5HZhlCgjUjhhjeq3OTIas00jLs8P-WpXGBSl5flOoJ4AeG-tj0_Qf6ZBx7P_xuGtQDWnszeYQop93CXK7uNPd0SSndS5D0MesTrbr4YIa90qz-QEGRPME-WnGohpRi9DIFo8N_rErrCXuRWQZzIOb7c2YavaZip4DoqNf6RjC_jvn-iGBQOrv1uR4QpPTnep_I6khxfmlSzPppVw_mpCANaDIquCxgw8RmFYs0P3OsX28Una3pjT3bi8Wus0RIQ_1rbGsCDQO_',
-    isNew: false
+    isNew: false,
+    voltage: '12V',
+    packageSize: 'Motor',
+    color: 'Silver'
   },
   {
     id: 'ra-02',
-    title: 'High-Torque Metal Gear Servo',
-    description: '20kg/cm | 6V-8.4V',
-    price: 25.50,
+    title: 'High-Torque Metal Gear Servo MG996R',
+    description: '10kg/cm | 4.8V-7.2V',
+    price: 8.50,
     rating: 4,
     reviews: 145,
     category: 'Robotics & Actuators',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuADjroi-O617y6-_ra7KBuTW_7pQVmQdmr-VAMiB_qOifwZGquCtVVs7rdpHOnU0QSEil10W6yUk2fR9NEhc4GSYWojxHbjGqklNxk5XES8dmVY0GTxnB-SvBwm2X_HJWaq1MczQOvTkJVnAdGGGu3Ogjh-pNbZubQZJJUBGlImCBP2k8KU8y6Z6GAt_hTLRY414GTAwWyq4g3wTGSwd4jZQRvRCsIKBy8O6j1ASTV8miEwThVBl_duVGW5PK8c7xAFhrMghJ7c7ibD',
-    isNew: true
+    isNew: true,
+    voltage: '5V',
+    packageSize: 'Servo',
+    color: 'Black'
   },
   {
     id: 'ra-03',
@@ -219,7 +358,10 @@ export const mockProducts = [
     reviews: 72,
     category: 'Robotics & Actuators',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-4V5HZhlCgjUjhhjeq3OTIas00jLs8P-WpXGBSl5flOoJ4AeG-tj0_Qf6ZBx7P_xuGtQDWnszeYQop93CXK7uNPd0SSndS5D0MesTrbr4YIa90qz-QEGRPME-WnGohpRi9DIFo8N_rErrCXuRWQZzIOb7c2YavaZip4DoqNf6RjC_jvn-iGBQOrv1uR4QpPTnep_I6khxfmlSzPppVw_mpCANaDIquCxgw8RmFYs0P3OsX28Una3pjT3bi8Wus0RIQ_1rbGsCDQO_',
-    isNew: false
+    isNew: false,
+    voltage: '12V',
+    packageSize: 'Actuator',
+    color: 'Silver'
   },
   {
     id: 'ra-04',
@@ -231,7 +373,24 @@ export const mockProducts = [
     category: 'Robotics & Actuators',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuADjroi-O617y6-_ra7KBuTW_7pQVmQdmr-VAMiB_qOifwZGquCtVVs7rdpHOnU0QSEil10W6yUk2fR9NEhc4GSYWojxHbjGqklNxk5XES8dmVY0GTxnB-SvBwm2X_HJWaq1MczQOvTkJVnAdGGGu3Ogjh-pNbZubQZJJUBGlImCBP2k8KU8y6Z6GAt_hTLRY414GTAwWyq4g3wTGSwd4jZQRvRCsIKBy8O6j1ASTV8miEwThVBl_duVGW5PK8c7xAFhrMghJ7c7ibD',
     isSale: true,
-    oldPrice: 80.00
+    oldPrice: 80.00,
+    voltage: '24V',
+    packageSize: 'Motor',
+    color: 'Black'
+  },
+  {
+    id: 'ra-05',
+    title: 'SG90 Micro Servo',
+    description: '9g | 1.8kg/cm',
+    price: 2.50,
+    rating: 4,
+    reviews: 980,
+    category: 'Robotics & Actuators',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-4V5HZhlCgjUjhhjeq3OTIas00jLs8P-WpXGBSl5flOoJ4AeG-tj0_Qf6ZBx7P_xuGtQDWnszeYQop93CXK7uNPd0SSndS5D0MesTrbr4YIa90qz-QEGRPME-WnGohpRi9DIFo8N_rErrCXuRWQZzIOb7c2YavaZip4DoqNf6RjC_jvn-iGBQOrv1uR4QpPTnep_I6khxfmlSzPppVw_mpCANaDIquCxgw8RmFYs0P3OsX28Una3pjT3bi8Wus0RIQ_1rbGsCDQO_',
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'Servo',
+    color: 'Blue'
   },
 
   // Passive Components
@@ -244,7 +403,10 @@ export const mockProducts = [
     reviews: 320,
     category: 'Passive Components',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
-    isNew: false
+    isNew: false,
+    voltage: '50V',
+    packageSize: 'Through-Hole',
+    color: 'Yellow'
   },
   {
     id: 'pc-02',
@@ -255,11 +417,14 @@ export const mockProducts = [
     reviews: 415,
     category: 'Passive Components',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
-    isNew: false
+    isNew: false,
+    voltage: 'N/A',
+    packageSize: 'Through-Hole',
+    color: 'Blue'
   },
   {
     id: 'pc-03',
-    title: 'SMD Inductor Reel',
+    title: 'SMD Inductor Reel 10uH',
     description: '10uH | 0805 Size | 3000 Pcs',
     price: 45.00,
     rating: 4,
@@ -267,7 +432,10 @@ export const mockProducts = [
     category: 'Passive Components',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
     isSale: true,
-    oldPrice: 55.00
+    oldPrice: 55.00,
+    voltage: 'N/A',
+    packageSize: '0805',
+    color: 'Black'
   },
   {
     id: 'pc-04',
@@ -278,6 +446,109 @@ export const mockProducts = [
     reviews: 55,
     category: 'Passive Components',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
-    isNew: true
+    isNew: true,
+    voltage: '450V',
+    packageSize: 'Snap-in',
+    color: 'Black'
+  },
+  {
+    id: 'pc-05',
+    title: '0805 SMD Resistor Book',
+    description: '170 values x 50pcs',
+    price: 22.00,
+    rating: 5,
+    reviews: 140,
+    category: 'Passive Components',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
+    isNew: false,
+    voltage: 'N/A',
+    packageSize: '0805',
+    color: 'Black'
+  },
+  {
+    id: 'pc-06',
+    title: '1206 SMD Capacitor Kit',
+    description: '1pF to 10uF',
+    price: 18.50,
+    rating: 4,
+    reviews: 90,
+    category: 'Passive Components',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi',
+    isNew: false,
+    voltage: '50V',
+    packageSize: '1206',
+    color: 'Brown'
+  },
+
+  // LEDs & Optoelectronics
+  {
+    id: 'led-01',
+    title: '5mm Diffused Red LED Pack',
+    description: 'Standard 20mA | 100 Pcs',
+    price: 4.50,
+    rating: 5,
+    reviews: 500,
+    category: 'LEDs & Opto',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCXp4C0yU7r2m-G5uK425Oq8y3Oqf0lI-lGgC83z8O1RzX090fPj7-V3-176-Y7Wl4XF9G89e-UoI1V0Fk0_a8J1Z0o_E7eN-p-b7w-B-67h_rB2Y_jP0h5yW5V-vA4j2M_4H7hFq-M0E_qA4U-8mN4pI8uA7jX4K9pT-6rM_a6uX3u5e8D0E5W-B8m',
+    isNew: false,
+    voltage: '1.8V',
+    packageSize: '5mm',
+    color: 'Red'
+  },
+  {
+    id: 'led-02',
+    title: '5mm Clear Blue LED Pack',
+    description: 'Ultra Bright | 100 Pcs',
+    price: 5.50,
+    rating: 4,
+    reviews: 420,
+    category: 'LEDs & Opto',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCXp4C0yU7r2m-G5uK425Oq8y3Oqf0lI-lGgC83z8O1RzX090fPj7-V3-176-Y7Wl4XF9G89e-UoI1V0Fk0_a8J1Z0o_E7eN-p-b7w-B-67h_rB2Y_jP0h5yW5V-vA4j2M_4H7hFq-M0E_qA4U-8mN4pI8uA7jX4K9pT-6rM_a6uX3u5e8D0E5W-B8m',
+    isNew: false,
+    voltage: '3.3V',
+    packageSize: '5mm',
+    color: 'Blue'
+  },
+  {
+    id: 'led-03',
+    title: '0805 SMD LED Assortment',
+    description: '5 Colors | 500 Pcs',
+    price: 12.00,
+    rating: 5,
+    reviews: 150,
+    category: 'LEDs & Opto',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCXp4C0yU7r2m-G5uK425Oq8y3Oqf0lI-lGgC83z8O1RzX090fPj7-V3-176-Y7Wl4XF9G89e-UoI1V0Fk0_a8J1Z0o_E7eN-p-b7w-B-67h_rB2Y_jP0h5yW5V-vA4j2M_4H7hFq-M0E_qA4U-8mN4pI8uA7jX4K9pT-6rM_a6uX3u5e8D0E5W-B8m',
+    isNew: false,
+    voltage: '3.3V',
+    packageSize: '0805',
+    color: 'Multicolor'
+  },
+  {
+    id: 'led-04',
+    title: '16x2 LCD Display with I2C',
+    description: 'HD44780 | Blue Backlight',
+    price: 6.99,
+    rating: 4,
+    reviews: 800,
+    category: 'LEDs & Opto',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCXp4C0yU7r2m-G5uK425Oq8y3Oqf0lI-lGgC83z8O1RzX090fPj7-V3-176-Y7Wl4XF9G89e-UoI1V0Fk0_a8J1Z0o_E7eN-p-b7w-B-67h_rB2Y_jP0h5yW5V-vA4j2M_4H7hFq-M0E_qA4U-8mN4pI8uA7jX4K9pT-6rM_a6uX3u5e8D0E5W-B8m',
+    isNew: false,
+    voltage: '5V',
+    packageSize: 'Module',
+    color: 'Blue'
+  },
+  {
+    id: 'led-05',
+    title: 'WS2812B RGB LED Strip 1m',
+    description: '60 LEDs/m | IP65',
+    price: 9.50,
+    rating: 5,
+    reviews: 340,
+    category: 'LEDs & Opto',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCXp4C0yU7r2m-G5uK425Oq8y3Oqf0lI-lGgC83z8O1RzX090fPj7-V3-176-Y7Wl4XF9G89e-UoI1V0Fk0_a8J1Z0o_E7eN-p-b7w-B-67h_rB2Y_jP0h5yW5V-vA4j2M_4H7hFq-M0E_qA4U-8mN4pI8uA7jX4K9pT-6rM_a6uX3u5e8D0E5W-B8m',
+    isNew: true,
+    voltage: '5V',
+    packageSize: 'Strip',
+    color: 'RGB'
   }
 ];

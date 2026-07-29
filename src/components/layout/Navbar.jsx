@@ -51,18 +51,15 @@ export default function Navbar() {
               >
                 Best Sellers
               </NavLink>
-              <NavLink 
-                to="/#contact" 
+              <button 
                 onClick={(e) => {
-                  if (window.location.pathname === '/') {
-                    e.preventDefault();
-                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                  }
+                  e.preventDefault();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
+                className="font-label-caps text-label-caps transition-colors duration-200 text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary"
               >
                 Contact
-              </NavLink>
+              </button>
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
@@ -107,21 +104,18 @@ export default function Navbar() {
               >
                 Best Sellers
               </NavLink>
-              <NavLink 
-                to="/#contact" 
+              <button 
                 onClick={(e) => {
+                  e.preventDefault();
                   setIsMobileMenuOpen(false);
-                  if (window.location.pathname === '/') {
-                    e.preventDefault();
-                    setTimeout(() => {
-                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }
+                  setTimeout(() => {
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
                 }}
-                className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
+                className="font-label-caps text-sm transition-colors duration-200 text-on-surface-variant dark:text-surface-variant font-medium text-left w-full hover:text-secondary"
               >
                 Contact
-              </NavLink>
+              </button>
               <div className="border-t border-outline-variant/30 dark:border-outline/30 pt-4 flex gap-4">
                 <button onClick={handleAccountClick} className="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant text-sm font-medium hover:text-secondary">
                   <span className="material-symbols-outlined text-[20px]">person</span> Account

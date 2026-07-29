@@ -32,12 +32,12 @@ export default function ProductDisplay({ selectedCategory }) {
             No products found for this category.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {displayedProducts.map((product) => (
               <div 
                 key={product.id} 
                 onClick={() => navigate(`/product/${product.id}`)}
-                className="product-card-hover group border border-outline-variant p-6 transition-all bg-white relative block cursor-pointer"
+                className="product-card-hover group border border-outline-variant p-4 transition-all bg-white relative block cursor-pointer rounded-lg"
               >
                 
                 {/* Badges */}
@@ -53,7 +53,7 @@ export default function ProductDisplay({ selectedCategory }) {
                 )}
 
                 {/* Product Image */}
-                <div className="aspect-square mb-6 overflow-hidden flex items-center justify-center p-4">
+                <div className="h-32 mb-4 overflow-hidden flex items-center justify-center p-2 bg-surface-container-lowest rounded">
                   <img 
                     src={product.image} 
                     alt={product.title}
@@ -74,8 +74,8 @@ export default function ProductDisplay({ selectedCategory }) {
                     <span className="text-outline text-[11px] font-medium ml-1">({product.reviews})</span>
                   </div>
 
-                  <h3 className="font-body-base font-bold text-on-surface line-clamp-2">{product.title}</h3>
-                  <p className="font-technical-data text-technical-data text-on-primary-container">{product.description}</p>
+                  <h3 className="font-bold text-sm text-on-surface line-clamp-2">{product.title}</h3>
+                  <p className="text-xs text-on-surface-variant line-clamp-1">{product.description}</p>
                   
                   {/* Price & Cart */}
                   <div className="flex items-center justify-between pt-4">
@@ -83,19 +83,19 @@ export default function ProductDisplay({ selectedCategory }) {
                       {product.isSale && product.oldPrice && (
                         <span className="text-outline line-through text-xs">${product.oldPrice.toFixed(2)}</span>
                       )}
-                      <span className={`text-headline-md font-black ${product.isSale ? 'text-secondary' : 'text-on-surface'}`}>
+                      <span className={`font-bold ${product.isSale ? 'text-secondary' : 'text-on-surface'}`}>
                         ${product.price.toFixed(2)}
                       </span>
                     </div>
                     <button 
-                      className="bg-primary-container text-white p-2 rounded hover:bg-secondary-container transition-colors"
+                      className="bg-surface-container text-on-surface-variant p-1.5 rounded hover:bg-secondary-container hover:text-white transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
                         // Add to cart logic here
                       }}
                     >
-                      <span className="material-symbols-outlined">shopping_cart</span>
+                      <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
                     </button>
                   </div>
 
