@@ -5,6 +5,7 @@ import AuthModal from '../auth/AuthModal';
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleAccountClick = () => {
@@ -65,6 +66,9 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
+            <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
+              <span className="material-symbols-outlined">search</span>
+            </button>
             <button onClick={handleAccountClick} className="hidden sm:block p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
               <span className="material-symbols-outlined">person</span>
             </button>
@@ -126,6 +130,24 @@ export default function Navbar() {
                   <span className="material-symbols-outlined text-[20px]">favorite</span> Wishlist
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Search Bar Overlay */}
+        {isSearchOpen && (
+          <div className="w-full px-margin-mobile md:px-margin-desktop py-3 bg-surface border-t border-outline-variant/30 animate-in slide-in-from-top-2">
+            <div className="max-w-3xl mx-auto flex items-center gap-2 bg-white rounded-full px-4 py-2 border border-outline-variant focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all shadow-sm">
+               <span className="material-symbols-outlined text-outline">search</span>
+               <input 
+                 type="text" 
+                 placeholder="Search for components, tools, or part numbers..." 
+                 className="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-on-surface px-2" 
+                 autoFocus 
+               />
+               <button onClick={() => setIsSearchOpen(false)} className="text-on-surface-variant hover:text-error flex items-center justify-center">
+                 <span className="material-symbols-outlined text-[20px]">close</span>
+               </button>
             </div>
           </div>
         )}
