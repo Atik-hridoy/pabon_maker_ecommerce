@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
 
 export default function ShoppingCart() {
+  const navigate = useNavigate();
   return (
     <MainLayout>
       <div className="pt-12 max-w-max-width mx-auto px-margin-desktop w-full flex-grow">
@@ -129,7 +131,7 @@ export default function ShoppingCart() {
                   <span className="font-display-lg text-3xl text-primary">$45.44</span>
                 </div>
                 <div className="space-y-4">
-                  <button className="w-full bg-primary text-white font-title-sm py-4 rounded-sm hover:bg-on-primary-fixed-variant transition-all flex items-center justify-center gap-3 group">
+                  <button onClick={() => navigate('/checkout/shipping')} className="w-full bg-primary text-white font-title-sm py-4 rounded-sm hover:bg-on-primary-fixed-variant transition-all flex items-center justify-center gap-3 group">
                     Proceed to Checkout
                     <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
                   </button>

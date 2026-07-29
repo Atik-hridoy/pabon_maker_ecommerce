@@ -7,6 +7,10 @@ import Categories from './pages/Categories/index.jsx';
 import Cart from './pages/Cart/index.jsx';
 import BestSellers from './pages/BestSellers/index.jsx';
 import ProductDetails from './pages/ProductDetails/index.jsx';
+import Shipping from './pages/Checkout/Shipping.jsx';
+import Payment from './pages/Checkout/Payment.jsx';
+import Confirmation from './pages/Checkout/Confirmation.jsx';
+import Account from './pages/Account/index.jsx';
 
 function App() {
   return (
@@ -18,6 +22,10 @@ function App() {
 
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout/shipping" element={<Shipping />} />
+        <Route path="/checkout/payment" element={<Payment />} />
+        <Route path="/checkout/confirmation" element={<Confirmation />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
     </Router>
   );

@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import AuthModal from '../auth/AuthModal';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleAccountClick = () => {
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      navigate('/account');
+    } else {
+      setIsAuthModalOpen(true);
+    }
+  };
 
   return (
-
+    <>
       <header className="sticky top-0 z-50 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none relative">
         <nav className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-stack-md max-w-container-max mx-auto">
           <div className="flex items-center gap-4 md:gap-8">
@@ -54,7 +65,7 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
-            <button className="hidden sm:block p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
+            <button onClick={handleAccountClick} className="hidden sm:block p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
               <span className="material-symbols-outlined">person</span>
             </button>
             <button className="hidden sm:block p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
@@ -108,7 +119,7 @@ export default function Navbar() {
                 Contact
               </NavLink>
               <div className="border-t border-outline-variant/30 dark:border-outline/30 pt-4 flex gap-4">
-                <button className="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant text-sm font-medium hover:text-secondary">
+                <button onClick={handleAccountClick} className="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant text-sm font-medium hover:text-secondary">
                   <span className="material-symbols-outlined text-[20px]">person</span> Account
                 </button>
                 <button className="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant text-sm font-medium hover:text-secondary">
@@ -119,6 +130,7 @@ export default function Navbar() {
           </div>
         )}
       </header>
-
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+    </>
   );
 }

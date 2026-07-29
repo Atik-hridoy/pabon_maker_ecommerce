@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductHero({ product }) {
+  const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
   if (!product) return null;
 
   return (
@@ -90,19 +93,41 @@ export default function ProductHero({ product }) {
               <button className="px-6 py-2 border-2 border-outline hover:border-primary font-semibold rounded transition-all">Unsoldered</button>
             </div>
           </div>
-          <div className="flex gap-4 items-end pt-4">
-            <div className="w-32">
+          <div className="flex flex-col sm:flex-row gap-4 items-end pt-4">
+            <div className="w-full sm:w-36 shrink-0">
               <label className="font-label-caps text-on-surface-variant block mb-2">QUANTITY</label>
-              <div className="flex items-center border border-outline rounded bg-white">
-                <button className="px-3 py-2 hover:bg-surface-variant">-</button>
-                <input className="w-full text-center border-none focus:ring-0 text-body-base font-bold" type="number" defaultValue="1" />
-                <button className="px-3 py-2 hover:bg-surface-variant">+</button>
+              <div className="flex items-center justify-between bg-surface-container-low border border-outline-variant rounded-lg h-[56px] px-2 shadow-inner">
+                <button 
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-10 h-10 flex items-center justify-center rounded-md bg-white border border-outline-variant hover:border-primary hover:text-primary transition-all shadow-sm active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-[18px]">remove</span>
+                </button>
+                <input 
+                  className="w-10 text-center border-none focus:ring-0 text-headline-md font-bold bg-transparent p-0" 
+                  type="number" 
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  min="1" 
+                />
+                <button 
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="w-10 h-10 flex items-center justify-center rounded-md bg-white border border-outline-variant hover:border-primary hover:text-primary transition-all shadow-sm active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                </button>
               </div>
             </div>
-            <button className="flex-grow bg-secondary-container hover:opacity-90 text-white font-bold py-4 rounded shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
-              <span className="material-symbols-outlined">shopping_cart</span>
-              ADD TO CART
-            </button>
+            <div className="flex gap-4 flex-grow w-full">
+              <button onClick={() => navigate('/checkout/shipping')} className="flex-1 bg-primary text-white font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2">
+                <span className="material-symbols-outlined">bolt</span>
+                BUY NOW
+              </button>
+              <button className="flex-1 bg-secondary-container text-white font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2">
+                <span className="material-symbols-outlined">shopping_cart</span>
+                ADD TO CART
+              </button>
+            </div>
           </div>
         </div>
       </div>
