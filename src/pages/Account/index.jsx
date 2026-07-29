@@ -11,6 +11,7 @@ import SettingsTab from './components/SettingsTab';
 export default function Account() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('orders');
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleSignOut = (e) => {
     e.preventDefault();
@@ -46,19 +47,36 @@ export default function Account() {
 
   return (
     <div className="min-h-screen text-on-surface flex flex-col md:flex-row bg-[#f6f9ff]">
+      
+      {/* Mobile Drawer Overlay */}
+      {isDrawerOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-[55] md:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => setIsDrawerOpen(false)}
+        />
+      )}
+
       {/* Side Navigation */}
-      <aside className="w-full md:w-64 bg-primary-container text-white md:sticky md:top-0 md:h-screen flex flex-col z-50">
-        <div className="p-6 border-b border-white/10">
-          <Link to="/" className="font-display-lg text-[22px] font-black tracking-tighter text-white hover:opacity-80 transition-opacity">
-            CIRCUITWORLD
-          </Link>
-          <div className="text-[10px] font-label-caps text-primary-fixed-dim mt-1 uppercase tracking-[0.2em]">Customer Order Hub</div>
+      <aside className={`fixed inset-y-0 left-0 transform ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static w-[280px] md:w-64 bg-primary-container text-white md:sticky md:top-0 h-screen flex flex-col z-[60] transition-transform duration-300`}>
+        <div className="p-6 border-b border-white/10 flex justify-between items-center">
+          <div>
+            <Link to="/" className="font-display-lg text-[22px] font-black tracking-tighter text-white hover:opacity-80 transition-opacity">
+              CIRCUITWORLD
+            </Link>
+            <div className="text-[10px] font-label-caps text-primary-fixed-dim mt-1 uppercase tracking-[0.2em]">Customer Order Hub</div>
+          </div>
+          <button onClick={() => setIsDrawerOpen(false)} className="md:hidden p-2 rounded hover:bg-white/10">
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </div>
         <nav className="flex-1 px-4 py-6 flex flex-col gap-2 overflow-y-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {
+                setActiveTab(tab.id);
+                setIsDrawerOpen(false);
+              }}
               className={`flex items-center gap-3 p-3 w-full text-left rounded-lg transition-all group ${
                 activeTab === tab.id 
                   ? 'bg-secondary-container text-white shadow-sm' 
@@ -74,7 +92,10 @@ export default function Account() {
           
           <div className="mt-auto pt-6 border-t border-white/10 flex flex-col gap-2">
             <button
-              onClick={() => setActiveTab('settings')}
+              onClick={() => {
+                setActiveTab('settings');
+                setIsDrawerOpen(false);
+              }}
               className={`flex items-center gap-3 p-3 w-full text-left rounded-lg transition-all group ${
                 activeTab === 'settings'
                   ? 'bg-secondary-container text-white shadow-sm'
@@ -96,7 +117,12 @@ export default function Account() {
       <main className="flex-1 bg-surface min-w-0">
         {/* Top Bar */}
         <header className="h-16 bg-white border-b border-outline-variant flex items-center justify-between px-4 md:px-6 sticky top-0 z-40">
-          <h1 className="text-2xl font-bold text-on-surface">{getPageTitle()}</h1>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setIsDrawerOpen(true)} className="md:hidden p-2 -ml-2 rounded-lg hover:bg-surface-variant text-on-surface">
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+            <h1 className="text-xl md:text-2xl font-bold text-on-surface">{getPageTitle()}</h1>
+          </div>
           <div className="flex items-center gap-8">
             {/* Search */}
             <div className="hidden sm:flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant">
@@ -114,7 +140,7 @@ export default function Account() {
           </div>
         </header>
 
-        <div className="p-4 md:p-6 max-w-[1280px] mx-auto space-y-6">
+        <div className="p-4 md:p-6 max-w-container-max mx-auto w-full space-y-6">
           {renderContent()}
         </div>
       </main>

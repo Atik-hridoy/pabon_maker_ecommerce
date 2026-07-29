@@ -37,36 +37,36 @@ export default function CategoriesGrid({ selectedCategory, onSelectCategory }) {
   return (
     <section className="py-20 bg-surface">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-        <div className="flex justify-between items-end mb-12">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8 md:mb-12">
           <div>
-            <p className="text-secondary font-label-caps text-label-caps tracking-widest mb-2 uppercase">Precision Modules</p>
-            <h2 className="font-headline-md text-headline-md text-on-surface">SHOP BY CATEGORY</h2>
+            <p className="text-secondary font-label-caps text-[10px] md:text-label-caps tracking-widest mb-1 md:mb-2 uppercase">Precision Modules</p>
+            <h2 className="text-2xl md:font-headline-md md:text-headline-md font-bold text-on-surface">SHOP BY CATEGORY</h2>
           </div>
           <button 
             onClick={() => onSelectCategory?.(null)}
-            className="text-secondary font-bold font-label-caps text-label-caps hover:underline"
+            className="text-secondary font-bold text-[10px] md:text-label-caps uppercase tracking-wider hover:underline self-start md:self-auto"
           >
             VIEW ALL CATEGORIES
           </button>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
+        <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-gutter scrollbar-hide pb-4 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0">
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat.name;
             return (
               <div 
                 key={cat.id}
                 onClick={() => onSelectCategory?.(cat.name)}
-                className={`group cursor-pointer flex flex-col items-center gap-4 transition-transform duration-300 ${isSelected ? 'scale-105' : 'hover:scale-105'}`}
+                className={`group cursor-pointer flex-shrink-0 w-16 sm:w-20 md:w-auto flex flex-col items-center gap-2 md:gap-4 transition-transform duration-300 ${isSelected ? 'scale-105' : 'hover:scale-105'}`}
               >
-                <div className={`w-full aspect-square bg-white border rounded-full flex items-center justify-center p-8 transition-all duration-300 ${isSelected ? 'border-secondary border-2 shadow-[0_10px_20px_rgba(254,107,0,0.15)]' : 'border-outline-variant group-hover:border-secondary'}`}>
+                <div className={`w-16 h-16 sm:w-20 sm:h-20 md:w-full md:h-auto md:aspect-square bg-white border rounded-full flex items-center justify-center p-3 md:p-8 transition-all duration-300 ${isSelected ? 'border-secondary border-2 shadow-[0_10px_20px_rgba(254,107,0,0.15)]' : 'border-outline-variant group-hover:border-secondary'}`}>
                   <img 
                     className="w-full h-full object-contain" 
                     alt={cat.name} 
                     src={cat.image} 
                   />
                 </div>
-                <p className={`font-label-caps text-label-caps text-center font-bold transition-colors ${isSelected ? 'text-secondary' : 'text-on-surface group-hover:text-secondary'}`}>
+                <p className={`text-[10px] sm:text-xs text-center font-medium leading-tight transition-colors ${isSelected ? 'text-secondary font-bold' : 'text-on-surface group-hover:text-secondary'}`}>
                   {cat.name}
                 </p>
               </div>

@@ -7,7 +7,7 @@ export default function Confirmation() {
 
   return (
     <MainLayout>
-      <div className="pt-8 pb-24 px-4 md:px-8 max-w-[1280px] mx-auto">
+      <div className="pt-8 pb-24 px-4 md:px-8 max-w-container-max mx-auto w-full">
         {/* Success Header Section */}
         <section className="flex flex-col items-center text-center mb-12">
           <div className="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mb-6 shadow-lg">

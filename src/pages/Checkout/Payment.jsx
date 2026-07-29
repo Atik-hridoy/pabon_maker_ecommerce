@@ -7,7 +7,7 @@ export default function Payment() {
 
   return (
     <MainLayout>
-      <div className="pt-8 pb-16 px-4 md:px-8 max-w-[1280px] mx-auto">
+      <div className="pt-8 pb-16 px-4 md:px-8 max-w-container-max mx-auto w-full">
         {/* Checkout Stepper */}
         <div className="mb-12 flex items-center justify-center md:justify-start gap-8 border-b border-outline-variant pb-6">
           <div className="flex items-center gap-2 text-secondary font-bold opacity-50 cursor-pointer" onClick={() => navigate('/checkout/shipping')}>

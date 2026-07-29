@@ -24,9 +24,9 @@ function CategoryProductCard({ product }) {
           </Link>
         </div>
         
-        <p className="text-xs text-on-surface-variant mb-3 line-clamp-1">{product.description}</p>
+        <p className="hidden md:block text-xs text-on-surface-variant mb-3 line-clamp-1">{product.description}</p>
         
-        <div className="flex flex-wrap gap-1 mb-4 mt-auto">
+        <div className="hidden md:flex flex-wrap gap-1 mb-4 mt-auto">
            {product.voltage && product.voltage !== 'N/A' && (
              <span className="text-[10px] font-technical-data border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant bg-surface-container-low">{product.voltage}</span>
            )}
@@ -46,7 +46,7 @@ function CategoryProductCard({ product }) {
             <span className="font-bold text-secondary">${product.price.toFixed(2)}</span>
             {product.oldPrice && <span className="text-xs text-outline-variant line-through ml-2">${product.oldPrice.toFixed(2)}</span>}
           </div>
-          <button className="w-8 h-8 rounded bg-surface-container hover:bg-secondary-container hover:text-white transition-colors flex items-center justify-center text-on-surface-variant">
+          <button className="hidden md:flex w-8 h-8 rounded bg-surface-container hover:bg-secondary-container hover:text-white transition-colors items-center justify-center text-on-surface-variant">
             <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
           </button>
         </div>
@@ -68,7 +68,7 @@ export default function CategoryProductGrid({ products }) {
 
   return (
     <div className="flex-1">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map(product => (
           <CategoryProductCard key={product.id} product={product} />
         ))}

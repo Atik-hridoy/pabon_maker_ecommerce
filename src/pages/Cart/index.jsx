@@ -6,7 +6,7 @@ export default function ShoppingCart() {
   const navigate = useNavigate();
   return (
     <MainLayout>
-      <div className="pt-12 max-w-max-width mx-auto px-margin-desktop w-full flex-grow">
+      <div className="pt-12 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full flex-grow">
         <h1 className="font-headline-md text-headline-md mb-8">Shopping Cart <span className="text-on-surface-variant font-normal text-title-sm">(2 items)</span></h1>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start pb-24">
           <div className="lg:col-span-8 space-y-6">

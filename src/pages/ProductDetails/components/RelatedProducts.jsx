@@ -20,7 +20,7 @@ export default function RelatedProducts() {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
         {/* Related 1 */}
         <div onClick={() => navigate('/product/pc-01')} className="bg-white border border-outline-variant rounded-xl p-6 part-shadow part-shadow-hover transition-all group flex flex-col cursor-pointer">
           <div className="aspect-square bg-surface-container-low rounded-lg mb-4 flex items-center justify-center p-4 relative overflow-hidden">
@@ -28,10 +28,10 @@ export default function RelatedProducts() {
             <span className="absolute top-3 left-3 bg-primary text-white font-label-caps px-2 py-1 text-[10px] rounded">ESSENTIAL</span>
           </div>
           <h4 className="font-bold text-primary group-hover:text-secondary-container transition-colors">Ceramic Cap Pro-Series</h4>
-          <p className="text-body-sm text-on-surface-variant mb-4">High-stability 0.1uF bypass capacitors for MCU power decoupling.</p>
+          <p className="hidden md:block text-body-sm text-on-surface-variant mb-4">High-stability 0.1uF bypass capacitors for MCU power decoupling.</p>
           <div className="mt-auto flex items-center justify-between">
             <span className="text-lg font-bold text-primary">$0.45</span>
-            <button className="p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+            <button className="hidden md:block p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
               <span className="material-symbols-outlined">add_shopping_cart</span>
             </button>
           </div>
@@ -43,10 +43,10 @@ export default function RelatedProducts() {
             <div className="w-full h-full bg-contain bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-300" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZ3k8boZqT_RIZSqffusmEvZhgZ0JsEkLZfc1zzC3B0BhrlqQLZ6qgwfn8RrZazPNWxXR9fY6oaG5brvmDIFr9cAPUMbEpPXff4PirscPnl3R2QO-30edUk7ZKYdqpsj6iYVxIjKVfHaU3R_ETTR8YvhwgyShzA4CWkJ30shntIStj20vWgWhUDQl1r808lDm_14H26-e1b25bux-Rc6zkvFIsjqDegNOqpLOPZG5eEzmavl0L9exPIQ')" }}></div>
           </div>
           <h4 className="font-bold text-primary group-hover:text-secondary-container transition-colors">Fast-Gate Hex Inverter</h4>
-          <p className="text-body-sm text-on-surface-variant mb-4">High-speed 74LVC series logic for signal conditioning and level shifting.</p>
+          <p className="hidden md:block text-body-sm text-on-surface-variant mb-4">High-speed 74LVC series logic for signal conditioning and level shifting.</p>
           <div className="mt-auto flex items-center justify-between">
             <span className="text-lg font-bold text-primary">$1.85</span>
-            <button className="p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+            <button className="hidden md:block p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
               <span className="material-symbols-outlined">add_shopping_cart</span>
             </button>
           </div>
@@ -59,10 +59,10 @@ export default function RelatedProducts() {
             <span className="absolute top-3 left-3 bg-secondary-container text-white font-label-caps px-2 py-1 text-[10px] rounded">POWER</span>
           </div>
           <h4 className="font-bold text-primary group-hover:text-secondary-container transition-colors">N-Channel Power FET</h4>
-          <p className="text-body-sm text-on-surface-variant mb-4">30V 50A Logic-level gate drive optimized for MCU PWM control.</p>
+          <p className="hidden md:block text-body-sm text-on-surface-variant mb-4">30V 50A Logic-level gate drive optimized for MCU PWM control.</p>
           <div className="mt-auto flex items-center justify-between">
             <span className="text-lg font-bold text-primary">$3.20</span>
-            <button className="p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+            <button className="hidden md:block p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
               <span className="material-symbols-outlined">add_shopping_cart</span>
             </button>
           </div>

@@ -32,7 +32,7 @@ export default function ProductDisplay({ selectedCategory }) {
             No products found for this category.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {displayedProducts.map((product) => (
               <div 
                 key={product.id} 
@@ -65,7 +65,7 @@ export default function ProductDisplay({ selectedCategory }) {
                 <div className="space-y-2">
                   
                   {/* Ratings */}
-                  <div className="flex text-secondary-container gap-0.5">
+                  <div className="hidden md:flex text-secondary-container gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <span key={i} className="material-symbols-outlined text-[14px]" style={{fontVariationSettings: i < product.rating ? "'FILL' 1" : "'FILL' 0"}}>
                         star
@@ -75,7 +75,7 @@ export default function ProductDisplay({ selectedCategory }) {
                   </div>
 
                   <h3 className="font-bold text-sm text-on-surface line-clamp-2">{product.title}</h3>
-                  <p className="text-xs text-on-surface-variant line-clamp-1">{product.description}</p>
+                  <p className="hidden md:block text-xs text-on-surface-variant line-clamp-1">{product.description}</p>
                   
                   {/* Price & Cart */}
                   <div className="flex items-center justify-between pt-4">
@@ -88,7 +88,7 @@ export default function ProductDisplay({ selectedCategory }) {
                       </span>
                     </div>
                     <button 
-                      className="bg-surface-container text-on-surface-variant p-1.5 rounded hover:bg-secondary-container hover:text-white transition-colors"
+                      className="hidden md:block bg-surface-container text-on-surface-variant p-1.5 rounded hover:bg-secondary-container hover:text-white transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();

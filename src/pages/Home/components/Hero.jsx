@@ -51,7 +51,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative overflow-hidden min-h-[600px] flex items-center group bg-surface-container-lowest">
+    <section className="relative overflow-hidden min-h-[250px] md:min-h-[600px] flex items-center group bg-surface-container-lowest">
       {/* Dynamic Animated Background */}
       <div className="absolute inset-0 bg-black"></div>
       
@@ -81,7 +81,7 @@ export default function Hero() {
       </button>
 
       {/* Slides Container */}
-      <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-20 w-full py-20">
+      <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-20 w-full py-4 md:py-20">
         
         {slides.map((slide, idx) => (
           <div 
@@ -93,12 +93,12 @@ export default function Hero() {
             }`}
           >
             {/* Text Content (Glassmorphism) */}
-            <div className="text-left space-y-6 pt-16 md:pt-0 relative z-30">
+            <div className="hidden md:block text-left space-y-6 pt-16 md:pt-0 relative z-30">
               <div className="inline-block px-3 py-1 rounded-full bg-secondary-container/20 border border-secondary-container/30 backdrop-blur-md">
                 <span className="text-secondary-container text-[11px] font-black uppercase tracking-widest">{slide.badge}</span>
               </div>
               
-              <h1 className="font-display-lg text-4xl md:text-5xl lg:text-6xl text-white font-black leading-[1.1] tracking-tight">
+              <h1 className="font-display-lg text-3xl md:text-5xl lg:text-6xl text-white font-black leading-[1.1] tracking-tight">
                 {slide.title1} <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-container to-secondary">
                   {slide.titleHighlight}
@@ -122,7 +122,7 @@ export default function Hero() {
             </div>
 
             {/* Image Content (Floating) */}
-            <div className="hidden md:flex justify-center relative h-[500px]">
+            <div className="flex justify-center relative h-[250px] sm:h-[350px] md:h-[500px] w-full">
               <div className="absolute inset-0 flex items-center justify-center">
                 {/* Glowing Base */}
                 <div className="w-72 h-16 bg-white opacity-10 absolute bottom-8 rounded-[100%] blur-xl transition-all duration-1000" style={{backgroundColor: slide.glowColor}}></div>
@@ -135,7 +135,7 @@ export default function Hero() {
                 <div className="relative z-20 animate-float" style={{ animationDuration: '6s' }}>
                   <img 
                     alt="High-performance tech component" 
-                    className="w-96 h-96 object-contain transition-transform duration-700 hover:scale-110 hover:rotate-3" 
+                    className="w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96 object-contain transition-transform duration-700 hover:scale-110 hover:rotate-3" 
                     src={slide.img} 
                     style={{filter: `drop-shadow(0 25px 35px ${slide.glowColor})`}}
                   />

@@ -103,10 +103,10 @@ function ProductCard({ product }) {
           <h3 className="font-headline-md text-primary">{product.title}</h3>
           <span className="font-headline-md text-secondary">{product.price}</span>
         </div>
-        <p className="font-body-sm text-on-surface-variant mb-stack-md">{product.desc}</p>
+        <p className="hidden md:block font-body-sm text-on-surface-variant mb-stack-md">{product.desc}</p>
         
         {/* Tech Specs Grid */}
-        <div className="grid grid-cols-2 gap-2 mb-stack-md">
+        <div className="hidden md:grid grid-cols-2 gap-2 mb-stack-md">
           {product.specs.map((spec, idx) => (
             <div 
               key={idx} 
@@ -118,7 +118,7 @@ function ProductCard({ product }) {
             </div>
           ))}
         </div>
-        <button className="mt-auto w-full bg-primary text-on-primary py-3 font-bold rounded group-hover:bg-secondary-container transition-colors">
+        <button className="hidden md:block mt-auto w-full bg-primary text-on-primary py-3 font-bold rounded group-hover:bg-secondary-container transition-colors">
           Add to Components List
         </button>
       </div>
@@ -150,7 +150,7 @@ export default function ProductGrid() {
 
       {/* Product Cards Area */}
       <div className="md:col-span-9">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-2 lg:grid-cols-2 gap-gutter">
           {products.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}
