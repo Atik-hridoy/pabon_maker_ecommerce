@@ -7,6 +7,7 @@ import InventoryView from './AdminViews/InventoryView';
 import UsersView from './AdminViews/UsersView';
 import AnalyticsView from './AdminViews/AnalyticsView';
 import SettingsView from './AdminViews/SettingsView';
+import { storage } from '../../utils/localStorage';
 
 export default function AdminDashboard({ onSignOut }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -18,8 +19,7 @@ export default function AdminDashboard({ onSignOut }) {
     if (onSignOut) {
       onSignOut(e);
     } else {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('isAdmin');
+      storage.clearAuth();
       navigate('/');
     }
   };

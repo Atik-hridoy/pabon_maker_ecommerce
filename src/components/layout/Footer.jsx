@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from '../../assets/logo.jpg';
 
 export default function Footer() {
   return (
@@ -6,7 +7,7 @@ export default function Footer() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop py-stack-lg max-w-container-max mx-auto">
         <div className="col-span-1 lg:col-span-2 space-y-6">
           <a className="font-display-lg-mobile text-display-lg-mobile text-on-primary dark:text-inverse-primary font-black tracking-tighter" href="#">
-            <img src="https://lh3.googleusercontent.com/aida/AP1WRLtbjd3JvAlcFvA5h5MHPfo1G2ERzqVmwDwWoKK0FnfYfHrp5nIfWkoC7y1XHwbfPNKQIl63vHHYDx7NIqExKMBweOxsXgtH0XtL6gQMCOciQHm529whq9F8ySG5RrxNQCvlPjMFviBnQ5XHnRwTKo50zHK3s2d-R9PLFrVl33AkyhrfRGuMjbAeyV1Xz10JYGm3zbVbEZHnyD8XYbmpQsUasrXL8JEPy_6xNK42hcQ4dU3fTBHo2TaeAPc" alt="Pabon Maker Logo" className="h-8 md:h-10 w-auto object-contain" />
+            <img src={logo} alt="Pabon Maker Logo" className="h-8 md:h-10 w-auto object-contain" />
           </a>
           <p className="text-on-primary-container font-body-sm text-body-sm max-w-md">Precision Engineering for Pabon Maker. Global supplier of premium electronics components and development tools.</p>
           <div className="flex gap-4">

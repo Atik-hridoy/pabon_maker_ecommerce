@@ -8,6 +8,7 @@ import PaymentMethodsTab from './components/PaymentMethodsTab';
 import WishlistTab from './components/WishlistTab';
 import SettingsTab from './components/SettingsTab';
 import AdminDashboard from './AdminDashboard';
+import { storage } from '../../utils/localStorage';
 
 export default function Account() {
   const navigate = useNavigate();
@@ -16,15 +17,14 @@ export default function Account() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('isAdmin') === 'true') {
+    if (storage.isAdmin()) {
       setIsAdmin(true);
     }
   }, []);
 
   const handleSignOut = (e) => {
     if (e) e.preventDefault();
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('isAdmin');
+    storage.clearAuth();
     navigate('/');
   };
 

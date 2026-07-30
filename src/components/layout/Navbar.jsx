@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AuthModal from '../auth/AuthModal';
+import { storage } from '../../utils/localStorage';
+import logo from '../../assets/logo.jpg';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -9,7 +11,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const handleAccountClick = () => {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
+    if (storage.isLoggedIn()) {
       navigate('/account');
     } else {
       setIsAuthModalOpen(true);
@@ -28,7 +30,7 @@ export default function Navbar() {
               <span className="material-symbols-outlined">{isMobileMenuOpen ? 'close' : 'menu'}</span>
             </button>
             <Link to="/" className="font-display-lg text-display-lg-mobile md:text-display-lg font-black tracking-tighter text-on-surface dark:text-inverse-on-surface">
-              <img src="https://lh3.googleusercontent.com/aida/AP1WRLtbjd3JvAlcFvA5h5MHPfo1G2ERzqVmwDwWoKK0FnfYfHrp5nIfWkoC7y1XHwbfPNKQIl63vHHYDx7NIqExKMBweOxsXgtH0XtL6gQMCOciQHm529whq9F8ySG5RrxNQCvlPjMFviBnQ5XHnRwTKo50zHK3s2d-R9PLFrVl33AkyhrfRGuMjbAeyV1Xz10JYGm3zbVbEZHnyD8XYbmpQsUasrXL8JEPy_6xNK42hcQ4dU3fTBHo2TaeAPc" alt="Pabon Maker Logo" className="h-6 md:h-10 w-auto object-contain" />
+              <img src={logo} alt="Pabon Maker Logo" className="h-6 md:h-10 w-auto object-contain" />
             </Link>
             
             {/* Desktop Navigation */}
