@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { storage } from '../utils/localStorage';
 
 /**
  * Registers a new user.
@@ -41,7 +42,34 @@ export const login = async (email, password) => {
   });
 };
 
+export const getProfile = async () => {
+  const token = storage.getToken();
+  return apiClient('/accounts/profile/', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+
+/**
+ * Retrieves all users for admin dashboard.
+ * 
+ * @returns {Promise<Object>}
+ */
+export const getAdminUsers = async () => {
+  const token = storage.getToken();
+  return apiClient('/accounts/admin/users/', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+
 export const authService = {
   register,
-  login
+  login,
+  getProfile,
+  getAdminUsers
 };

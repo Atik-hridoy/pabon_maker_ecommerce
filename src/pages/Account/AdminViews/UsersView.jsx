@@ -1,13 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { authService } from '../../../api/authService';
 
 export default function UsersView() {
-  const users = [
-    { id: 'USR-001', name: 'Aris Pabon', email: 'admin@pabonmaker.com', role: 'System Admin', status: 'Active', joined: 'Jan 15, 2026', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAWRGJEuznHoQRceDQv-_QiKQetTa_KyBGBgQi5sDwyeP0jDcV6y5YhkmPkMiRzfU7JS8t8Kq36qs5K3-cppp36vCMHNhobhEAZJQegc-Bi7YsLpbRjKFBVKx0EbBQq1A64NBn0ut_6j0j-DRNUROpuWPNmNlaplIC4ayctzDFwfEXUalsb2mOCbsTgVKdYIkisrPWF7q8ZXEGmyiNtdUv9ZcRQ0Y5xe06Flpo61B_lumYhPi_wj0I5Mw', init: 'AP' },
-    { id: 'USR-042', name: 'Jane Doe', email: 'jane.d@example.com', role: 'Customer', status: 'Active', joined: 'Mar 12, 2026', init: 'JD' },
-    { id: 'USR-089', name: 'Mark Smith', email: 'msmith@circuit.io', role: 'Pro Member', status: 'Active', joined: 'Jul 28, 2026', init: 'MS' },
-    { id: 'USR-104', name: 'Elena Lopez', email: 'elena.l@tech.co', role: 'Customer', status: 'Suspended', joined: 'Aug 04, 2026', init: 'EL' },
-    { id: 'USR-112', name: 'David Kim', email: 'dkim@hw-lab.net', role: 'Moderator', status: 'Active', joined: 'Sep 10, 2026', init: 'DK' },
-  ];
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await authService.getAdminUsers();
+        if (response.success && response.data) {
+          const formattedUsers = response.data.map(user => {
+            const role = user.is_superuser ? 'System Admin' : user.is_staff ? 'Moderator' : 'Customer';
+            const joinedDate = new Date(user.date_joined).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            
+            return {
+              id: `USR-${user.id.toString().padStart(3, '0')}`,
+              name: `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.username,
+              email: user.email || user.username,
+              role: role,
+              status: user.is_active ? 'Active' : 'Suspended',
+              joined: joinedDate,
+              avatar: user.avatar ? `http://127.0.0.1:8000${user.avatar}` : null,
+              init: user.first_name ? user.first_name.charAt(0).toUpperCase() : user.username.charAt(0).toUpperCase()
+            };
+          });
+          setUsers(formattedUsers);
+        }
+      } catch (err) {
+        console.error("Failed to fetch users", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -34,6 +62,9 @@ export default function UsersView() {
         </div>
         
         <div className="overflow-x-auto">
+          {loading ? (
+             <div className="p-8 text-center text-on-surface-variant font-bold">Loading users...</div>
+          ) : (
           <table className="w-full high-density-table min-w-[800px]">
             <thead>
               <tr>
@@ -92,6 +123,7 @@ export default function UsersView() {
               ))}
             </tbody>
           </table>
+          )}
         </div>
       </div>
     </div>

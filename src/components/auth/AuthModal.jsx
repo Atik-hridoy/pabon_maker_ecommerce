@@ -25,7 +25,7 @@ export default function AuthModal({ isOpen, onClose }) {
         storage.setToken(access);
         storage.setLoggedIn('true');
         
-        if (email === 'abcd@gmail.com') {
+        if (response.data.is_admin || response.data.is_staff) {
           storage.setAdmin('true');
         } else {
           storage.setAdmin('false');
