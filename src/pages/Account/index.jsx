@@ -15,11 +15,29 @@ export default function Account() {
   const [activeTab, setActiveTab] = useState('orders');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     if (storage.isAdmin()) {
       setIsAdmin(true);
     }
+    
+    const fetchProfileData = async () => {
+      const token = storage.getToken();
+      if (!token) return;
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (data.success && data.data) {
+          setProfile(data.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch topbar profile:", err);
+      }
+    };
+    fetchProfileData();
   }, []);
 
   const handleSignOut = (e) => {
@@ -145,10 +163,16 @@ export default function Account() {
             {/* User Avatar */}
             <div className="flex items-center gap-3 border-l border-outline-variant pl-6">
               <div className="text-right hidden md:block">
-                <div className="text-sm font-bold leading-tight">Aris Pabon</div>
+                <div className="text-sm font-bold leading-tight">
+                  {profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || profile.email : 'Loading...'}
+                </div>
                 <div className="text-[10px] text-secondary font-bold uppercase tracking-wider">Pro Tier Member</div>
               </div>
-              <img alt="Avatar" className="w-10 h-10 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWRGJEuznHoQRceDQv-_QiKQetTa_KyBGBgQi5sDwyeP0jDcV6y5YhkmPkMiRzfU7JS8t8Kq36qs5K3-cppp36vCMHNhobhEAZJQegc-Bi7YsLpbRjKFBVKx0EbBQq1A64NBn0ut_6j0j-DRNUROpuWPNmNlaplIC4ayctzDFwfEXUalsb2mOCbsTgVKdYIkisrPWF7q8ZXEGmyiNtdUv9ZcRQ0Y5xe06Flpo61B_lumYhPi_wj0I5Mw" />
+              <img 
+                alt="Avatar" 
+                className="w-10 h-10 rounded-full border border-outline-variant object-cover" 
+                src={profile?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuAWRGJEuznHoQRceDQv-_QiKQetTa_KyBGBgQi5sDwyeP0jDcV6y5YhkmPkMiRzfU7JS8t8Kq36qs5K3-cppp36vCMHNhobhEAZJQegc-Bi7YsLpbRjKFBVKx0EbBQq1A64NBn0ut_6j0j-DRNUROpuWPNmNlaplIC4ayctzDFwfEXUalsb2mOCbsTgVKdYIkisrPWF7q8ZXEGmyiNtdUv9ZcRQ0Y5xe06Flpo61B_lumYhPi_wj0I5Mw"} 
+              />
             </div>
           </div>
         </header>
