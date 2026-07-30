@@ -24,6 +24,24 @@ export const register = async (userData) => {
   });
 };
 
+/**
+ * Logs in a user.
+ * 
+ * @param {string} email - The user's email (sent as username)
+ * @param {string} password - The user's password
+ * @returns {Promise<Object>}
+ */
+export const login = async (email, password) => {
+  return apiClient('/accounts/login/', {
+    method: 'POST',
+    body: {
+      username: email,
+      password: password
+    }
+  });
+};
+
 export const authService = {
-  register
+  register,
+  login
 };

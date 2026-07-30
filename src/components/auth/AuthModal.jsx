@@ -18,15 +18,30 @@ export default function AuthModal({ isOpen, onClose }) {
       const email = e.target.elements.email?.value;
       const password = e.target.elements.password?.value;
 
-      if (email === 'abcd@gmail.com' && password === '123456') {
-        storage.setAdmin('true');
-      } else {
-        storage.setAdmin('false');
+      try {
+        const response = await authService.login(email, password);
+        const { access } = response.data;
+        
+        storage.setToken(access);
+        storage.setLoggedIn('true');
+        
+        if (email === 'abcd@gmail.com') {
+          storage.setAdmin('true');
+        } else {
+          storage.setAdmin('false');
+        }
+        
+        setLoading(false);
+        onClose();
+        navigate('/account');
+      } catch (err) {
+        setLoading(false);
+        if (err.data && err.data.errors && err.data.errors.detail) {
+           setErrorMsg(err.data.errors.detail);
+        } else {
+           setErrorMsg('Invalid email or password.');
+        }
       }
-      storage.setLoggedIn('true');
-      setLoading(false);
-      onClose();
-      navigate('/account');
     } else {
       const email = e.target.elements.email?.value;
       const full_name = e.target.elements.name?.value;
