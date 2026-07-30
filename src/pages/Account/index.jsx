@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import OrdersTab from './components/OrdersTab';
@@ -7,17 +7,30 @@ import AddressesTab from './components/AddressesTab';
 import PaymentMethodsTab from './components/PaymentMethodsTab';
 import WishlistTab from './components/WishlistTab';
 import SettingsTab from './components/SettingsTab';
+import AdminDashboard from './AdminDashboard';
 
 export default function Account() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('orders');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('isAdmin') === 'true') {
+      setIsAdmin(true);
+    }
+  }, []);
 
   const handleSignOut = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('isAdmin');
     navigate('/');
   };
+
+  if (isAdmin) {
+    return <AdminDashboard onSignOut={handleSignOut} />;
+  }
 
   const tabs = [
     { id: 'profile', icon: 'person', label: 'Profile' },

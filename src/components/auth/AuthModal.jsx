@@ -7,6 +7,21 @@ export default function AuthModal({ isOpen, onClose }) {
 
   const handleAuth = (e) => {
     e.preventDefault();
+    
+    // We are extracting values if it's the sign in form
+    if (activeTab === 'signin') {
+      const email = e.target.elements.email?.value;
+      const password = e.target.elements.password?.value;
+      
+      if (email === 'abcd@gmail.com' && password === '123456') {
+        localStorage.setItem('isAdmin', 'true');
+      } else {
+        localStorage.removeItem('isAdmin');
+      }
+    } else {
+      localStorage.removeItem('isAdmin');
+    }
+
     localStorage.setItem('isLoggedIn', 'true');
     onClose();
     navigate('/account');
@@ -91,14 +106,14 @@ export default function AuthModal({ isOpen, onClose }) {
                     <form className="space-y-4" onSubmit={handleAuth}>
                       <div className="space-y-2">
                         <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">EMAIL ADDRESS</label>
-                        <input className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="engineer@pabonmaker.com" type="email" required />
+                        <input name="email" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="engineer@pabonmaker.com" type="email" required />
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
                           <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">PASSWORD</label>
                           <a className="font-label-caps text-xs text-secondary hover:underline" href="#">FORGOT?</a>
                         </div>
-                        <input className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="••••••••" type="password" required />
+                        <input name="password" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="••••••••" type="password" required />
                       </div>
                       <button className="w-full bg-secondary-container text-white py-4 rounded-lg font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-lg text-lg" type="submit">
                         SIGN IN

@@ -1,0 +1,42 @@
+.admin-dashboard-wrapper {
+  background-color: #f6f9ff;
+  background-image: radial-gradient(#dbe1ff 0.5px, transparent 0.5px);
+  background-size: 24px 24px;
+}
+.level-1-card {
+  border: 1px solid #E2E8F0;
+  box-shadow: 0px 2px 4px rgba(11, 19, 43, 0.05);
+}
+.high-density-table th {
+  font-family: 'Geist', sans-serif;
+  font-size: 12px;
+  line-height: 1.0;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #45464d;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #c6c6ce;
+  background-color: #eef4fc;
+}
+.high-density-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #c6c6ce;
+  vertical-align: middle;
+}
+.chart-grid line {
+  stroke: #e2e8f0;
+  stroke-width: 1;
+}
+.chart-line {
+  stroke: #fe6b00;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart-area {
+  fill: url(#chartGradient);
+  opacity: 0.1;
+}
