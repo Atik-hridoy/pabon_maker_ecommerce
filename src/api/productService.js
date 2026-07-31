@@ -67,3 +67,26 @@ export const deleteProduct = async (id) => {
   }
   return data;
 };
+
+export const getBanners = async () => {
+  return apiClient('/products/banners/', {
+    method: 'GET'
+  });
+};
+
+export const uploadBanners = async (formData) => {
+  const token = storage.getToken();
+  const response = await fetch('http://127.0.0.1:8000/api/products/banners/', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    body: formData
+  });
+  
+  const data = await response.json();
+  if (!response.ok) {
+    throw { status: response.status, data };
+  }
+  return data;
+};

@@ -7,11 +7,14 @@ import InventoryView from './AdminViews/InventoryView';
 import UsersView from './AdminViews/UsersView';
 import AnalyticsView from './AdminViews/AnalyticsView';
 import SettingsView from './AdminViews/SettingsView';
+import AddBannerModal from './AdminViews/AddBannerModal';
 import { storage } from '../../utils/localStorage';
+import { uploadBanners } from '../../api/productService';
 
 export default function AdminDashboard({ onSignOut }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showAddBanner, setShowAddBanner] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = (e) => {
@@ -179,10 +182,10 @@ export default function AdminDashboard({ onSignOut }) {
                     <span className="material-symbols-outlined text-[16px]">file_download</span> Export Data
                   </button>
                   <button 
-                    onClick={() => alert('Opening new component creation flow...')}
+                    onClick={() => setShowAddBanner(true)}
                     className="px-4 py-2 bg-primary-container text-white font-label-caps text-[11px] uppercase rounded hover:opacity-90 transition-all flex items-center gap-2"
                   >
-                    <span className="material-symbols-outlined text-[16px]">add</span> New Component
+                    <span className="material-symbols-outlined text-[16px]">add_photo_alternate</span> Add Banner
                   </button>
                 </div>
               </section>
@@ -496,6 +499,22 @@ export default function AdminDashboard({ onSignOut }) {
 
         </div>
       </main>
+
+      {showAddBanner && (
+        <AddBannerModal 
+          onClose={() => setShowAddBanner(false)}
+          onSave={async (formData) => {
+            try {
+              await uploadBanners(formData);
+              alert("Banners uploaded successfully!");
+              setShowAddBanner(false);
+            } catch (err) {
+              console.error("Failed to upload banners", err);
+              throw err;
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { getBanners } from '../../../api/productService';
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 3;
+  const [banners, setBanners] = useState([]);
+  const totalSlides = banners.length > 0 ? banners.length : 3;
 
   useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const res = await getBanners();
+        if (res.success && res.data && res.data.length > 0) {
+          setBanners(res.data);
+        }
+      } catch (err) {
+        console.error("Failed to load banners", err);
+      }
+    };
+    fetchBanners();
+
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, 8000);
     return () => clearInterval(timer);
-  }, []);
+  }, [totalSlides]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -81,7 +95,19 @@ export default function Hero() {
       </button>
 
       {/* Slides Container */}
-      <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-20 w-full py-4 md:py-20">
+      {banners.length > 0 ? (
+        <div className="absolute inset-0 z-20">
+          {banners.map((banner, idx) => (
+             <img 
+               key={idx}
+               alt={`Banner ${idx + 1}`}
+               src={banner.image?.startsWith('http') ? banner.image : `http://127.0.0.1:8000${banner.image || banner}`}
+               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentSlide === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+             />
+          ))}
+        </div>
+      ) : (
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-20 w-full py-4 md:py-20">
         
         {slides.map((slide, idx) => (
           <div 
@@ -145,10 +171,11 @@ export default function Hero() {
           </div>
         ))}
       </div>
+      )}
 
       {/* Modern Indicator Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 flex gap-4">
-        {[0, 1, 2].map((index) => (
+        {Array.from({ length: totalSlides }).map((_, index) => (
           <button 
             key={index}
             onClick={() => setCurrentSlide(index)}
