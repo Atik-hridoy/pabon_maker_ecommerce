@@ -7,6 +7,8 @@ import logo from '../../assets/logo.jpg';
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authRedirect, setAuthRedirect] = useState(null);
+  const [authRedirectState, setAuthRedirectState] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -17,6 +19,21 @@ export default function Navbar() {
       setIsAuthModalOpen(true);
     }
   };
+
+  React.useEffect(() => {
+    const handleOpenAuth = (e) => {
+      if (e.detail && e.detail.redirect) {
+        setAuthRedirect(e.detail.redirect);
+        setAuthRedirectState(e.detail.state || null);
+      } else {
+        setAuthRedirect(null);
+        setAuthRedirectState(null);
+      }
+      setIsAuthModalOpen(true);
+    };
+    window.addEventListener('openAuthModal', handleOpenAuth);
+    return () => window.removeEventListener('openAuthModal', handleOpenAuth);
+  }, []);
 
   return (
     <>
@@ -148,7 +165,7 @@ export default function Navbar() {
           </div>
         )}
       </header>
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} redirectPath={authRedirect} redirectState={authRedirectState} />
     </>
   );
 }

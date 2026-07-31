@@ -1,9 +1,70 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
+import { authService } from '../../api/authService';
+import { storage } from '../../utils/localStorage';
 
 export default function Shipping() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { product, quantity, displayImage } = location.state || {};
+
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    region: '',
+    postalCode: ''
+  });
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (storage.isLoggedIn()) {
+        try {
+          const res = await authService.getProfile();
+          if (res.data) {
+            const { first_name, last_name, email, phone_number, shipping_address } = res.data;
+            let addressText = '';
+            if (shipping_address) {
+               try {
+                 const parsed = JSON.parse(shipping_address);
+                 if (Array.isArray(parsed)) {
+                    const def = parsed.find(a => a.isDefault) || parsed[0];
+                    if (def) addressText = def.text;
+                 } else {
+                    addressText = shipping_address;
+                 }
+               } catch(e) {
+                 addressText = shipping_address;
+               }
+            }
+            setFormData(prev => ({
+              ...prev,
+              fullName: `${first_name || ''} ${last_name || ''}`.trim(),
+              email: email || '',
+              phone: phone_number || '',
+              address: addressText
+            }));
+          }
+        } catch (e) {
+          console.error('Failed to load profile', e);
+        }
+      }
+    };
+    loadProfile();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const subtotal = product ? Number(product.price) * quantity : 0;
+  const tax = subtotal * 0.085; // 8.5%
+  const shipping = 34.00; // hardcoded for now
+  const total = subtotal + tax + shipping;
 
   return (
     <MainLayout>
@@ -38,32 +99,32 @@ export default function Shipping() {
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1 md:col-span-2">
                   <label className="text-xs text-on-surface-variant uppercase tracking-wider">Full Legal Name / Organization</label>
-                  <input className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="e.g. Dr. Aris Pabon" type="text" />
+                  <input name="fullName" value={formData.fullName} onChange={handleInputChange} className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="e.g. Dr. Aris Pabon" type="text" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs text-on-surface-variant uppercase tracking-wider">Technical ID / Email</label>
-                  <input className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="aris.pabon@engineering.com" type="email" />
+                  <input name="email" value={formData.email} onChange={handleInputChange} className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="aris.pabon@engineering.com" type="email" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs text-on-surface-variant uppercase tracking-wider">Primary Contact Phone</label>
-                  <input className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="+1 (555) 000-0000" type="tel" />
+                  <input name="phone" value={formData.phone} onChange={handleInputChange} className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="+1 (555) 000-0000" type="tel" />
                 </div>
                 <div className="space-y-1 md:col-span-2">
                   <label className="text-xs text-on-surface-variant uppercase tracking-wider">Engineering Facility Address</label>
-                  <input className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="Street Address, Suite, Lab Number" type="text" />
+                  <input name="address" value={formData.address} onChange={handleInputChange} className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="Street Address, Suite, Lab Number" type="text" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs text-on-surface-variant uppercase tracking-wider">City</label>
-                  <input className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="San Francisco" type="text" />
+                  <input name="city" value={formData.city} onChange={handleInputChange} className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="San Francisco" type="text" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-xs text-on-surface-variant uppercase tracking-wider">Region</label>
-                    <input className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="CA" type="text" />
+                    <input name="region" value={formData.region} onChange={handleInputChange} className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="CA" type="text" />
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-on-surface-variant uppercase tracking-wider">Postal Code</label>
-                    <input className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="94103" type="text" />
+                    <input name="postalCode" value={formData.postalCode} onChange={handleInputChange} className="w-full border border-outline-variant rounded p-3 focus:outline-none focus:ring-2 focus:ring-secondary-container transition-all" placeholder="94103" type="text" />
                   </div>
                 </div>
               </form>
@@ -123,57 +184,49 @@ export default function Shipping() {
               <h3 className="text-xl font-bold text-primary mb-6 border-b border-outline-variant pb-4">Order Summary</h3>
               {/* Item List */}
               <div className="space-y-4 mb-8 max-h-64 overflow-y-auto pr-2">
-                <div className="flex gap-4 items-start">
-                  <div className="w-16 h-16 bg-surface-container rounded border border-outline-variant flex-shrink-0 relative overflow-hidden p-1">
-                    <img className="w-full h-full object-contain" alt="P-Core X4-G2 Microcontroller" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmvjONEWYW0OK52fZmUOw6IeIKVrYx2MIIlk1m00bRt1JiKnHTcw1StmZmYI5wTpStPNhz8V0Np9TyPa9OQWWxRpPVcTG-AhTiyJ0_C48be58gGtTVx_7d1SwIDvkLedWbkXUt3j_jbGMOHX_uetHfirn72Nk5pqCVZ0Tx46T7Bk1fIU5CRHJ4m2Xezl_-UPXZYK2JFv8rK_ZQgFaLOB5adOsQ1-bXGl6yPj--4XJ5I8f00dHGZN3kfg" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-on-surface truncate">P-Core X4-G2 Microcontroller</p>
-                    <p className="text-xs text-on-surface-variant">SKU: 994-PC-X4G2</p>
-                    <div className="flex justify-between items-center mt-1">
-                      <span className="text-xs">Qty: 2</span>
-                      <span className="text-xs font-bold">$178.00</span>
+                {product ? (
+                  <div className="flex gap-4 items-start">
+                    <div className="w-16 h-16 bg-surface-container rounded border border-outline-variant flex-shrink-0 relative overflow-hidden p-1">
+                      {displayImage ? (
+                        <img className="w-full h-full object-contain" alt={product.name} src={displayImage.startsWith('http') ? displayImage : `http://127.0.0.1:8000${displayImage}`} />
+                      ) : (
+                        <span className="material-symbols-outlined text-outline-variant flex h-full items-center justify-center">image</span>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold text-on-surface truncate">{product.name}</p>
+                      <p className="text-xs text-on-surface-variant">Category: {product.category_name || 'N/A'}</p>
+                      <div className="flex justify-between items-center mt-1">
+                        <span className="text-xs">Qty: {quantity}</span>
+                        <span className="text-xs font-bold">৳{(Number(product.price) * quantity).toFixed(2)}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex gap-4 items-start">
-                  <div className="w-16 h-16 bg-surface-container rounded border border-outline-variant flex-shrink-0 relative overflow-hidden p-1">
-                    <img className="w-full h-full object-contain" alt="Ceramic Cap Pro-Series" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRUb5rf-UAsififHR2BlXlb_29YMcbS2Q_T1_p4NxuyQzKgCGmCL4WYViU0vEK3jfZyRxPufym2pJIHAy0MpRaAIyL4t7hmAfps1vCaGul6QMwlS5daDhRwHObXHq4qCbCCwLI2KtKmdOLS5QHVMjtKCd9cBCjsBdfcShfebiQ_6XocMisEGNN06NE8bKctZTw1xuCMSLwLwk57YT0PVpnLJsEIo-UCsAW364j_ukpBnGEhlhnraMwEg" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-on-surface truncate">Ceramic Cap Pro-Series</p>
-                    <p className="text-xs text-on-surface-variant">SKU: 102-CP-PS</p>
-                    <div className="flex justify-between items-center mt-1">
-                      <span className="text-xs">Qty: 50</span>
-                      <span className="text-xs font-bold">$24.50</span>
-                    </div>
-                  </div>
-                </div>
+                ) : (
+                  <p className="text-sm text-on-surface-variant">No items in checkout.</p>
+                )}
               </div>
               {/* Financial Breakdown */}
               <div className="space-y-3 border-t border-outline-variant pt-6 mb-8">
                 <div className="flex justify-between text-sm">
                   <span className="text-on-surface-variant">Subtotal</span>
-                  <span className="text-on-surface">$202.50</span>
+                  <span className="text-on-surface">৳{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-on-surface-variant">Engineering Tax (8.5%)</span>
-                  <span className="text-on-surface">$17.21</span>
+                  <span className="text-on-surface-variant">Tax (8.5%)</span>
+                  <span className="text-on-surface">৳{tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-on-surface-variant">Shipping (Express)</span>
-                  <span className="text-on-surface">$34.00</span>
-                </div>
-                <div className="flex justify-between items-center border-t border-outline-variant pt-3 mt-3">
-                  <span className="text-xl font-bold text-primary">Total</span>
-                  <div className="text-right">
-                    <span className="text-2xl font-bold text-secondary">$253.71</span>
-                    <p className="text-[10px] text-on-surface-variant uppercase tracking-widest">Currency: USD</p>
-                  </div>
+                  <span className="text-on-surface">৳{shipping.toFixed(2)}</span>
                 </div>
               </div>
+              <div className="flex justify-between items-center border-t border-outline-variant pt-6">
+                <span className="font-bold text-lg text-primary">Total</span>
+                <span className="font-bold text-2xl text-secondary">৳{total.toFixed(2)}</span>
+              </div>
               {/* Promo Code */}
-              <div className="mb-8">
+              <div className="mb-8 mt-8">
                 <div className="flex gap-2">
                   <input className="flex-1 border border-outline-variant rounded p-2 text-sm focus:ring-1 focus:ring-secondary" placeholder="Project Voucher Code" type="text" />
                   <button className="bg-surface-container text-primary px-4 rounded text-xs font-bold hover:bg-surface-variant transition-colors">Apply</button>

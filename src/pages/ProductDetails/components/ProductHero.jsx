@@ -1,11 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../../api/client';
+import { storage } from '../../../utils/localStorage';
 
 export default function ProductHero({ product }) {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(null);
+  
   if (!product) return null;
+
+  const handleAuthCheck = (action, redirect, state) => {
+    if (!storage.isLoggedIn()) {
+      window.dispatchEvent(new CustomEvent('openAuthModal', { detail: { redirect, state } }));
+      return;
+    }
+    action();
+  };
+
+  const handleBuyNow = () => {
+    const checkoutState = { product, quantity, displayImage };
+    handleAuthCheck(() => {
+      navigate('/checkout/shipping', { state: checkoutState });
+    }, '/checkout/shipping', checkoutState);
+  };
+
+  const handleAddToCart = () => {
+    handleAuthCheck(() => {
+      // Implement add to cart logic here
+      console.log('Added to cart');
+    }, window.location.pathname);
+  };
+
+  const defaultImage = product.images && product.images.length > 0 
+    ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) 
+    : '';
+  const displayImage = selectedImage || defaultImage;
+  const displayImageUrl = displayImage ? (displayImage.startsWith('http') ? displayImage : `${BASE_URL}${displayImage}`) : '';
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start mb-16">
@@ -15,8 +46,13 @@ export default function ProductHero({ product }) {
           {product.images && product.images.length > 0 ? (
             product.images.map((img, idx) => {
               const imgUrl = img.image.startsWith('http') ? img.image : `${BASE_URL}${img.image}`;
+              const isSelected = selectedImage ? selectedImage === img.image : img.is_cover;
               return (
-                <button key={img.id || idx} className={`w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border-2 rounded-lg overflow-hidden bg-white p-2 transition-all ${img.is_cover ? 'border-secondary-container' : 'border-outline-variant hover:border-secondary-container'}`}>
+                <button 
+                  key={img.id || idx} 
+                  onClick={() => setSelectedImage(img.image)}
+                  className={`w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border-2 rounded-lg overflow-hidden bg-white p-2 transition-all ${isSelected ? 'border-secondary-container' : 'border-outline-variant hover:border-secondary-container'}`}
+                >
                   <img className="w-full h-full object-contain" alt={`${product.name} - ${idx}`} src={imgUrl} />
                 </button>
               );
@@ -28,13 +64,11 @@ export default function ProductHero({ product }) {
           )}
         </div>
         <div className="flex-grow order-1 md:order-2 bg-white rounded-xl border border-outline-variant p-8 flex items-center justify-center part-shadow min-h-[400px]">
-          {product.images && product.images.length > 0 ? (
+          {displayImageUrl ? (
             <img 
               className="max-w-full max-h-[500px] object-contain" 
               alt={product.name} 
-              src={(product.images.find(img => img.is_cover)?.image || product.images[0].image).startsWith('http') 
-                ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) 
-                : `${BASE_URL}${product.images.find(img => img.is_cover)?.image || product.images[0].image}`} 
+              src={displayImageUrl} 
             />
           ) : (
             <span className="material-symbols-outlined text-[100px] text-outline-variant">image</span>
@@ -71,44 +105,15 @@ export default function ProductHero({ product }) {
               <span className="text-outline line-through text-body-sm ml-2">৳{Number(product.oldPrice).toFixed(2)}</span>
             )}
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white p-3 rounded border border-outline-variant">
-              <p className="font-label-caps text-on-surface-variant mb-1">10+ UNITS</p>
-              <p className="font-bold text-primary">৳{(Number(product.price) * 0.95).toFixed(2)} ea.</p>
-            </div>
-            <div className="bg-white p-3 rounded border border-outline-variant">
-              <p className="font-label-caps text-on-surface-variant mb-1">50+ UNITS</p>
-              <p className="font-bold text-primary">৳{(Number(product.price) * 0.85).toFixed(2)} ea.</p>
-            </div>
-          </div>
+
         </div>
 
         <div className="space-y-4">
           <p className="text-body-base text-on-surface-variant">{product.description}</p>
-          <ul className="grid grid-cols-2 gap-y-2 text-technical-data text-on-surface">
-            <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-secondary-container rounded-full"></span> High Performance Core</li>
-            <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-secondary-container rounded-full"></span> Extended Temp Range</li>
-            <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-secondary-container rounded-full"></span> Industry Standard</li>
-            <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-secondary-container rounded-full"></span> Multiple Interfaces</li>
-          </ul>
         </div>
 
+
         <div className="space-y-4 pt-4 border-t border-outline-variant">
-          <div className="mb-4">
-            <label className="font-label-caps text-on-surface-variant block mb-2">COLOR</label>
-            <div className="flex gap-3">
-              <button className="w-8 h-8 rounded-full bg-[#00504f] border-2 border-primary ring-2 ring-offset-2 ring-primary transition-all" title="Industrial Blue"></button>
-              <button className="w-8 h-8 rounded-full bg-[#2b3137] border-2 border-outline-variant hover:border-primary transition-all" title="Deep Charcoal"></button>
-              <button className="w-8 h-8 rounded-full bg-[#fe6b00] border-2 border-outline-variant hover:border-primary transition-all" title="Signal Orange"></button>
-            </div>
-          </div>
-          <div>
-            <label className="font-label-caps text-on-surface-variant block mb-2">HEADER TYPE</label>
-            <div className="flex gap-3">
-              <button className="px-6 py-2 border-2 border-primary bg-primary text-white font-semibold rounded transition-all">Pre-soldered</button>
-              <button className="px-6 py-2 border-2 border-outline hover:border-primary font-semibold rounded transition-all">Unsoldered</button>
-            </div>
-          </div>
           <div className="flex flex-col sm:flex-row gap-4 items-end pt-4">
             <div className="w-full sm:w-36 shrink-0">
               <label className="font-label-caps text-on-surface-variant block mb-2">QUANTITY</label>
@@ -135,11 +140,11 @@ export default function ProductHero({ product }) {
               </div>
             </div>
             <div className="flex gap-4 flex-grow w-full">
-              <button onClick={() => navigate('/checkout/shipping')} className="flex-1 bg-primary text-white font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2">
+              <button onClick={handleBuyNow} className="flex-1 bg-primary text-white font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2">
                 <span className="material-symbols-outlined">bolt</span>
                 BUY NOW
               </button>
-              <button className="flex-1 bg-secondary-container text-white font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2">
+              <button onClick={handleAddToCart} className="flex-1 bg-secondary-container text-white font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2">
                 <span className="material-symbols-outlined">shopping_cart</span>
                 ADD TO CART
               </button>

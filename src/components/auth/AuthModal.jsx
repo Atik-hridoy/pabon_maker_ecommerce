@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { authService } from '../../api/authService';
 import { storage } from '../../utils/localStorage';
 
-export default function AuthModal({ isOpen, onClose }) {
+export default function AuthModal({ isOpen, onClose, redirectPath, redirectState }) {
   const [activeTab, setActiveTab] = useState('signin');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -33,7 +33,7 @@ export default function AuthModal({ isOpen, onClose }) {
         
         setLoading(false);
         onClose();
-        navigate('/account');
+        navigate(redirectPath || '/account', { state: redirectState });
       } catch (err) {
         setLoading(false);
         if (err.data && err.data.errors && err.data.errors.detail) {
@@ -62,7 +62,7 @@ export default function AuthModal({ isOpen, onClose }) {
         storage.setAdmin('false'); // Ensure new users are not admins
         setLoading(false);
         onClose();
-        navigate('/account');
+        navigate(redirectPath || '/account', { state: redirectState });
       } catch (err) {
         setLoading(false);
         if (err.data) {

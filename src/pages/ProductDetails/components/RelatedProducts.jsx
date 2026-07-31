@@ -1,72 +1,101 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getPublicProducts } from '../../../api/productService';
+import { BASE_URL } from '../../../api/client';
 
-export default function RelatedProducts() {
+export default function RelatedProducts({ categoryName }) {
   const navigate = useNavigate();
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchRelated = async () => {
+      setLoading(true);
+      try {
+        const response = await getPublicProducts(1, categoryName);
+        if (response.success && response.data && response.data.results) {
+          setAllProducts(response.data.results);
+        }
+      } catch (error) {
+        console.error('Failed to fetch related products', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (categoryName) {
+      fetchRelated();
+    }
+  }, [categoryName]);
+
+  const handleNext = () => {
+    if (currentIndex + 4 < allProducts.length) {
+      setCurrentIndex(prev => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  };
+
+  if (loading || allProducts.length === 0) return null;
+
+  const visibleProducts = allProducts.slice(currentIndex, currentIndex + 4);
+
   return (
     <section className="mb-24">
       <div className="flex items-end justify-between mb-8">
         <div className="space-y-1">
           <span className="font-label-caps text-on-surface-variant tracking-widest">SYSTEM COMPLEMENTS</span>
-          <h2 className="font-headline-md text-headline-md text-primary">Frequently Bought Together</h2>
+          <h2 className="font-headline-md text-headline-md text-primary">Related Products</h2>
         </div>
         <div className="flex gap-2">
-          <button className="p-2 rounded-full border border-outline-variant hover:bg-surface-variant transition-all">
+          <button 
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+            className={`p-2 rounded-full border border-outline-variant transition-all ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-variant'}`}
+          >
             <span className="material-symbols-outlined">chevron_left</span>
           </button>
-          <button className="p-2 rounded-full border border-outline-variant hover:bg-surface-variant transition-all">
+          <button 
+            onClick={handleNext}
+            disabled={currentIndex + 4 >= allProducts.length}
+            className={`p-2 rounded-full border border-outline-variant transition-all ${currentIndex + 4 >= allProducts.length ? 'opacity-50 cursor-not-allowed' : 'hover:bg-surface-variant'}`}
+          >
             <span className="material-symbols-outlined">chevron_right</span>
           </button>
         </div>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        {/* Related 1 */}
-        <div onClick={() => navigate('/product/pc-01')} className="bg-white border border-outline-variant rounded-xl p-6 part-shadow part-shadow-hover transition-all group flex flex-col cursor-pointer">
-          <div className="aspect-square bg-surface-container-low rounded-lg mb-4 flex items-center justify-center p-4 relative overflow-hidden">
-            <div className="w-full h-full bg-contain bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-300" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2yZ7OUXU1cthQdp1pNngFKRXS44RnWeOg71jFN4lZeT0mO-Kvf11Gju5a1euHJJP4FxBeEEDeNnZ9FC2Kf4n4PmiAPtZkAY1cFgVPWugqr8yPI1JgmDOFeOLGXw5rIxskKPC2jeqmOKH_dl2I5Y2T_AmLJ7-LBhkr0RokPVnVgHEN8w0HyLfMyjsyS8w1dKnOOJ1G8nQ7gy1p6dZTTMcbqVjHdwOPjzpcQII67CEk6OQogWVQwusLyQ')" }}></div>
-            <span className="absolute top-3 left-3 bg-primary text-white font-label-caps px-2 py-1 text-[10px] rounded">ESSENTIAL</span>
-          </div>
-          <h4 className="font-bold text-primary group-hover:text-secondary-container transition-colors">Ceramic Cap Pro-Series</h4>
-          <p className="hidden md:block text-body-sm text-on-surface-variant mb-4">High-stability 0.1uF bypass capacitors for MCU power decoupling.</p>
-          <div className="mt-auto flex items-center justify-between">
-            <span className="text-lg font-bold text-primary">$0.45</span>
-            <button className="hidden md:block p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
-              <span className="material-symbols-outlined">add_shopping_cart</span>
-            </button>
-          </div>
-        </div>
-        
-        {/* Related 2 */}
-        <div onClick={() => navigate('/product/mc-02')} className="bg-white border border-outline-variant rounded-xl p-6 part-shadow part-shadow-hover transition-all group flex flex-col cursor-pointer">
-          <div className="aspect-square bg-surface-container-low rounded-lg mb-4 flex items-center justify-center p-4 relative overflow-hidden">
-            <div className="w-full h-full bg-contain bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-300" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZ3k8boZqT_RIZSqffusmEvZhgZ0JsEkLZfc1zzC3B0BhrlqQLZ6qgwfn8RrZazPNWxXR9fY6oaG5brvmDIFr9cAPUMbEpPXff4PirscPnl3R2QO-30edUk7ZKYdqpsj6iYVxIjKVfHaU3R_ETTR8YvhwgyShzA4CWkJ30shntIStj20vWgWhUDQl1r808lDm_14H26-e1b25bux-Rc6zkvFIsjqDegNOqpLOPZG5eEzmavl0L9exPIQ')" }}></div>
-          </div>
-          <h4 className="font-bold text-primary group-hover:text-secondary-container transition-colors">Fast-Gate Hex Inverter</h4>
-          <p className="hidden md:block text-body-sm text-on-surface-variant mb-4">High-speed 74LVC series logic for signal conditioning and level shifting.</p>
-          <div className="mt-auto flex items-center justify-between">
-            <span className="text-lg font-bold text-primary">$1.85</span>
-            <button className="hidden md:block p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
-              <span className="material-symbols-outlined">add_shopping_cart</span>
-            </button>
-          </div>
-        </div>
-        
-        {/* Related 3 */}
-        <div onClick={() => navigate('/product/ps-02')} className="bg-white border border-outline-variant rounded-xl p-6 part-shadow part-shadow-hover transition-all group flex flex-col cursor-pointer">
-          <div className="aspect-square bg-surface-container-low rounded-lg mb-4 flex items-center justify-center p-4 relative overflow-hidden">
-            <div className="w-full h-full bg-contain bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-300" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCI1Ln5G3l1lM0tnYxg73-xoumoMfifGxErAHA0RreETaC2k_psOb3b2wE1TDoxwZIXTJL5BsYUlY9481U6O5UgVuGTfILU403U1eWf96XdaX6BC8jVGj6J51E_V30ph9JXmzpwI8bfNdhS2qSgpncLNsLlbxGjtgZgeFbWJZ2Di6ylgIua2mf4csMvCfyw0m8o_SBL5iLyLU6lpq2s941tqDEku4mw3BiDgeLHcurzhe2YRfDhbfWYqQ')" }}></div>
-            <span className="absolute top-3 left-3 bg-secondary-container text-white font-label-caps px-2 py-1 text-[10px] rounded">POWER</span>
-          </div>
-          <h4 className="font-bold text-primary group-hover:text-secondary-container transition-colors">N-Channel Power FET</h4>
-          <p className="hidden md:block text-body-sm text-on-surface-variant mb-4">30V 50A Logic-level gate drive optimized for MCU PWM control.</p>
-          <div className="mt-auto flex items-center justify-between">
-            <span className="text-lg font-bold text-primary">$3.20</span>
-            <button className="hidden md:block p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
-              <span className="material-symbols-outlined">add_shopping_cart</span>
-            </button>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-gutter overflow-hidden">
+        {visibleProducts.map(product => {
+          const coverImage = product.images?.find(img => img.is_cover)?.image || product.images?.[0]?.image;
+          const finalImgUrl = coverImage ? (coverImage.startsWith('http') ? coverImage : `${BASE_URL}${coverImage}`) : '';
+          
+          return (
+            <div key={product.id} onClick={() => navigate(`/product/${product.id}`)} className="bg-white border border-outline-variant rounded-xl p-6 part-shadow part-shadow-hover transition-all group flex flex-col cursor-pointer">
+              <div className="aspect-square bg-surface-container-low rounded-lg mb-4 flex items-center justify-center p-4 relative overflow-hidden">
+                {finalImgUrl ? (
+                  <div className="w-full h-full bg-contain bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-300" style={{ backgroundImage: `url('${finalImgUrl}')` }}></div>
+                ) : (
+                  <span className="material-symbols-outlined text-4xl text-outline-variant">image</span>
+                )}
+                {product.isNew && <span className="absolute top-3 left-3 bg-primary text-white font-label-caps px-2 py-1 text-[10px] rounded">NEW</span>}
+                {product.isSale && <span className="absolute top-3 left-3 bg-error text-white font-label-caps px-2 py-1 text-[10px] rounded">SALE</span>}
+              </div>
+              <h4 className="font-bold text-primary group-hover:text-secondary-container transition-colors line-clamp-2">{product.name}</h4>
+              <p className="hidden md:block text-body-sm text-on-surface-variant mb-4 line-clamp-2">{product.description}</p>
+              <div className="mt-auto flex items-center justify-between">
+                <span className="text-lg font-bold text-primary">৳{Number(product.price).toFixed(2)}</span>
+                <button className="hidden md:flex items-center justify-center p-2 bg-surface-container hover:bg-secondary-container hover:text-white rounded-lg transition-all" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+                  <span className="material-symbols-outlined">add_shopping_cart</span>
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

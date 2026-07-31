@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
 import ProductHero from './components/ProductHero';
 import ProductTabs from './components/ProductTabs';
-import ProductFeatures from './components/ProductFeatures';
 import RelatedProducts from './components/RelatedProducts';
 import { getProduct } from '../../api/productService';
 
@@ -71,8 +70,7 @@ export default function ProductDetails() {
 
         <ProductHero product={product} />
         <ProductTabs />
-        <ProductFeatures />
-        <RelatedProducts />
+        <RelatedProducts categoryName={product.category_name} categoryId={product.category} />
       </main>
     </MainLayout>
   );
