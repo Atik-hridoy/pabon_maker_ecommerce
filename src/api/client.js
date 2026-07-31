@@ -1,5 +1,6 @@
 // Base configuration for all API calls
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+export const BASE_URL = 'http://127.0.0.1:8000';
+export const API_BASE_URL = `${BASE_URL}/api`;
 
 /**
  * A wrapper around the native fetch API to handle base URLs, headers, and standard error handling.

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../api/client';
 
 import OrdersTab from './components/OrdersTab';
 import ProfileTab from './components/ProfileTab';
@@ -26,7 +27,7 @@ export default function Account() {
       const token = storage.getToken();
       if (!token) return;
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+        const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await response.json();

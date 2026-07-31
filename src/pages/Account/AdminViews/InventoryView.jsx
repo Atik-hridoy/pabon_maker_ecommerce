@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AddProductModal from './AddProductModal';
+import { BASE_URL } from '../../../api/client';
 import { getProducts, createProduct } from '../../../api/productService';
 
 export default function InventoryView() {
@@ -118,7 +119,7 @@ export default function InventoryView() {
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-surface-container rounded border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden">
                         {product.images && product.images.length > 0 ? (
-                          <img src={`http://127.0.0.1:8000${product.images.find(i => i.is_cover)?.image || product.images[0].image}`} className="w-full h-full object-cover" alt="product"/>
+                          <img src={`${BASE_URL}${product.images.find(i => i.is_cover)?.image || product.images[0].image}`} className="w-full h-full object-cover" alt="product"/>
                         ) : (
                           <span className="material-symbols-outlined text-on-surface-variant text-[18px]">category</span>
                         )}

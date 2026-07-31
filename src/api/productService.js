@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+import { apiClient, API_BASE_URL } from './client';
 import { storage } from '../utils/localStorage';
 
 export const getCategories = async () => {
@@ -13,10 +13,26 @@ export const getProducts = async () => {
   });
 };
 
+export const getProduct = async (id) => {
+  return apiClient(`/products/${id}/`, {
+    method: 'GET'
+  });
+};
+
+export const getPublicProducts = async (page = 1, category = null) => {
+  let url = `/products/public/?page=${page}`;
+  if (category) {
+    url += `&category=${encodeURIComponent(category)}`;
+  }
+  return apiClient(url, {
+    method: 'GET'
+  });
+};
+
 export const createProduct = async (formData) => {
   const token = storage.getToken();
   // We use fetch directly here to allow the browser to set the correct multipart/form-data boundary automatically
-  const response = await fetch('http://127.0.0.1:8000/api/products/', {
+  const response = await fetch(`${API_BASE_URL}/products/`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -33,7 +49,7 @@ export const createProduct = async (formData) => {
 
 export const updateProduct = async (id, formData) => {
   const token = storage.getToken();
-  const response = await fetch(`http://127.0.0.1:8000/api/products/${id}/`, {
+  const response = await fetch(`${API_BASE_URL}/products/${id}/`, {
     method: 'PATCH',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -50,7 +66,7 @@ export const updateProduct = async (id, formData) => {
 
 export const deleteProduct = async (id) => {
   const token = storage.getToken();
-  const response = await fetch(`http://127.0.0.1:8000/api/products/${id}/`, {
+  const response = await fetch(`${API_BASE_URL}/products/${id}/`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`
@@ -76,7 +92,7 @@ export const getBanners = async () => {
 
 export const uploadBanners = async (formData) => {
   const token = storage.getToken();
-  const response = await fetch('http://127.0.0.1:8000/api/products/banners/', {
+  const response = await fetch(`${API_BASE_URL}/products/banners/`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`

@@ -1,18 +1,48 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockProducts } from '../../../data/mockProducts';
+import { getPublicProducts } from '../../../api/productService';
+import { BASE_URL } from '../../../api/client';
 
 export default function ProductDisplay({ selectedCategory }) {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  // If a category is selected, filter by it. Otherwise, show 8 random products.
-  const displayedProducts = useMemo(() => {
-    if (selectedCategory) {
-      return mockProducts.filter(product => product.category === selectedCategory);
-    }
-    // Randomize for default view
-    return [...mockProducts].sort(() => 0.5 - Math.random()).slice(0, 8);
+  // Reset when category changes
+  useEffect(() => {
+    setProducts([]);
+    setPage(1);
+    setHasMore(true);
   }, [selectedCategory]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (loading || !hasMore) return;
+      
+      try {
+        setLoading(true);
+        const response = await getPublicProducts(page, selectedCategory);
+        if (response.success && response.data) {
+          const newProducts = response.data.results || [];
+          setProducts(prev => {
+            // Avoid duplicates by checking IDs
+            const existingIds = new Set(prev.map(p => p.id));
+            const uniqueNew = newProducts.filter(p => !existingIds.has(p.id));
+            return [...prev, ...uniqueNew];
+          });
+          setHasMore(response.data.next !== null);
+        }
+      } catch (err) {
+        console.error("Failed to load products", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [page, selectedCategory]);
 
   return (
     <section className="py-12 bg-white min-h-[400px]">
@@ -27,81 +57,80 @@ export default function ProductDisplay({ selectedCategory }) {
           </h2>
         </div>
 
-        {displayedProducts.length === 0 ? (
+        {products.length === 0 && !loading ? (
           <div className="text-center py-20 text-on-surface-variant font-medium">
             No products found for this category.
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {displayedProducts.map((product) => (
-              <div 
-                key={product.id} 
-                onClick={() => navigate(`/product/${product.id}`)}
-                className="product-card-hover group border border-outline-variant p-4 transition-all bg-white relative block cursor-pointer rounded-lg"
-              >
-                
-                {/* Badges */}
-                {product.isNew && (
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="bg-secondary-container text-white px-2 py-1 text-[10px] font-black rounded uppercase">New</span>
-                  </div>
-                )}
-                {product.isSale && (
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="bg-error text-white px-2 py-1 text-[10px] font-black rounded uppercase">Sale</span>
-                  </div>
-                )}
-
-                {/* Product Image */}
-                <div className="h-32 mb-4 overflow-hidden flex items-center justify-center p-2 bg-surface-container-lowest rounded">
-                  <img 
-                    src={product.image} 
-                    alt={product.title}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" 
-                  />
-                </div>
-
-                {/* Product Details */}
-                <div className="space-y-2">
+            {products.map((product) => {
+              const coverImage = product.images?.find(img => img.is_cover)?.image || product.images?.[0]?.image;
+              
+              return (
+                <div 
+                  key={product.id} 
+                  onClick={() => navigate(`/product/${product.id}`)}
+                  className="product-card-hover group border border-outline-variant p-4 transition-all bg-white relative block cursor-pointer rounded-lg"
+                >
                   
-                  {/* Ratings */}
-                  <div className="hidden md:flex text-secondary-container gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="material-symbols-outlined text-[14px]" style={{fontVariationSettings: i < product.rating ? "'FILL' 1" : "'FILL' 0"}}>
-                        star
-                      </span>
-                    ))}
-                    <span className="text-outline text-[11px] font-medium ml-1">({product.reviews})</span>
+                  {/* Product Image */}
+                  <div className="h-32 mb-4 overflow-hidden flex items-center justify-center p-2 bg-surface-container-lowest rounded">
+                    {coverImage ? (
+                      <img 
+                        src={coverImage.startsWith('http') ? coverImage : `${BASE_URL}${coverImage}`}
+                        alt={product.name}
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" 
+                      />
+                    ) : (
+                      <span className="material-symbols-outlined text-4xl text-outline-variant">image</span>
+                    )}
                   </div>
 
-                  <h3 className="font-bold text-sm text-on-surface line-clamp-2">{product.title}</h3>
-                  <p className="hidden md:block text-xs text-on-surface-variant line-clamp-1">{product.description}</p>
-                  
-                  {/* Price & Cart */}
-                  <div className="flex items-center justify-between pt-4">
-                    <div className="flex flex-col">
-                      {product.isSale && product.oldPrice && (
-                        <span className="text-outline line-through text-xs">${product.oldPrice.toFixed(2)}</span>
-                      )}
-                      <span className={`font-bold ${product.isSale ? 'text-secondary' : 'text-on-surface'}`}>
-                        ${product.price.toFixed(2)}
-                      </span>
+                  {/* Product Details */}
+                  <div className="space-y-2">
+                    <h3 className="font-bold text-sm text-on-surface line-clamp-2">{product.name}</h3>
+                    <p className="hidden md:block text-xs text-on-surface-variant line-clamp-1">{product.description}</p>
+                    
+                    {/* Price & Cart */}
+                    <div className="flex items-center justify-between pt-4">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-on-surface">
+                          ৳ {product.price}
+                        </span>
+                      </div>
+                      <button 
+                        className="hidden md:block bg-surface-container text-on-surface-variant p-1.5 rounded hover:bg-secondary-container hover:text-white transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          // Add to cart logic here
+                        }}
+                      >
+                        <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+                      </button>
                     </div>
-                    <button 
-                      className="hidden md:block bg-surface-container text-on-surface-variant p-1.5 rounded hover:bg-secondary-container hover:text-white transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        // Add to cart logic here
-                      }}
-                    >
-                      <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
-                    </button>
-                  </div>
 
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+        )}
+        
+        {loading && (
+          <div className="flex justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+          </div>
+        )}
+
+        {!loading && hasMore && products.length > 0 && (
+          <div className="flex justify-center mt-12">
+            <button 
+              onClick={() => setPage(prev => prev + 1)}
+              className="px-6 py-3 border border-outline-variant text-on-surface font-label-caps tracking-widest text-[12px] uppercase rounded-full hover:bg-surface transition-all hover:border-secondary"
+            >
+              Load More
+            </button>
           </div>
         )}
         

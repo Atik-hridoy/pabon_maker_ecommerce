@@ -45,7 +45,7 @@ export default function Navbar() {
                 to="/categories" 
                 className={({ isActive }) => `font-label-caps text-label-caps transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container border-b-2 border-secondary font-bold pb-1' : 'text-on-surface-variant dark:text-surface-variant font-medium hover:text-secondary'}`}
               >
-                Categories
+                Explore
               </NavLink>
               <NavLink 
                 to="/best-sellers" 
@@ -97,7 +97,7 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={({ isActive }) => `font-label-caps text-sm transition-colors duration-200 ${isActive ? 'text-secondary dark:text-secondary-container font-bold' : 'text-on-surface-variant dark:text-surface-variant font-medium'}`}
               >
-                Categories
+                Explore
               </NavLink>
               <NavLink 
                 to="/best-sellers" 

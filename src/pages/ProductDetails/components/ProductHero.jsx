@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../../api/client';
 
 export default function ProductHero({ product }) {
   const navigate = useNavigate();
@@ -11,26 +12,41 @@ export default function ProductHero({ product }) {
       {/* Left: Image Gallery */}
       <div className="lg:col-span-6 flex flex-col md:flex-row gap-4">
         <div className="flex md:flex-col order-2 md:order-1 gap-4 overflow-x-auto scrollbar-hide md:w-20">
-          <button className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border-2 border-secondary-container rounded-lg overflow-hidden bg-white p-2">
-            <img className="w-full h-full object-contain" alt={product.title} src={product.image} />
-          </button>
-          <div className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border border-outline-variant rounded-lg overflow-hidden bg-white hover:border-secondary-container transition-all cursor-pointer">
-            <div className="w-full h-full bg-contain bg-center bg-no-repeat" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4OltapEz9aQPpJANGChIDgiXqwfph0QmapNAE06-oy8MQzNO8AmffqNpfWiVAGH4XLidaOziNks8Kb6dKeC96YJhiH8sSkWeFNZoPCOq0X8Bc8yJ60XNFbKD5dNHnWnla2hsXmAfRKK0Rp26XlvhWdl1o3hpoi44VYy7ik9A7Wf8mzXEFlpp0Y6xe4tSGbhFjO6EAUJv5PkFHFEQhGslnv9-W-GgcsLtkz0rd9ouyCLjE3kDRpTwwaA')" }}></div>
-          </div>
-          <div className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border border-outline-variant rounded-lg overflow-hidden bg-white hover:border-secondary-container transition-all cursor-pointer">
-            <div className="w-full h-full bg-contain bg-center bg-no-repeat" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDv-lIBmfghywO8A39jcwhuBZeE5-Eng7oFOlvwDiU2_Ld5DkQv9_O6j72IJFteRZu53m0gi1O0RbEvVwHsNmqt1EcAoetFL9-HmIMwrxgV-pnY8uA2cjs5CHFYB1GYVVwfo1qcEEC2PhlbIOKAxEwyFCjZ6gwOCR3Khge-7iVwJ7KQM0Bj2g92uE0IqCdCq-3CX9Pz6aCewFPc1i78UTo1KK7N6EpMZaZPQKJaFJiAutvJhWjaNVUKGg')" }}></div>
-          </div>
+          {product.images && product.images.length > 0 ? (
+            product.images.map((img, idx) => {
+              const imgUrl = img.image.startsWith('http') ? img.image : `${BASE_URL}${img.image}`;
+              return (
+                <button key={img.id || idx} className={`w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border-2 rounded-lg overflow-hidden bg-white p-2 transition-all ${img.is_cover ? 'border-secondary-container' : 'border-outline-variant hover:border-secondary-container'}`}>
+                  <img className="w-full h-full object-contain" alt={`${product.name} - ${idx}`} src={imgUrl} />
+                </button>
+              );
+            })
+          ) : (
+            <button className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border-2 border-secondary-container rounded-lg overflow-hidden bg-white p-2">
+              <span className="material-symbols-outlined text-4xl text-outline-variant flex h-full items-center justify-center">image</span>
+            </button>
+          )}
         </div>
         <div className="flex-grow order-1 md:order-2 bg-white rounded-xl border border-outline-variant p-8 flex items-center justify-center part-shadow min-h-[400px]">
-          <img className="max-w-full max-h-[500px] object-contain" alt={product.title} src={product.image} />
+          {product.images && product.images.length > 0 ? (
+            <img 
+              className="max-w-full max-h-[500px] object-contain" 
+              alt={product.name} 
+              src={(product.images.find(img => img.is_cover)?.image || product.images[0].image).startsWith('http') 
+                ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) 
+                : `${BASE_URL}${product.images.find(img => img.is_cover)?.image || product.images[0].image}`} 
+            />
+          ) : (
+            <span className="material-symbols-outlined text-[100px] text-outline-variant">image</span>
+          )}
         </div>
       </div>
 
       {/* Right: Product Info */}
       <div className="lg:col-span-6 space-y-6">
         <div>
-          <span className="font-label-caps text-secondary-container tracking-widest mb-2 block uppercase">{product.category}</span>
-          <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight mb-2">{product.title}</h1>
+          <span className="font-label-caps text-secondary-container tracking-widest mb-2 block uppercase">{product.category_name}</span>
+          <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight mb-2">{product.name}</h1>
           <div className="flex items-center gap-4">
             <div className="flex text-secondary-container">
               {[...Array(5)].map((_, i) => (
@@ -49,20 +65,20 @@ export default function ProductHero({ product }) {
         
         <div className="bg-surface-container-low p-6 rounded-lg space-y-4">
           <div className="flex items-baseline gap-3">
-            <span className="text-headline-md font-bold text-primary">${product.price.toFixed(2)}</span>
+            <span className="text-headline-md font-bold text-primary">৳{Number(product.price).toFixed(2)}</span>
             <span className="text-body-sm text-on-surface-variant">/ unit</span>
             {product.isSale && product.oldPrice && (
-              <span className="text-outline line-through text-body-sm ml-2">${product.oldPrice.toFixed(2)}</span>
+              <span className="text-outline line-through text-body-sm ml-2">৳{Number(product.oldPrice).toFixed(2)}</span>
             )}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white p-3 rounded border border-outline-variant">
               <p className="font-label-caps text-on-surface-variant mb-1">10+ UNITS</p>
-              <p className="font-bold text-primary">${(product.price * 0.95).toFixed(2)} ea.</p>
+              <p className="font-bold text-primary">৳{(Number(product.price) * 0.95).toFixed(2)} ea.</p>
             </div>
             <div className="bg-white p-3 rounded border border-outline-variant">
               <p className="font-label-caps text-on-surface-variant mb-1">50+ UNITS</p>
-              <p className="font-bold text-primary">${(product.price * 0.85).toFixed(2)} ea.</p>
+              <p className="font-bold text-primary">৳{(Number(product.price) * 0.85).toFixed(2)} ea.</p>
             </div>
           </div>
         </div>

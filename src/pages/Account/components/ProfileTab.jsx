@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { storage } from '../../../utils/localStorage';
+import { API_BASE_URL } from '../../../api/client';
 
 export default function ProfileTab() {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ export default function ProfileTab() {
       const token = storage.getToken();
       if (!token) return;
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+        const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -66,7 +67,7 @@ export default function ProfileTab() {
       const uploadData = new FormData();
       uploadData.append('avatar', file);
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+        const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
           method: 'PATCH',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -112,7 +113,7 @@ export default function ProfileTab() {
     setIsSaving(true);
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+      const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

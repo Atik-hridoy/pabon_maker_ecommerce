@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL, BASE_URL } from '../../../api/client';
 import { authService } from '../../../api/authService';
 
 export default function UsersView() {
@@ -21,7 +22,7 @@ export default function UsersView() {
               role: role,
               status: user.is_active ? 'Active' : 'Suspended',
               joined: joinedDate,
-              avatar: user.avatar ? `http://127.0.0.1:8000${user.avatar}` : null,
+              avatar: user.avatar ? `${BASE_URL}${user.avatar}` : null,
               init: user.first_name ? user.first_name.charAt(0).toUpperCase() : user.username.charAt(0).toUpperCase()
             };
           });

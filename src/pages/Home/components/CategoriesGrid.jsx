@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getCategories } from '../../../api/productService';
+import { BASE_URL } from '../../../api/client';
 
 export default function CategoriesGrid({ selectedCategory, onSelectCategory }) {
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -27,7 +30,7 @@ export default function CategoriesGrid({ selectedCategory, onSelectCategory }) {
             <h2 className="text-2xl md:font-headline-md md:text-headline-md font-bold text-on-surface">SHOP BY CATEGORY</h2>
           </div>
           <button 
-            onClick={() => onSelectCategory?.(null)}
+            onClick={() => navigate('/categories')}
             className="text-secondary font-bold text-[10px] md:text-label-caps uppercase tracking-wider hover:underline self-start md:self-auto"
           >
             VIEW ALL CATEGORIES
@@ -48,7 +51,7 @@ export default function CategoriesGrid({ selectedCategory, onSelectCategory }) {
                     <img 
                       className="w-full h-full object-contain" 
                       alt={cat.name} 
-                      src={cat.image.startsWith('http') ? cat.image : `http://127.0.0.1:8000${cat.image}`} 
+                      src={cat.image.startsWith('http') ? cat.image : `${BASE_URL}${cat.image}`} 
                     />
                   ) : (
                     <span className="material-symbols-outlined text-[32px] md:text-[48px] text-on-surface-variant">category</span>

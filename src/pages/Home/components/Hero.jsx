@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getBanners } from '../../../api/productService';
+import { BASE_URL } from "../../../api/client";
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -101,7 +102,7 @@ export default function Hero() {
              <img 
                key={idx}
                alt={`Banner ${idx + 1}`}
-               src={banner.image?.startsWith('http') ? banner.image : `http://127.0.0.1:8000${banner.image || banner}`}
+               src={banner.image?.startsWith('http') ? banner.image : `${BASE_URL}${banner.image || banner}`}
                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentSlide === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
              />
           ))}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { storage } from '../../../utils/localStorage';
+import { API_BASE_URL } from '../../../api/client';
 
 export default function AddressesTab() {
   const [addresses, setAddresses] = useState([]);
@@ -17,7 +18,7 @@ export default function AddressesTab() {
       return;
     }
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+      const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -74,7 +75,7 @@ export default function AddressesTab() {
     const updatedAddresses = [...addresses, newAddress];
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+      const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -113,7 +114,7 @@ export default function AddressesTab() {
     const updatedAddresses = addresses.filter(a => a.id !== id);
     
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/accounts/profile/', {
+      const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

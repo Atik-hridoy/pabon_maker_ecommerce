@@ -5,20 +5,43 @@ import ProductHero from './components/ProductHero';
 import ProductTabs from './components/ProductTabs';
 import ProductFeatures from './components/ProductFeatures';
 import RelatedProducts from './components/RelatedProducts';
-import { mockProducts } from '../../data/mockProducts';
+import { getProduct } from '../../api/productService';
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Look up product by id
-    const foundProduct = mockProducts.find(p => p.id === id);
-    if (foundProduct) {
-      setProduct(foundProduct);
-      window.scrollTo(0, 0); // Scroll to top on navigation
-    }
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const response = await getProduct(id);
+        if (response.success && response.data) {
+          setProduct(response.data);
+          window.scrollTo(0, 0); // Scroll to top on navigation
+        } else {
+          setProduct(null);
+        }
+      } catch (err) {
+        console.error("Failed to load product", err);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
   }, [id]);
+
+  if (loading) {
+    return (
+      <MainLayout>
+        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 flex justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary"></div>
+        </div>
+      </MainLayout>
+    );
+  }
 
   if (!product) {
     return (
@@ -41,9 +64,9 @@ export default function ProductDetails() {
           <span className="material-symbols-outlined text-[16px]">chevron_right</span>
           <Link to="/components" className="hover:text-primary transition-colors">Components</Link>
           <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <span className="text-primary font-semibold">{product.category}</span>
+          <span className="text-primary font-semibold">{product.category_name}</span>
           <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <span className="text-primary font-semibold">{product.title}</span>
+          <span className="text-primary font-semibold">{product.name}</span>
         </nav>
 
         <ProductHero product={product} />
