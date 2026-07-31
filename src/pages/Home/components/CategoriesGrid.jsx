@@ -1,38 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getCategories } from '../../../api/productService';
 
 export default function CategoriesGrid({ selectedCategory, onSelectCategory }) {
-  const categories = [
-    {
-      id: 'mc',
-      name: 'Microcontrollers & SOCs',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUQRqm5yAb71B0Y8tojtZJzugfUu92RbLyQP_kZCrNApGrgzUvnCm_xAo3yesgcRobu1BPV2d5nb5o8DibH3AEl5LI1YuBEtb2g3MINA5EWHaeQ6CZEZX8S3u6uESM5ly_WhJHVn5vjOFHtxdKQp6_AG-ey4bmVJx4bV2exLqLdoZ-ty2ETF0FWQxhXUGNl5qZQ7dba3YJNu3eUvY55B78MI9ugWo4AGi6yK3DqVGd6XFsru5cEvlXM8lhv-mHlLWVbfoDS6rhtYF2'
-    },
-    {
-      id: 'sm',
-      name: 'Sensors & Modules',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCn4VqL7OALZhJa63buK2FaEdkD4gz9THGsjLOZUtKi54mAIHWdOL2k-iGnEVAUYBFMKrPE5Q6VBlj4g6g_d7MC9vR8vBQybs9AFRNKQ8xWjmuAQUAvsqAb383pdufiENVjtWqhL5GYPULFE7akYuaMzfChAfEgL8X5XBXFnxzBx4qt4nClqKyFsyk0YXwf9hIQmeBsGxr-y-P4kFJ74C2CkKjElsrsUzulB4DvLm5HBCej8D1_5nNOrtVfcKB9v5hE0CoBBRiGeejs'
-    },
-    {
-      id: 'ps',
-      name: 'Power Supplies',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUrcH6o4zFFUnW1bvPb_T6PtgcWbNUcgplwgdB5EgPf3oD5_jKym0MoL7fl9C1bNXTISeiyng0sinealf4McKydMn-q3RTMXMBmrhnYw8TL5ydDtlGPVCTbxo6VEvLQKiNVD025FxsTeRXvy-p26UINXZaS7LXtypeUzi6Fj0v78-VP5MpE1jYcZ9eaYqz4EbrJHujWX6fdTFZsVWBBXF5tGQ8Y--WWgxCgvV-sekQq9837uSHXBYPQZJizlDI0BFEHG2F1bVxr8wF'
-    },
-    {
-      id: 'iw',
-      name: 'IoT & Wireless',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCY109R2x6yUwmyxGVVnrsDQicEeRiCGJKxYT9ToAreRHmqc7HWo8krT2_uyibKkFoRcKkJYCfw9lS4WxJ0w_zA1d4Nt6eG7PaUlWd0tYSgb7iJpHWx51h_JDZtgxbvPE059VhyR-vfHipvZ7IgktdYWzpsWNm4q3t2OBYJR0pY70S6HZAe-mDontEl-jRvnNpj4i3vHIbvMEn8NMJ9zhCOWjj5nksY94AScD4HSCu5kmbOxCcLxebXWsBQB_tqrYdxMCjSCjIIQfK-'
-    },
-    {
-      id: 'ra',
-      name: 'Robotics & Actuators',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuADjroi-O617y6-_ra7KBuTW_7pQVmQdmr-VAMiB_qOifwZGquCtVVs7rdpHOnU0QSEil10W6yUk2fR9NEhc4GSYWojxHbjGqklNxk5XES8dmVY0GTxnB-SvBwm2X_HJWaq1MczQOvTkJVnAdGGGu3Ogjh-pNbZubQZJJUBGlImCBP2k8KU8y6Z6GAt_hTLRY414GTAwWyq4g3wTGSwd4jZQRvRCsIKBy8O6j1ASTV8miEwThVBl_duVGW5PK8c7xAFhrMghJ7c7ibD'
-    },
-    {
-      id: 'pc',
-      name: 'Passive Components',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWMTgxSqEMchU9F9U_uBUJ96PtOjwsDE5nf5BqZ6sxIpCQJ6hVdC8qMD-mlGeNbC0WAJs4RYp3z9kZiIRqLHiXaGzXDEOxuoLV43PoLUVL8NLvHlS8nJW_AbgCC3Jzsb3tTjsGRqjuPOQpc6PB_fhUpM7zrDtCBr5CEgh3GbW1H3L2wUmZgiz4WE6SsA08aO5qXbbMItQyas_PbVGmXQ8quqsKLM8kg-plKbW-z8J5gljFZ-ky1C5o6Kz4OeZbMcnwflmP_RvXQgbi'
-    }
-  ];
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getCategories();
+        if (response.success && response.data) {
+          setCategories(response.data);
+        }
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <section className="py-20 bg-surface">
@@ -59,12 +43,16 @@ export default function CategoriesGrid({ selectedCategory, onSelectCategory }) {
                 onClick={() => onSelectCategory?.(cat.name)}
                 className={`group cursor-pointer flex-shrink-0 w-16 sm:w-20 md:w-auto flex flex-col items-center gap-2 md:gap-4 transition-transform duration-300 ${isSelected ? 'scale-105' : 'hover:scale-105'}`}
               >
-                <div className={`w-16 h-16 sm:w-20 sm:h-20 md:w-full md:h-auto md:aspect-square bg-white border rounded-full flex items-center justify-center p-3 md:p-8 transition-all duration-300 ${isSelected ? 'border-secondary border-2 shadow-[0_10px_20px_rgba(254,107,0,0.15)]' : 'border-outline-variant group-hover:border-secondary'}`}>
-                  <img 
-                    className="w-full h-full object-contain" 
-                    alt={cat.name} 
-                    src={cat.image} 
-                  />
+                <div className={`w-16 h-16 sm:w-20 sm:h-20 md:w-full md:h-auto md:aspect-square bg-white border rounded-full flex items-center justify-center p-3 md:p-8 transition-all duration-300 overflow-hidden ${isSelected ? 'border-secondary border-2 shadow-[0_10px_20px_rgba(254,107,0,0.15)]' : 'border-outline-variant group-hover:border-secondary'}`}>
+                  {cat.image ? (
+                    <img 
+                      className="w-full h-full object-contain" 
+                      alt={cat.name} 
+                      src={cat.image.startsWith('http') ? cat.image : `http://127.0.0.1:8000${cat.image}`} 
+                    />
+                  ) : (
+                    <span className="material-symbols-outlined text-[32px] md:text-[48px] text-on-surface-variant">category</span>
+                  )}
                 </div>
                 <p className={`text-[10px] sm:text-xs text-center font-medium leading-tight transition-colors ${isSelected ? 'text-secondary font-bold' : 'text-on-surface group-hover:text-secondary'}`}>
                   {cat.name}
