@@ -1,49 +1,50 @@
 import React, { useState, useRef, useEffect } from 'react';
-
-const mockLogs = [
-  {
-    id: 'LOG-1042',
-    timestamp: 'Aug 01, 2026 03:00 AM',
-    user: 'admin@domain.com',
-    ip: '103.114.172.5',
-    module: 'Billing & Charges',
-    action: 'Updated Rates',
-    diff: {
-      summary: 'VAT increased by +2.5% | Inside Dhaka Delivery increased by +20 BDT',
-      oldValue: '{\n  "vat_percentage": 5.0,\n  "inside_dhaka": {\n    "regular": 60.0\n  }\n}',
-      newValue: '{\n  "vat_percentage": 7.5,\n  "inside_dhaka": {\n    "regular": 80.0\n  }\n}'
-    }
-  },
-  {
-    id: 'LOG-1041',
-    timestamp: 'Jul 28, 2026 11:20 PM',
-    user: 'manager@domain.com',
-    ip: '103.114.172.10',
-    module: 'Billing & Charges',
-    action: 'Delivery Fee Edit',
-    diff: {
-      summary: 'Flat Delivery Charge updated from 60 BDT to 120 BDT',
-      oldValue: '{\n  "delivery_charge": 60.0\n}',
-      newValue: '{\n  "delivery_charge": 120.0\n}'
-    }
-  },
-  {
-    id: 'LOG-1040',
-    timestamp: 'Jul 25, 2026 02:15 PM',
-    user: 'super@domain.com',
-    ip: '192.168.1.5',
-    module: 'Inventory',
-    action: 'Restocked Items',
-    diff: {
-      summary: 'Restocked XC-701 Micro-Controller by +50 units',
-      oldValue: '{\n  "item": "XC-701",\n  "stock": 2\n}',
-      newValue: '{\n  "item": "XC-701",\n  "stock": 52\n}'
-    }
-  }
-];
+import { getAuditLogs, getAuditLogDetails } from '../../../api/billingService';
 
 export default function AuditLogView() {
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedLog, setSelectedLog] = useState(null);
+  const [loadingDiff, setLoadingDiff] = useState(null); // id of log being loaded
+
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const data = await getAuditLogs();
+        // Pagination data check: if the API is paginated, it returns { results: [...] }
+        setLogs(data.results || data || []);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to fetch audit logs.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLogs();
+  }, []);
+
+  const handleOpenDiff = async (log) => {
+    setLoadingDiff(log.id);
+    try {
+      const details = await getAuditLogDetails(log.id);
+      setSelectedLog({
+        ...log,
+        user: log.user_email || log.user,
+        ip: log.ip_address || log.ip,
+        diff: {
+          summary: details.summary?.join(' | ') || 'No summary available',
+          oldValue: JSON.stringify(details.old_value, null, 2),
+          newValue: JSON.stringify(details.new_value, null, 2)
+        }
+      });
+    } catch (err) {
+      console.error(err);
+      alert('Failed to load log details.');
+    } finally {
+      setLoadingDiff(null);
+    }
+  };
 
   // Sync scroll refs
   const leftScrollRef = useRef(null);
@@ -80,6 +81,13 @@ export default function AuditLogView() {
       </div>
 
       <div className="bg-white rounded-lg border border-outline-variant shadow-sm overflow-hidden">
+        {error && (
+          <div className="p-4 bg-error/10 border-b border-error/20 text-error flex items-center gap-2 text-sm font-bold">
+            <span className="material-symbols-outlined">error</span>
+            {error}
+          </div>
+        )}
+
         {/* Toolbar */}
         <div className="p-4 border-b border-outline-variant bg-surface-container-low flex flex-col md:flex-row gap-4 justify-between items-center">
           <div className="relative w-full md:w-64">
@@ -102,37 +110,57 @@ export default function AuditLogView() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-surface text-on-surface-variant text-xs uppercase font-bold border-b border-outline-variant">
-              <tr>
-                <th className="px-6 py-4">Timestamp</th>
-                <th className="px-6 py-4">Admin User</th>
-                <th className="px-6 py-4">Module</th>
-                <th className="px-6 py-4">Action / Event</th>
-                <th className="px-6 py-4 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant">
-              {mockLogs.map(log => (
-                <tr key={log.id} className="hover:bg-surface-container-low transition-colors text-on-surface">
-                  <td className="px-6 py-4 font-technical-data">{log.timestamp}</td>
-                  <td className="px-6 py-4 font-bold">{log.user}</td>
-                  <td className="px-6 py-4">{log.module}</td>
-                  <td className="px-6 py-4">{log.action}</td>
-                  <td className="px-6 py-4 text-center">
-                    <button 
-                      onClick={() => setSelectedLog(log)}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-secondary-container/10 text-secondary-container hover:bg-secondary-container hover:text-white rounded font-bold transition-colors text-xs uppercase tracking-wider"
-                    >
-                      <span className="material-symbols-outlined text-[14px]">difference</span>
-                      Diff
-                    </button>
-                  </td>
+        <div className="overflow-x-auto min-h-[300px]">
+          {loading ? (
+            <div className="flex justify-center items-center h-64 text-on-surface-variant">
+              <div className="flex flex-col items-center gap-2">
+                <span className="material-symbols-outlined animate-spin text-4xl text-secondary">refresh</span>
+                <p className="font-bold text-sm tracking-wider uppercase font-label-caps">Loading Logs...</p>
+              </div>
+            </div>
+          ) : (
+            <table className="w-full text-left text-sm whitespace-nowrap">
+              <thead className="bg-surface text-on-surface-variant text-xs uppercase font-bold border-b border-outline-variant">
+                <tr>
+                  <th className="px-6 py-4">Timestamp</th>
+                  <th className="px-6 py-4">Admin User</th>
+                  <th className="px-6 py-4">Module</th>
+                  <th className="px-6 py-4">Action / Event</th>
+                  <th className="px-6 py-4 text-center">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-outline-variant">
+                {logs.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="text-center py-8 text-on-surface-variant">No audit logs found.</td>
+                  </tr>
+                ) : (
+                  logs.map(log => (
+                    <tr key={log.id} className="hover:bg-surface-container-low transition-colors text-on-surface">
+                      <td className="px-6 py-4 font-technical-data">
+                        {new Date(log.created_at || log.timestamp).toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 font-bold">{log.user_email || log.user}</td>
+                      <td className="px-6 py-4">{log.module}</td>
+                      <td className="px-6 py-4">{log.action}</td>
+                      <td className="px-6 py-4 text-center">
+                        <button 
+                          onClick={() => handleOpenDiff(log)}
+                          disabled={loadingDiff === log.id}
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-secondary-container/10 text-secondary-container hover:bg-secondary-container hover:text-white rounded font-bold transition-colors text-xs uppercase tracking-wider disabled:opacity-50"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">
+                            {loadingDiff === log.id ? 'sync' : 'difference'}
+                          </span>
+                          {loadingDiff === log.id ? 'Loading...' : 'Diff'}
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 

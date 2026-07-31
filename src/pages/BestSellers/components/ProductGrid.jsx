@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toggleWishlist } from '../../../api/activityService';
 
 const products = [
   {
@@ -77,6 +78,21 @@ function ProductCard({ product }) {
     >
       <div className="relative h-64 bg-surface-container-low flex items-center justify-center p-8">
         <img className="max-h-full object-contain" src={product.image} alt={product.title} />
+        <button 
+          onClick={async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+              await toggleWishlist(product.id);
+              // For mock data, just toggle UI state
+            } catch (err) {
+              console.log('Failed to save to backend (likely mock data ID)', err);
+            }
+          }}
+          className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white text-outline-variant hover:text-error transition-all shadow-sm z-10 flex items-center justify-center group/btn"
+        >
+          <span className="material-symbols-outlined text-[20px] group-hover/btn:text-error">favorite</span>
+        </button>
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           {product.badges.map((badge, idx) => {
             if (badge.type === 'rating') {

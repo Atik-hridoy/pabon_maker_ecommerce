@@ -9,6 +9,7 @@ import BestSellers from './pages/BestSellers/index.jsx';
 import ProductDetails from './pages/ProductDetails/index.jsx';
 import Shipping from './pages/Checkout/Shipping.jsx';
 import Payment from './pages/Checkout/Payment.jsx';
+import Review from './pages/Checkout/Review.jsx';
 import Confirmation from './pages/Checkout/Confirmation.jsx';
 import Account from './pages/Account/index.jsx';
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/shipping" element={<Shipping />} />
         <Route path="/checkout/payment" element={<Payment />} />
+        <Route path="/checkout/review" element={<Review />} />
         <Route path="/checkout/confirmation" element={<Confirmation />} />
         <Route path="/account" element={<Account />} />
       </Routes>

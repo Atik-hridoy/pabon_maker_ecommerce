@@ -1,35 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getMyOrders } from '../../../api/checkoutService';
+import { authService } from '../../../api/authService';
+import { getRecentlyViewed } from '../../../api/activityService';
 
 export default function OrdersTab() {
+  const [orders, setOrders] = useState([]);
+  const [recentItems, setRecentItems] = useState([]);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ordersRes, profileRes, recentRes] = await Promise.all([
+          getMyOrders(),
+          authService.getProfile(),
+          getRecentlyViewed()
+        ]);
+        
+        if (Array.isArray(ordersRes)) {
+            setOrders(ordersRes);
+        } else if (ordersRes.data) {
+            setOrders(ordersRes.data);
+        } else {
+            setOrders(ordersRes); // Depending on your axios setup, it might just be the array
+        }
+
+        if (Array.isArray(recentRes)) {
+            setRecentItems(recentRes);
+        } else if (recentRes.data) {
+            setRecentItems(recentRes.data);
+        }
+
+        if (profileRes.data) {
+          setProfile(profileRes.data);
+        }
+      } catch (e) {
+        console.error("Failed to fetch orders data", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
   return (
     <>
       {/* Account Overview Row */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="md:col-span-2 bg-white p-6 rounded-lg border border-outline-variant shadow-sm flex flex-col md:flex-row gap-6 items-center md:items-start">
-          <img alt="Aris Pabon" className="w-24 h-24 rounded-full border-4 border-surface-container shadow-inner" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWRGJEuznHoQRceDQv-_QiKQetTa_KyBGBgQi5sDwyeP0jDcV6y5YhkmPkMiRzfU7JS8t8Kq36qs5K3-cppp36vCMHNhobhEAZJQegc-Bi7YsLpbRjKFBVKx0EbBQq1A64NBn0ut_6j0j-DRNUROpuWPNmNlaplIC4ayctzDFwfEXUalsb2mOCbsTgVKdYIkisrPWF7q8ZXEGmyiNtdUv9ZcRQ0Y5xe06Flpo61B_lumYhPi_wj0I5Mw" />
+      <section className="mb-6">
+        <div className="bg-white p-6 rounded-lg border border-outline-variant shadow-sm flex flex-col md:flex-row gap-6 items-center md:items-start">
+          <img alt="User Avatar" className="w-24 h-24 rounded-full border-4 border-surface-container shadow-inner object-cover" src={profile?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuAWRGJEuznHoQRceDQv-_QiKQetTa_KyBGBgQi5sDwyeP0jDcV6y5YhkmPkMiRzfU7JS8t8Kq36qs5K3-cppp36vCMHNhobhEAZJQegc-Bi7YsLpbRjKFBVKx0EbBQq1A64NBn0ut_6j0j-DRNUROpuWPNmNlaplIC4ayctzDFwfEXUalsb2mOCbsTgVKdYIkisrPWF7q8ZXEGmyiNtdUv9ZcRQ0Y5xe06Flpo61B_lumYhPi_wj0I5Mw"} />
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-2xl font-bold text-on-surface">Aris Pabon</h2>
-            <p className="text-base text-on-surface-variant">aris.pabon@circuitworld.tech</p>
+            <h2 className="text-2xl font-bold text-on-surface">{profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || profile.email : 'Loading...'}</h2>
+            <p className="text-base text-on-surface-variant">{profile?.email || ''}</p>
             <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-3">
               <span className="px-3 py-1 bg-primary-container text-white text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[14px]">stars</span> PRO MEMBER
               </span>
-              <span className="px-3 py-1 bg-surface-container text-on-surface text-[10px] font-bold uppercase tracking-wider rounded-full border border-outline-variant">
-                Since Oct 2022
-              </span>
             </div>
-          </div>
-        </div>
-
-        <div className="bg-primary-container p-6 rounded-lg shadow-lg flex flex-col justify-between">
-          <div>
-            <div className="text-xs font-bold text-primary-fixed-dim uppercase mb-1 tracking-wider">Available Lab Credits</div>
-            <div className="text-[32px] font-black text-white">2,450.00 CC</div>
-          </div>
-          <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
-            <span className="text-sm font-medium text-on-primary-container">Next renewal: June 1st</span>
-            <button className="text-secondary-fixed-dim font-bold text-sm hover:underline tracking-wider">RELOAD</button>
           </div>
         </div>
       </section>
@@ -59,73 +92,43 @@ export default function OrdersTab() {
                   </tr>
                 </thead>
                 <tbody className="text-sm font-medium">
-                  <tr className="hover:bg-surface-container-low transition-colors">
-                    <td className="py-3 px-4 border-b border-outline-variant font-bold">#ORD-28491</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">May 14, 2024</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-secondary-container/10 text-secondary font-bold text-[11px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-secondary-container animate-pulse"></span>
-                        IN TRANSIT
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 border-b border-outline-variant text-on-surface-variant">Titan-X Shield (x1), Logic Array (x2)</td>
-                    <td className="py-3 px-4 border-b border-outline-variant whitespace-nowrap">
-                      <div className="flex gap-3">
-                        <button className="text-secondary hover:underline font-bold text-xs tracking-wider">TRACK</button>
-                        <button className="text-outline hover:text-on-surface font-bold text-xs tracking-wider">DETAILS</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-surface-container-low transition-colors">
-                    <td className="py-3 px-4 border-b border-outline-variant font-bold">#ORD-27902</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">May 02, 2024</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-green-500/10 text-green-700 font-bold text-[11px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-600"></span>
-                        DELIVERED
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 border-b border-outline-variant text-on-surface-variant">Precision Potentiometer Kit</td>
-                    <td className="py-3 px-4 border-b border-outline-variant whitespace-nowrap">
-                      <div className="flex gap-3">
-                        <button className="text-secondary hover:underline font-bold text-xs tracking-wider">REORDER</button>
-                        <button className="text-outline hover:text-on-surface font-bold text-xs tracking-wider">INVOICE</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-surface-container-low transition-colors">
-                    <td className="py-3 px-4 border-b border-outline-variant font-bold">#ORD-26554</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">Apr 18, 2024</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-green-500/10 text-green-700 font-bold text-[11px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-600"></span>
-                        DELIVERED
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 border-b border-outline-variant text-on-surface-variant">ARM Cortex-M4 Module</td>
-                    <td className="py-3 px-4 border-b border-outline-variant whitespace-nowrap">
-                      <div className="flex gap-3">
-                        <button className="text-secondary hover:underline font-bold text-xs tracking-wider">REORDER</button>
-                        <button className="text-outline hover:text-on-surface font-bold text-xs tracking-wider">INVOICE</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="hover:bg-surface-container-low transition-colors">
-                    <td className="py-3 px-4 border-b border-outline-variant font-bold">#ORD-25110</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">Mar 30, 2024</td>
-                    <td className="py-3 px-4 border-b border-outline-variant">
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-outline/10 text-on-surface-variant font-bold text-[11px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-outline"></span>
-                        RETURNED
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 border-b border-outline-variant text-on-surface-variant">XC-701 Micro-Controller (Defective)</td>
-                    <td className="py-3 px-4 border-b border-outline-variant whitespace-nowrap">
-                      <div className="flex gap-3">
-                        <button className="text-outline hover:text-on-surface font-bold text-xs tracking-wider">SUPPORT</button>
-                      </div>
-                    </td>
-                  </tr>
+                  {loading ? (
+                    <tr>
+                      <td colSpan="5" className="py-8 text-center text-on-surface-variant">Loading orders...</td>
+                    </tr>
+                  ) : (!Array.isArray(orders) || orders.length === 0) ? (
+                    <tr>
+                      <td colSpan="5" className="py-8 text-center text-on-surface-variant">No orders found.</td>
+                    </tr>
+                  ) : (
+                    orders.map(order => (
+                      <tr key={order.id} className="hover:bg-surface-container-low transition-colors">
+                        <td className="py-3 px-4 border-b border-outline-variant font-bold">#{order.order_number}</td>
+                        <td className="py-3 px-4 border-b border-outline-variant">{formatDate(order.created_at)}</td>
+                        <td className="py-3 px-4 border-b border-outline-variant">
+                          <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-bold text-[11px] uppercase
+                            ${order.status === 'DELIVERED' ? 'bg-green-500/10 text-green-700' : 
+                              order.status === 'PENDING' ? 'bg-orange-500/10 text-orange-700' : 
+                              order.status === 'CANCELLED' ? 'bg-error/10 text-error' : 
+                              'bg-secondary-container/10 text-secondary'}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${order.status === 'DELIVERED' ? 'bg-green-600' : 
+                              order.status === 'PENDING' ? 'bg-orange-500 animate-pulse' : 
+                              order.status === 'CANCELLED' ? 'bg-error' : 
+                              'bg-secondary-container'}`}></span>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 border-b border-outline-variant text-on-surface-variant max-w-[200px] truncate">
+                          {order.items?.map(i => `${i.product_name} (x${i.quantity})`).join(', ') || 'Unknown Items'}
+                        </td>
+                        <td className="py-3 px-4 border-b border-outline-variant whitespace-nowrap">
+                          <div className="flex gap-3">
+                            <button className="text-secondary hover:underline font-bold text-xs tracking-wider">DETAILS</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -143,39 +146,28 @@ export default function OrdersTab() {
               <h3 className="text-xs text-on-surface font-bold uppercase tracking-wider">Recently Viewed Items</h3>
             </div>
             <div className="p-4 space-y-4 flex-1 overflow-y-auto max-h-[600px]">
-              {/* Product Item */}
-              <div className="flex gap-4 p-3 border border-outline-variant rounded hover:border-secondary hover:bg-surface transition-all group cursor-pointer">
-                <div className="w-16 h-16 bg-surface-container rounded flex items-center justify-center border border-outline-variant">
-                  <span className="material-symbols-outlined text-outline group-hover:text-secondary">memory</span>
+              {recentItems.length === 0 ? (
+                <div className="text-center text-sm text-on-surface-variant py-8">
+                  You haven't viewed any products recently.
                 </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-on-surface text-sm">XC-701 Micro-Controller</h4>
-                  <div className="text-[11px] text-on-surface-variant">v4.2 | 48-Pin QFP</div>
-                  <div className="mt-1 font-bold text-secondary text-sm">45.00 CC</div>
-                </div>
-              </div>
-              {/* Product Item */}
-              <div className="flex gap-4 p-3 border border-outline-variant rounded hover:border-secondary hover:bg-surface transition-all group cursor-pointer">
-                <div className="w-16 h-16 bg-surface-container rounded flex items-center justify-center border border-outline-variant">
-                  <span className="material-symbols-outlined text-outline group-hover:text-secondary">layers</span>
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-on-surface text-sm">Logic Array Layout v1.9</h4>
-                  <div className="text-[11px] text-on-surface-variant">4-Layer Stackup Module</div>
-                  <div className="mt-1 font-bold text-secondary text-sm">120.00 CC</div>
-                </div>
-              </div>
-              {/* Product Item */}
-              <div className="flex gap-4 p-3 border border-outline-variant rounded hover:border-secondary hover:bg-surface transition-all group cursor-pointer">
-                <div className="w-16 h-16 bg-surface-container rounded flex items-center justify-center border border-outline-variant">
-                  <span className="material-symbols-outlined text-outline group-hover:text-secondary">developer_board</span>
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-on-surface text-sm">ARM Cortex-M4 Module</h4>
-                  <div className="text-[11px] text-on-surface-variant">High Speed dev kit</div>
-                  <div className="mt-1 font-bold text-secondary text-sm">89.00 CC</div>
-                </div>
-              </div>
+              ) : (
+                recentItems.map(item => (
+                  <Link to={`/product/${item.id}`} key={item.id} className="flex gap-4 p-3 border border-outline-variant rounded hover:border-secondary hover:bg-surface transition-all group cursor-pointer">
+                    <div className="w-16 h-16 bg-surface-container rounded flex items-center justify-center border border-outline-variant overflow-hidden">
+                      {item.cover_image ? (
+                        <img src={item.cover_image.image_url} alt={item.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="material-symbols-outlined text-outline group-hover:text-secondary">inventory_2</span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-on-surface text-sm line-clamp-1">{item.name}</h4>
+                      <div className="text-[11px] text-on-surface-variant line-clamp-1">{item.category_name}</div>
+                      <div className="mt-1 font-bold text-secondary text-sm">{item.price} CC</div>
+                    </div>
+                  </Link>
+                ))
+              )}
               {/* Shop more */}
               <div className="pt-2">
                 <Link to="/" className="w-full py-3 border-2 border-dashed border-outline-variant rounded text-on-surface-variant hover:text-secondary hover:border-secondary font-bold text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2">

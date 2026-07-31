@@ -88,9 +88,9 @@ export default function Navbar() {
             <button onClick={handleAccountClick} className="hidden sm:block p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
               <span className="material-symbols-outlined">person</span>
             </button>
-            <button className="hidden sm:block p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
+            <Link to="/account" state={{ tab: 'wishlist' }} className="hidden sm:block p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95">
               <span className="material-symbols-outlined">favorite</span>
-            </button>
+            </Link>
             <Link to="/cart" className="p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95 relative block">
               <span className="material-symbols-outlined">shopping_cart</span>
               <span className="absolute top-1 right-1 bg-secondary-container text-white text-[10px] px-1.5 rounded-full font-bold">2</span>
@@ -139,9 +139,9 @@ export default function Navbar() {
                 <button onClick={handleAccountClick} className="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant text-sm font-medium hover:text-secondary">
                   <span className="material-symbols-outlined text-[20px]">person</span> Account
                 </button>
-                <button className="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant text-sm font-medium hover:text-secondary">
+                <Link to="/account" state={{ tab: 'wishlist' }} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 text-on-surface-variant dark:text-surface-variant text-sm font-medium hover:text-secondary">
                   <span className="material-symbols-outlined text-[20px]">favorite</span> Wishlist
-                </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../../api/client';
 import { storage } from '../../../utils/localStorage';
+import { cartService } from '../../../utils/cartService';
 
 export default function ProductHero({ product }) {
   const navigate = useNavigate();
@@ -26,10 +27,8 @@ export default function ProductHero({ product }) {
   };
 
   const handleAddToCart = () => {
-    handleAuthCheck(() => {
-      // Implement add to cart logic here
-      console.log('Added to cart');
-    }, window.location.pathname);
+    cartService.addToCart(product, quantity);
+    alert('Added to cart!');
   };
 
   const defaultImage = product.images && product.images.length > 0 

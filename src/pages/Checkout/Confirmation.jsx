@@ -6,9 +6,9 @@ import OrderSummary from './OrderSummary';
 export default function Confirmation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { product, quantity, displayImage, shippingFormData, paymentMethod } = location.state || {};
+  const { product, quantity, displayImage, shippingFormData, paymentMethod, appliedVoucher, order_number } = location.state || {};
 
-  const orderNumber = `PB-${Math.floor(Math.random() * 90000) + 10000}`;
+  const orderNumber = order_number || `PB-${Math.floor(Math.random() * 90000) + 10000}`;
   const orderDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const deliveryStart = new Date();
   deliveryStart.setDate(deliveryStart.getDate() + 4);
@@ -121,7 +121,13 @@ export default function Confirmation() {
             </div>
           </div>
 
-          <OrderSummary product={product} quantity={quantity} displayImage={displayImage}>
+          <OrderSummary 
+            product={product} 
+            quantity={quantity} 
+            displayImage={displayImage} 
+            initialVoucher={appliedVoucher}
+            readonly={true}
+          >
             {/* Action Buttons */}
             <div className="flex flex-col gap-4 mt-6">
               <button onClick={() => navigate('/')} className="w-full bg-primary text-white py-4 rounded-lg font-bold hover:bg-primary/90 transition-all flex items-center justify-center gap-2">

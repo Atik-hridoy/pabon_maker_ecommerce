@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getBillingSettings, updateBillingSettings, getVouchers, createVoucher } from '../../../api/billingService';
+import VoucherModal from './VoucherModal';
 
 export default function BillingChargesView() {
   const [vatEnabled, setVatEnabled] = useState(true);
@@ -9,23 +11,93 @@ export default function BillingChargesView() {
   const [bkashFee, setBkashFee] = useState(1.5);
   const [nagadFee, setNagadFee] = useState(1.0);
   const [previewMethod, setPreviewMethod] = useState('bkash');
+  const [testVoucher, setTestVoucher] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+  
+  const [isVoucherModalOpen, setIsVoucherModalOpen] = useState(false);
+  
+  // Real state to hold vouchers from backend
+  const [vouchers, setVouchers] = useState([]);
 
   const sampleOrderTotal = 1000;
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const [data, voucherData] = await Promise.all([
+          getBillingSettings(),
+          getVouchers()
+        ]);
+        
+        setVatEnabled(data.vat_enabled ?? true);
+        setVatPercentage(data.vat_percentage ?? 5.0);
+        setDeliveryCharge(data.delivery_charges?.flat_regular ?? 120);
+        setBkashFee(data.gateway_fees?.bkash_percentage ?? 1.5);
+        setNagadFee(data.gateway_fees?.nagad_percentage ?? 1.0);
+        
+        // Handle pagination structure if it exists
+        setVouchers(voucherData.results || voucherData || []);
+      } catch (err) {
+        console.error("Failed to load settings:", err);
+        setError('Failed to fetch current billing settings.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSettings();
+  }, []);
+  // Find if the tested voucher exists in our local state
+  let discount = 0;
+  if (testVoucher) {
+    const foundVoucher = vouchers.find(v => v.code === testVoucher);
+    if (foundVoucher) {
+      if (foundVoucher.discount_type === 'FLAT') {
+        discount = Number(foundVoucher.discount_amount);
+      } else {
+        discount = sampleOrderTotal * (Number(foundVoucher.discount_amount) / 100);
+      }
+    }
+  }
   
+  const taxableSubtotal = sampleOrderTotal - discount;
+
   // Calculations
-  const calculatedVat = vatEnabled ? (sampleOrderTotal * (vatPercentage / 100)) : 0;
+  const calculatedVat = vatEnabled ? (taxableSubtotal * (vatPercentage / 100)) : 0;
   const calculatedDelivery = Number(deliveryCharge);
   
   let selectedFeePct = 0;
   if (previewMethod === 'bkash') selectedFeePct = Number(bkashFee);
   else if (previewMethod === 'nagad') selectedFeePct = Number(nagadFee);
   
-  const basePlusVatAndDelivery = sampleOrderTotal + calculatedVat + calculatedDelivery;
+  const basePlusVatAndDelivery = taxableSubtotal + calculatedVat + calculatedDelivery;
   const calculatedGatewayFee = previewMethod !== 'cod' ? basePlusVatAndDelivery * (selectedFeePct / 100) : 0;
   const grandTotal = basePlusVatAndDelivery + calculatedGatewayFee;
 
-  const handleSave = () => {
-    alert('Billing & Charges configuration saved successfully!');
+  const handleSave = async () => {
+    setError(null);
+    if (vatPercentage < 0 || deliveryCharge < 0 || bkashFee < 0 || nagadFee < 0) {
+      setError('Values cannot be negative');
+      return;
+    }
+    
+    setSaving(true);
+    try {
+      const payload = {
+        vat_enabled: vatEnabled,
+        vat_percentage: Number(vatPercentage),
+        delivery_charges: { flat_regular: Number(deliveryCharge) },
+        gateway_fees: { bkash_percentage: Number(bkashFee), nagad_percentage: Number(nagadFee), cod_fee: 0.0 }
+      };
+      await updateBillingSettings(payload);
+      alert('Settings updated successfully!');
+    } catch (err) {
+      console.error(err);
+      setError(err.data?.detail || 'Failed to save settings. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDiscard = () => {
@@ -41,8 +113,23 @@ export default function BillingChargesView() {
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-on-surface">Billing & Charges Settings</h2>
         <p className="text-on-surface-variant text-sm mt-1">Manage global taxes, shipping rates, and gateway convenience fees.</p>
+        
+        {error && (
+          <div className="mt-4 p-4 bg-error/10 border border-error/20 text-error rounded flex items-center gap-2 text-sm font-bold">
+            <span className="material-symbols-outlined">error</span>
+            {error}
+          </div>
+        )}
       </div>
 
+      {loading ? (
+        <div className="flex justify-center items-center h-64 text-on-surface-variant">
+          <div className="flex flex-col items-center gap-2">
+            <span className="material-symbols-outlined animate-spin text-4xl text-secondary">refresh</span>
+            <p className="font-bold text-sm tracking-wider uppercase font-label-caps">Loading Configurations...</p>
+          </div>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-8 space-y-6">
           
@@ -141,6 +228,22 @@ export default function BillingChargesView() {
             <p className="text-xs text-on-surface-variant mt-4 italic">* Gateway fees are calculated on the total order value (Subtotal + VAT + Shipping).</p>
           </section>
 
+          {/* Section 4 - Voucher Management */}
+          <section className="bg-white p-6 rounded-lg border border-outline-variant shadow-sm">
+            <h3 className="text-label-caps font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined">local_offer</span>
+              Vouchers & Promotions
+            </h3>
+            <p className="text-sm text-on-surface-variant mb-6">Create and manage discount codes for your users.</p>
+            <button 
+              onClick={() => setIsVoucherModalOpen(true)}
+              className="px-4 py-2 bg-primary-container text-white text-sm font-bold rounded hover:opacity-90 transition-all flex items-center gap-2 w-max"
+            >
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              Create New Voucher / Promo Code
+            </button>
+          </section>
+
         </div>
 
         {/* Right Column: Live Preview & Actions */}
@@ -165,6 +268,21 @@ export default function BillingChargesView() {
                    <option value="cod">Cash on Delivery (0%)</option>
                  </select>
                </div>
+               <div>
+                 <label className="text-[10px] font-bold text-on-surface-variant uppercase block mb-1">Select Voucher to Simulate</label>
+                 <select 
+                   className="w-full p-2 text-sm border border-outline-variant rounded focus:ring-1 focus:ring-secondary"
+                   value={testVoucher}
+                   onChange={(e) => setTestVoucher(e.target.value)}
+                 >
+                   <option value="">-- No Voucher --</option>
+                   {vouchers.map(v => (
+                     <option key={v.code} value={v.code} disabled={!v.is_active}>
+                       {v.code} ({v.discount_type === 'FLAT' ? `৳${v.discount_amount}` : `${v.discount_amount}%`}) {v.is_active ? '' : '- Inactive'}
+                     </option>
+                   ))}
+                 </select>
+               </div>
             </div>
 
             {/* Receipt Summary */}
@@ -173,6 +291,18 @@ export default function BillingChargesView() {
                 <span>Sample Cart Value</span>
                 <span className="font-bold">৳{sampleOrderTotal.toFixed(2)}</span>
               </div>
+              {discount > 0 && (
+                <>
+                  <div className="flex justify-between items-center text-green-600 font-bold">
+                    <span>Discount (Voucher)</span>
+                    <span>-৳{discount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-on-surface-variant">
+                    <span>Taxable Subtotal</span>
+                    <span>৳{taxableSubtotal.toFixed(2)}</span>
+                  </div>
+                </>
+              )}
               <div className="flex justify-between items-center text-on-surface">
                 <span>VAT ({vatEnabled ? vatPercentage : 0}%)</span>
                 <span>৳{calculatedVat.toFixed(2)}</span>
@@ -193,18 +323,49 @@ export default function BillingChargesView() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button onClick={handleDiscard} className="w-full sm:w-1/3 py-3 border border-outline-variant text-on-surface font-bold rounded hover:bg-surface-container transition-colors text-sm">
+              <button onClick={handleDiscard} disabled={saving} className="w-full sm:w-1/3 py-3 border border-outline-variant text-on-surface font-bold rounded hover:bg-surface-container transition-colors text-sm disabled:opacity-50">
                 Discard
               </button>
-              <button onClick={handleSave} className="w-full sm:w-2/3 py-3 bg-secondary-container text-white font-bold rounded shadow-md hover:opacity-90 active:scale-95 transition-all text-sm flex justify-center items-center gap-2">
-                Save Changes
-                <span className="material-symbols-outlined text-[18px]">save</span>
+              <button onClick={handleSave} disabled={saving} className="w-full sm:w-2/3 py-3 bg-secondary-container text-white font-bold rounded shadow-md hover:opacity-90 active:scale-95 transition-all text-sm flex justify-center items-center gap-2 disabled:opacity-75 disabled:active:scale-100">
+                {saving ? 'Saving...' : 'Save Changes'}
+                {!saving && <span className="material-symbols-outlined text-[18px]">save</span>}
               </button>
             </div>
 
           </div>
         </div>
       </div>
+      )}
+
+      {isVoucherModalOpen && (
+        <VoucherModal 
+          onClose={() => setIsVoucherModalOpen(false)}
+          onSave={async (data) => {
+            try {
+              // Map frontend state to backend expected format
+              const payload = {
+                code: data.code,
+                discount_type: data.discountType,
+                discount_amount: Number(data.discountValue),
+                min_order_amount: Number(data.minOrderAmount || 0),
+                usage_limit_per_user: Number(data.usageLimit || 1),
+                is_active: data.isActive
+              };
+              if (data.expiryDate) {
+                payload.expiry_date = new Date(data.expiryDate).toISOString();
+              }
+              
+              const newVoucher = await createVoucher(payload);
+              setVouchers(prev => [newVoucher, ...prev]);
+              setIsVoucherModalOpen(false);
+              alert(`Voucher '${newVoucher.code}' created successfully in the backend!`);
+            } catch (err) {
+              console.error(err);
+              alert('Failed to save voucher. Please check inputs.');
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

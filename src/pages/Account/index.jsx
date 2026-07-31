@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { API_BASE_URL } from '../../api/client';
 
 import OrdersTab from './components/OrdersTab';
@@ -13,10 +13,17 @@ import { storage } from '../../utils/localStorage';
 
 export default function Account() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('orders');
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'orders');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (storage.isAdmin()) {

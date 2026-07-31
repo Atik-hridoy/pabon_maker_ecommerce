@@ -1,19 +1,86 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BASE_URL } from '../../api/client';
+import { calculateCheckout } from '../../api/checkoutService';
 
-export default function OrderSummary({ product, quantity, displayImage, paymentMethod, children }) {
-  const subtotal = product ? Number(product.price) * quantity : 0;
-  const tax = subtotal * 0.085; // 8.5%
-  const shipping = 120.00; // hardcoded for now
+export default function OrderSummary({ product, quantity, displayImage, paymentMethod, readonly = false, initialVoucher = null, onVoucherChange, children }) {
+  const [totals, setTotals] = useState({
+    subtotal: 0,
+    discount_amount: 0,
+    vat: 0,
+    delivery_charge: 0,
+    gateway_fee: 0,
+    grand_total: 0
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   
-  const basePlusTaxAndShipping = subtotal + tax + shipping;
-  
-  let gatewayFeePct = 0;
-  if (paymentMethod === 'bkash') gatewayFeePct = 1.5;
-  if (paymentMethod === 'nagad') gatewayFeePct = 1.0;
-  
-  const gatewayFee = basePlusTaxAndShipping * (gatewayFeePct / 100);
-  const total = basePlusTaxAndShipping + gatewayFee;
+  const [voucherInput, setVoucherInput] = useState('');
+  const [appliedVoucher, setAppliedVoucher] = useState(initialVoucher);
+  const [voucherMsg, setVoucherMsg] = useState({ text: '', type: '' });
+
+  useEffect(() => {
+    const fetchTotals = async () => {
+      if (!product) return;
+      
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const payload = {
+          cartItems: [{ price: product.price, quantity: quantity }],
+          paymentMethod: paymentMethod ? paymentMethod.toUpperCase() : "COD"
+        };
+        if (appliedVoucher) {
+          payload.voucher_code = appliedVoucher;
+        }
+        
+        const data = await calculateCheckout(payload);
+        
+        setTotals({
+          subtotal: data.subtotal || 0,
+          discount_amount: data.discount_amount || 0,
+          vat: data.vat_amount || 0,
+          delivery_charge: data.delivery_charge || 0,
+          gateway_fee: data.gateway_charge || 0,
+          grand_total: data.grand_total || 0
+        });
+
+        if (appliedVoucher && !data.applied_voucher) {
+           setVoucherMsg({ text: 'Invalid or expired voucher code', type: 'error' });
+           setAppliedVoucher(null);
+        } else if (data.applied_voucher) {
+           setVoucherMsg({ text: `Voucher '${data.applied_voucher.code}' applied!`, type: 'success' });
+        } else {
+           setVoucherMsg({ text: '', type: '' });
+        }
+
+      } catch (err) {
+        console.error('Failed to calculate checkout:', err);
+        setError('Failed to calculate totals.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    const timeoutId = setTimeout(fetchTotals, 300);
+    return () => clearTimeout(timeoutId);
+  }, [product, quantity, paymentMethod, appliedVoucher]);
+
+  const handleApplyVoucher = () => {
+    if (voucherInput.trim()) {
+      const code = voucherInput.trim();
+      setAppliedVoucher(code);
+      setVoucherMsg({ text: '', type: '' });
+      if (onVoucherChange) onVoucherChange(code);
+    }
+  };
+
+  const handleRemoveVoucher = () => {
+    setAppliedVoucher(null);
+    setVoucherMsg({ text: '', type: '' });
+    setVoucherInput('');
+    if (onVoucherChange) onVoucherChange(null);
+  };
 
   return (
     <aside className="lg:col-span-4 space-y-6">
@@ -44,31 +111,85 @@ export default function OrderSummary({ product, quantity, displayImage, paymentM
           )}
         </div>
         {/* Financial Breakdown */}
-        <div className="space-y-3 border-t border-outline-variant pt-6 mb-8">
+        <div className="space-y-3 border-t border-outline-variant pt-6 mb-8 relative">
+          {loading && (
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded">
+               <span className="material-symbols-outlined animate-spin text-secondary text-2xl">refresh</span>
+            </div>
+          )}
+          {error && (
+            <div className="text-error text-xs mb-2 font-bold">{error}</div>
+          )}
           <div className="flex justify-between text-sm">
             <span className="text-on-surface-variant">Subtotal</span>
-            <span className="text-on-surface">৳{subtotal.toFixed(2)}</span>
+            <span className="text-on-surface">৳{totals.subtotal.toFixed(2)}</span>
+          </div>
+          {totals.discount_amount > 0 && (
+            <div className="flex justify-between text-sm text-green-600 font-bold">
+              <span>Discount (Voucher)</span>
+              <span>-৳{totals.discount_amount.toFixed(2)}</span>
+            </div>
+          )}
+          <div className="flex justify-between text-sm">
+            <span className="text-on-surface-variant">VAT</span>
+            <span className="text-on-surface">৳{totals.vat.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-on-surface-variant">Tax (8.5%)</span>
-            <span className="text-on-surface">৳{tax.toFixed(2)}</span>
+            <span className="text-on-surface-variant">Delivery Charge</span>
+            <span className="text-on-surface">৳{totals.delivery_charge.toFixed(2)}</span>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-on-surface-variant">Shipping (Express)</span>
-            <span className="text-on-surface">৳{shipping.toFixed(2)}</span>
-          </div>
+          {totals.gateway_fee > 0 && (
+            <div className="flex justify-between text-sm text-secondary">
+              <span className="font-bold">Gateway Fee</span>
+              <span className="font-bold">৳{totals.gateway_fee.toFixed(2)}</span>
+            </div>
+          )}
         </div>
-        <div className="flex justify-between items-center border-t border-outline-variant pt-6">
+        <div className="flex justify-between items-center border-t border-outline-variant pt-6 relative">
+          {loading && (
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 rounded"></div>
+          )}
           <span className="font-bold text-lg text-primary">Total</span>
-          <span className="font-bold text-2xl text-secondary">৳{total.toFixed(2)}</span>
+          <span className="font-bold text-2xl text-secondary">৳{totals.grand_total.toFixed(2)}</span>
         </div>
-        {/* Promo Code */}
-        <div className="mb-8 mt-8">
-          <div className="flex gap-2">
-            <input className="flex-1 border border-outline-variant rounded p-2 text-sm focus:ring-1 focus:ring-secondary" placeholder="Project Voucher Code" type="text" />
-            <button className="bg-surface-container text-primary px-4 rounded text-xs font-bold hover:bg-surface-variant transition-colors">Apply</button>
+        {/* Promo Code - Hidden in Readonly/Review mode */}
+        {!readonly && (
+          <div className="mb-8 mt-8 space-y-2">
+            {appliedVoucher && totals.discount_amount > 0 ? (
+              <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded text-sm">
+                <div className="flex items-center gap-2 text-green-700 font-bold">
+                  <span className="material-symbols-outlined text-[18px]">local_offer</span>
+                  {appliedVoucher.toUpperCase()} Applied
+                </div>
+                <button onClick={handleRemoveVoucher} className="text-error font-bold text-xs hover:underline uppercase tracking-wider">Remove</button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input 
+                  className="flex-1 border border-outline-variant rounded p-2 text-sm focus:ring-1 focus:ring-secondary uppercase" 
+                  placeholder="Voucher Code" 
+                  type="text" 
+                  value={voucherInput}
+                  onChange={(e) => setVoucherInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleApplyVoucher()}
+                />
+                <button 
+                  onClick={handleApplyVoucher}
+                  disabled={loading || !voucherInput.trim()}
+                  className="bg-surface-container text-primary px-4 rounded text-xs font-bold hover:bg-surface-variant transition-colors disabled:opacity-50"
+                >
+                  Apply
+                </button>
+              </div>
+            )}
+            
+            {voucherMsg.text && (
+              <p className={`text-xs font-bold ${voucherMsg.type === 'error' ? 'text-error' : 'text-green-600'}`}>
+                {voucherMsg.text}
+              </p>
+            )}
           </div>
-        </div>
+        )}
         <div className="mt-4 flex items-center justify-center gap-2 text-on-surface-variant opacity-60 mb-6">
           <span className="material-symbols-outlined text-sm">lock</span>
           <span className="text-[11px] font-bold uppercase tracking-tighter">SECURE 256-BIT ENCRYPTION</span>

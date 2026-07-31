@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../../api/client';
+import { toggleWishlist, getWishlist } from '../../../api/activityService';
 
-function CategoryProductCard({ product }) {
+function CategoryProductCard({ product, initialWishlisted = false }) {
+  const [isWishlisted, setIsWishlisted] = useState(initialWishlisted);
   const imgUrl = product.images && product.images.length > 0 ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) : '';
   const finalImgUrl = imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`;
+
+  useEffect(() => {
+    setIsWishlisted(initialWishlisted);
+  }, [initialWishlisted]);
+
+  const handleWishlistClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await toggleWishlist(product.id);
+      setIsWishlisted(!isWishlisted);
+    } catch (error) {
+      console.error('Failed to toggle wishlist', error);
+      alert('Please log in to add items to your wishlist.');
+    }
+  };
 
   return (
     <div className="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:border-secondary transition-colors">
@@ -24,6 +42,14 @@ function CategoryProductCard({ product }) {
             Sale
           </span>
         )}
+        <button 
+          onClick={handleWishlistClick}
+          className="absolute top-2 right-2 p-1.5 rounded-full bg-white/80 hover:bg-white text-outline-variant hover:text-error transition-all shadow-sm z-10 flex items-center justify-center"
+        >
+          <span className={`material-symbols-outlined text-[18px] ${isWishlisted ? 'text-error fill-current font-variation-fill' : ''}`} style={isWishlisted ? { fontVariationSettings: "'FILL' 1" } : {}}>
+            favorite
+          </span>
+        </button>
       </Link>
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-1">
@@ -64,6 +90,21 @@ function CategoryProductCard({ product }) {
 }
 
 export default function CategoryProductGrid({ products }) {
+  const [wishlistIds, setWishlistIds] = useState([]);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const res = await getWishlist();
+        const data = Array.isArray(res) ? res : (res.data || []);
+        setWishlistIds(data.map(item => item.id));
+      } catch (e) {
+        console.error("Failed to fetch wishlist", e);
+      }
+    };
+    fetchWishlist();
+  }, []);
+
   if (products.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-24 bg-surface rounded-lg border border-outline-variant border-dashed">
@@ -78,7 +119,11 @@ export default function CategoryProductGrid({ products }) {
     <div className="flex-1">
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map(product => (
-          <CategoryProductCard key={product.id} product={product} />
+          <CategoryProductCard 
+            key={product.id} 
+            product={product} 
+            initialWishlisted={wishlistIds.includes(product.id)}
+          />
         ))}
       </div>
     </div>

@@ -153,7 +153,7 @@ export default function Shipping() {
           </div>
 
           {/* Right Column: Order Summary */}
-          <OrderSummary product={product} quantity={quantity} displayImage={displayImage} />
+          <OrderSummary product={product} quantity={quantity} displayImage={displayImage} readonly={true} />
         </div>
       </div>
     </MainLayout>

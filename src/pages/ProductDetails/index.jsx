@@ -5,6 +5,7 @@ import ProductHero from './components/ProductHero';
 import ProductTabs from './components/ProductTabs';
 import RelatedProducts from './components/RelatedProducts';
 import { getProduct } from '../../api/productService';
+import { trackProductView } from '../../api/activityService';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -19,6 +20,8 @@ export default function ProductDetails() {
         if (response.success && response.data) {
           setProduct(response.data);
           window.scrollTo(0, 0); // Scroll to top on navigation
+          // Track the view quietly in the background
+          trackProductView(response.data.id).catch(e => console.error("Failed to track view", e));
         } else {
           setProduct(null);
         }

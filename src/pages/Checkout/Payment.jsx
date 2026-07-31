@@ -7,6 +7,7 @@ export default function Payment() {
   const location = useLocation();
   const { product, quantity, displayImage, shippingFormData } = location.state || {};
   const [paymentMethod, setPaymentMethod] = useState('cod');
+  const [appliedVoucher, setAppliedVoucher] = useState(null);
 
   return (
     <MainLayout>
@@ -94,10 +95,16 @@ export default function Payment() {
           </div>
 
           {/* Right Column: Order Summary */}
-          <OrderSummary product={product} quantity={quantity} displayImage={displayImage} paymentMethod={paymentMethod}>
-            <button onClick={() => navigate('/checkout/confirmation', { state: { ...location.state, paymentMethod } })} className="w-full bg-secondary-container text-white py-4 rounded-lg font-bold text-lg shadow-lg hover:opacity-90 active:scale-95 transition-all flex justify-center items-center gap-2 group">
-              Confirm Order
-              <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">check_circle</span>
+          <OrderSummary 
+            product={product} 
+            quantity={quantity} 
+            displayImage={displayImage} 
+            paymentMethod={paymentMethod}
+            onVoucherChange={setAppliedVoucher}
+          >
+            <button onClick={() => navigate('/checkout/review', { state: { ...location.state, paymentMethod, appliedVoucher } })} className="w-full bg-primary text-white py-4 rounded-lg font-bold text-lg shadow-lg hover:opacity-90 active:scale-95 transition-all flex justify-center items-center gap-2 group">
+              Review Order
+              <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </button>
           </OrderSummary>
         </div>

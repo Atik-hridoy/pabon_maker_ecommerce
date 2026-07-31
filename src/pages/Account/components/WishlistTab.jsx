@@ -1,12 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { mockProducts } from '../../../data/mockProducts';
+import { getWishlist, toggleWishlist } from '../../../api/activityService';
+import { cartService } from '../../../utils/cartService';
+import { BASE_URL } from '../../../api/client';
 
 export default function WishlistTab() {
-  const [wishlist, setWishlist] = useState(mockProducts.slice(0, 4));
+  const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleRemove = (id) => {
-    setWishlist(wishlist.filter(item => item.id !== id));
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
+
+  const fetchWishlist = async () => {
+    setLoading(true);
+    try {
+      const response = await getWishlist();
+      if (Array.isArray(response)) {
+        setWishlist(response);
+      } else if (response.data) {
+        setWishlist(response.data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch wishlist", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemove = async (id) => {
+    try {
+      await toggleWishlist(id);
+      fetchWishlist();
+    } catch (e) {
+      console.error("Failed to remove item from wishlist", e);
+    }
+  };
+
+  const handleAddToCart = (product) => {
+    cartService.addToCart(product, 1);
+    alert('Added to cart!');
   };
 
   return (
@@ -21,7 +54,11 @@ export default function WishlistTab() {
         </span>
       </div>
       
-      {wishlist.length === 0 ? (
+      {loading ? (
+        <div className="p-12 text-center text-on-surface-variant">
+          Loading wishlist...
+        </div>
+      ) : wishlist.length === 0 ? (
         <div className="p-12 text-center">
           <span className="material-symbols-outlined text-[48px] text-outline-variant mb-4">favorite_border</span>
           <h4 className="font-bold text-lg text-on-surface mb-2">Your wishlist is empty</h4>
@@ -33,7 +70,10 @@ export default function WishlistTab() {
       ) : (
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-            {wishlist.map(product => (
+            {wishlist.map(product => {
+              const imgUrl = product.images && product.images.length > 0 ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) : '';
+              const finalImgUrl = imgUrl ? (imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`) : '';
+              return (
               <div key={product.id} className="flex gap-4 p-4 border border-outline-variant rounded-lg hover:border-secondary transition-colors group relative">
                 <button 
                   onClick={() => handleRemove(product.id)}
@@ -42,26 +82,30 @@ export default function WishlistTab() {
                 >
                   <span className="material-symbols-outlined text-[18px]">close</span>
                 </button>
-                <div className="w-24 h-24 bg-surface-container-lowest rounded-md border border-outline-variant overflow-hidden flex-shrink-0">
-                  <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+                <div className="w-24 h-24 bg-surface-container-lowest rounded-md border border-outline-variant overflow-hidden flex-shrink-0 flex items-center justify-center">
+                  {finalImgUrl ? (
+                    <img src={finalImgUrl} alt={product.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="material-symbols-outlined text-outline-variant">image</span>
+                  )}
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <h4 className="font-bold text-on-surface text-sm pr-8 leading-tight">{product.title}</h4>
-                    <div className="text-xs text-on-surface-variant mt-1">{product.description}</div>
+                    <h4 className="font-bold text-on-surface text-sm pr-8 leading-tight line-clamp-2">{product.name}</h4>
+                    <div className="text-xs text-on-surface-variant mt-1 line-clamp-1">{product.description}</div>
                   </div>
                   <div className="flex items-center justify-between mt-3">
                     <div className="font-bold text-secondary text-base">
-                      ${product.price.toFixed(2)}
+                      ৳{Number(product.price).toFixed(2)}
                     </div>
-                    <button className="flex items-center justify-center gap-1 px-3 py-1.5 border border-outline-variant rounded text-xs font-bold text-on-surface hover:border-secondary hover:text-secondary transition-colors">
+                    <button onClick={() => handleAddToCart(product)} className="flex items-center justify-center gap-1 px-3 py-1.5 border border-outline-variant rounded text-xs font-bold text-on-surface hover:border-secondary hover:text-secondary transition-colors">
                       <span className="material-symbols-outlined text-[14px]">shopping_cart</span>
                       ADD TO CART
                     </button>
                   </div>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       )}
