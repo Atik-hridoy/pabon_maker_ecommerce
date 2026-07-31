@@ -7,6 +7,8 @@ import InventoryView from './AdminViews/InventoryView';
 import UsersView from './AdminViews/UsersView';
 import AnalyticsView from './AdminViews/AnalyticsView';
 import SettingsView from './AdminViews/SettingsView';
+import BillingChargesView from './AdminViews/BillingChargesView';
+import AuditLogView from './AdminViews/AuditLogView';
 import AddBannerModal from './AdminViews/AddBannerModal';
 import { storage } from '../../utils/localStorage';
 import { uploadBanners } from '../../api/productService';
@@ -38,6 +40,8 @@ export default function AdminDashboard({ onSignOut }) {
     { id: 'inventory', icon: 'inventory_2', label: 'Inventory' },
     { id: 'users', icon: 'group', label: 'Users' },
     { id: 'analytics', icon: 'monitoring', label: 'Analytics' },
+    { id: 'billing', icon: 'payments', label: 'Billing & Charges' },
+    { id: 'audit', icon: 'history', label: 'Audit Logs' },
   ];
 
   const renderDashboardContent = () => {
@@ -46,6 +50,8 @@ export default function AdminDashboard({ onSignOut }) {
       case 'inventory': return <InventoryView />;
       case 'users': return <UsersView />;
       case 'analytics': return <AnalyticsView />;
+      case 'billing': return <BillingChargesView />;
+      case 'audit': return <AuditLogView />;
       case 'settings': return <SettingsView />;
       default: return null; // handled separately below
     }

@@ -36,45 +36,7 @@ export default function Payment() {
           <div className="lg:col-span-8 space-y-8">
             <section className="bg-surface-container-low border border-outline-variant p-8 rounded-lg shadow-sm">
               <h2 className="text-2xl font-bold text-primary mb-6">Select Payment Method</h2>
-              
               <div className="space-y-4">
-                {/* Credit/Debit Card Option */}
-                <div className="border-2 border-secondary-container rounded-lg p-6 bg-white transition-all shadow-sm">
-                  <label className="flex items-center gap-3 mb-6 cursor-pointer">
-                    <input checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} className="w-5 h-5 text-secondary border-outline-variant focus:ring-secondary" name="payment_method" type="radio" />
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-bold">Credit / Debit Card</span>
-                      <div className="flex gap-2">
-                        <div className="w-8 h-5 border border-outline-variant rounded flex items-center justify-center text-[8px] font-bold">VISA</div>
-                        <div className="w-8 h-5 border border-outline-variant rounded flex items-center justify-center text-[8px] font-bold">MC</div>
-                        <div className="w-8 h-5 border border-outline-variant rounded flex items-center justify-center text-[8px] font-bold">AMEX</div>
-                      </div>
-                    </div>
-                  </label>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="col-span-full">
-                      <label className="text-xs text-on-surface-variant uppercase block mb-1">CARD NUMBER</label>
-                      <div className="relative">
-                        <input className="w-full p-3 border border-outline-variant rounded focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="0000 0000 0000 0000" type="text" />
-                        <span className="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant">lock</span>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-xs text-on-surface-variant uppercase block mb-1">EXPIRY DATE (MM/YY)</label>
-                      <input className="w-full p-3 border border-outline-variant rounded focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="MM / YY" type="text" />
-                    </div>
-                    <div>
-                      <label className="text-xs text-on-surface-variant uppercase block mb-1">CVV / CVC</label>
-                      <input className="w-full p-3 border border-outline-variant rounded focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="123" type="text" />
-                    </div>
-                    <div className="col-span-full">
-                      <label className="text-xs text-on-surface-variant uppercase block mb-1">CARDHOLDER NAME</label>
-                      <input className="w-full p-3 border border-outline-variant rounded focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Full name as printed on card" type="text" />
-                    </div>
-                  </div>
-                </div>
-
                 {/* bKash Option */}
                 <div className="border border-outline-variant rounded-lg p-6 hover:border-secondary bg-white transition-all cursor-pointer">
                   <label className="flex items-center gap-3 cursor-pointer">
@@ -132,7 +94,7 @@ export default function Payment() {
           </div>
 
           {/* Right Column: Order Summary */}
-          <OrderSummary product={product} quantity={quantity} displayImage={displayImage}>
+          <OrderSummary product={product} quantity={quantity} displayImage={displayImage} paymentMethod={paymentMethod}>
             <button onClick={() => navigate('/checkout/confirmation', { state: { ...location.state, paymentMethod } })} className="w-full bg-secondary-container text-white py-4 rounded-lg font-bold text-lg shadow-lg hover:opacity-90 active:scale-95 transition-all flex justify-center items-center gap-2 group">
               Confirm Order
               <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">check_circle</span>

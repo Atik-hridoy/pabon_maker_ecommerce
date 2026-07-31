@@ -130,25 +130,11 @@ export default function Shipping() {
                   <div className="flex items-center gap-4">
                     <input defaultChecked className="text-secondary focus:ring-secondary w-4 h-4" name="shipping_method" type="radio" />
                     <div>
-                      <p className="font-bold text-on-surface">Standard Ground</p>
-                      <p className="text-sm text-on-surface-variant">Estimated delivery: 3-5 business days</p>
+                      <p className="font-bold text-on-surface">Standard Delivery</p>
+                      <p className="text-sm text-on-surface-variant">Flat delivery charge across Bangladesh</p>
                     </div>
                   </div>
-                  <span className="font-bold">৳576.00</span>
-                </label>
-                {/* Express Option */}
-                <label className="flex items-center justify-between p-4 border-2 border-secondary-container bg-secondary/5 rounded cursor-pointer hover:bg-secondary/10 transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <input className="text-secondary focus:ring-secondary w-4 h-4" name="shipping_method" type="radio" />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-bold text-on-surface">Express Engineering</p>
-                        <span className="bg-secondary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">FASTEST</span>
-                      </div>
-                      <p className="text-sm text-on-surface-variant">Priority air dispatch: 1-2 business days</p>
-                    </div>
-                  </div>
-                  <span className="font-bold text-secondary">৳1565.00</span>
+                  <span className="font-bold">৳120.00</span>
                 </label>
               </div>
             </section>

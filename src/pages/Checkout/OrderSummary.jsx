@@ -1,11 +1,19 @@
 import React from 'react';
 import { BASE_URL } from '../../api/client';
 
-export default function OrderSummary({ product, quantity, displayImage, children }) {
+export default function OrderSummary({ product, quantity, displayImage, paymentMethod, children }) {
   const subtotal = product ? Number(product.price) * quantity : 0;
   const tax = subtotal * 0.085; // 8.5%
-  const shipping = 34.00; // hardcoded for now
-  const total = subtotal + tax + shipping;
+  const shipping = 120.00; // hardcoded for now
+  
+  const basePlusTaxAndShipping = subtotal + tax + shipping;
+  
+  let gatewayFeePct = 0;
+  if (paymentMethod === 'bkash') gatewayFeePct = 1.5;
+  if (paymentMethod === 'nagad') gatewayFeePct = 1.0;
+  
+  const gatewayFee = basePlusTaxAndShipping * (gatewayFeePct / 100);
+  const total = basePlusTaxAndShipping + gatewayFee;
 
   return (
     <aside className="lg:col-span-4 space-y-6">
