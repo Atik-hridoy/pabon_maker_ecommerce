@@ -12,6 +12,15 @@ export const calculateCheckout = async (payload) => {
 };
 
 /**
+ * Fetch active public vouchers
+ */
+export const getPublicVouchers = async () => {
+  return apiClient('/orders/active-vouchers/', {
+    method: 'GET'
+  });
+};
+
+/**
  * Place the final order
  */
 export const placeOrder = async (payload) => {

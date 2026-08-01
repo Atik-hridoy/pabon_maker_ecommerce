@@ -4,9 +4,8 @@ import Hero from './components/Hero';
 import Features from './components/Features';
 import CategoriesGrid from './components/CategoriesGrid';
 import ProductDisplay from './components/ProductDisplay';
+import RecommendedProducts from './components/RecommendedProducts';
 import PromoBanner from './components/PromoBanner';
-import Metrics from './components/Metrics';
-import Testimonials from './components/Testimonials';
 
 export default function Homepage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -21,8 +20,7 @@ export default function Homepage() {
       />
       <ProductDisplay selectedCategory={selectedCategory} />
       <PromoBanner />
-      <Metrics />
-      <Testimonials />
+      <RecommendedProducts />
     </MainLayout>
   );
 }

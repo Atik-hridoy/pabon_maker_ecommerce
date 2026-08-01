@@ -1,51 +1,85 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getProductReviews, submitProductReview } from '../../../api/productService';
+import { storage } from '../../../utils/localStorage';
 
-export default function ProductTabs() {
+export default function ProductTabs({ product }) {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const isLoggedIn = storage.isLoggedIn();
+
+  useEffect(() => {
+    if (!product?.id) return;
+    
+    const fetchReviews = async () => {
+      try {
+        const res = await getProductReviews(product.id);
+        if (res.success && res.data) {
+          setReviews(res.data);
+        }
+      } catch (e) {
+        console.error("Failed to load reviews", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchReviews();
+  }, [product?.id]);
+
+
+  if (!product) return null;
+
+  const avgRating = product.average_rating || 0;
+  const reviewCount = product.reviews_count || 0;
+
   return (
     <section className="mb-16">
-      <h3 className="font-headline-md text-headline-md text-primary border-b border-outline-variant pb-4 mb-8">Reviews (128)</h3>
+      <h3 className="font-headline-md text-headline-md text-primary border-b border-outline-variant pb-4 mb-8">
+        Reviews ({reviewCount})
+      </h3>
+      
       <div className="animate-fadeIn">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
             <div className="bg-white p-6 rounded-xl border border-outline-variant text-center">
-              <p className="text-4xl font-bold text-primary">4.9</p>
+              <p className="text-4xl font-bold text-primary">{avgRating.toFixed(1)}</p>
               <div className="flex justify-center text-secondary-container my-2">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
+                  <span key={i} className="material-symbols-outlined" style={{fontVariationSettings: i < Math.round(avgRating) ? "'FILL' 1" : "'FILL' 0"}}>
+                    star
+                  </span>
                 ))}
               </div>
-              <p className="text-body-sm text-on-surface-variant">Based on 128 verified purchases</p>
+              <p className="text-body-sm text-on-surface-variant">Based on {reviewCount} verified purchases</p>
             </div>
-            <button className="w-full py-3 border-2 border-primary font-bold rounded hover:bg-primary hover:text-white transition-all">Write a Review</button>
-          </div>
+            
+
+          
           <div className="md:col-span-2 space-y-6">
-            <div className="border-b border-outline-variant pb-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold">Engr. Alex M.</span>
-                <span className="text-body-sm text-on-surface-variant italic">2 weeks ago</span>
-              </div>
-              <div className="flex text-secondary-container mb-2">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
-                ))}
-              </div>
-              <p className="text-body-base text-on-surface-variant font-medium mb-1">Exceptional clock stability.</p>
-              <p className="text-body-sm text-on-surface-variant">Using this for a custom flight controller. The DSP instructions made the PID loops much cleaner to implement. Rock solid performance even at higher temps.</p>
-            </div>
-            <div className="border-b border-outline-variant pb-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold">HardwareHacker88</span>
-                <span className="text-body-sm text-on-surface-variant italic">1 month ago</span>
-              </div>
-              <div className="flex text-secondary-container mb-2">
-                {[...Array(4)].map((_, i) => (
-                  <span key={i} className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: "'FILL' 1"}}>star</span>
-                ))}
-                <span className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: "'FILL' 0"}}>star</span>
-              </div>
-              <p className="text-body-base text-on-surface-variant font-medium mb-1">Solid for the price.</p>
-              <p className="text-body-sm text-on-surface-variant">Documentation is thorough. The chip runs cool. Only wish the breakout pins were spaced slightly differently for my specific shield, but that's a minor gripe.</p>
-            </div>
+            {loading ? (
+              <p className="text-on-surface-variant">Loading reviews...</p>
+            ) : reviews.length === 0 ? (
+              <p className="text-on-surface-variant">No reviews yet. Be the first to review this product!</p>
+            ) : (
+              reviews.map(review => (
+                <div key={review.id} className="border-b border-outline-variant pb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold">{review.user_name || 'Anonymous User'}</span>
+                    <span className="text-body-sm text-on-surface-variant italic">
+                      {new Date(review.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div className="flex text-secondary-container mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: i < review.rating ? "'FILL' 1" : "'FILL' 0"}}>
+                        star
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-body-sm text-on-surface-variant whitespace-pre-wrap">{review.comment}</p>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

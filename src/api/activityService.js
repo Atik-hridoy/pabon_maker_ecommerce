@@ -40,3 +40,12 @@ export const getWishlist = async () => {
     headers: { 'Authorization': `Bearer ${token}` }
   });
 };
+
+export const getRecommendations = async () => {
+  const token = storage.getToken();
+  if (!token) return []; // Return empty if not logged in
+  return apiClient('/activity/recommendations/', {
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+};

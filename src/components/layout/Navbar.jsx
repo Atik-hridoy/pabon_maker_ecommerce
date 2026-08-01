@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AuthModal from '../auth/AuthModal';
 import { storage } from '../../utils/localStorage';
+import { cartService } from '../../utils/cartService';
 import logo from '../../assets/logo.jpg';
 
 export default function Navbar() {
@@ -10,7 +11,16 @@ export default function Navbar() {
   const [authRedirect, setAuthRedirect] = useState(null);
   const [authRedirectState, setAuthRedirectState] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(cartService.getCartCount());
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      setCartCount(cartService.getCartCount());
+    };
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    return () => window.removeEventListener('cartUpdated', handleCartUpdate);
+  }, []);
 
   const handleAccountClick = () => {
     if (storage.isLoggedIn()) {
@@ -93,7 +103,9 @@ export default function Navbar() {
             </Link>
             <Link to="/cart" className="p-2 text-on-surface-variant dark:text-surface-variant hover:text-secondary transition-all active:opacity-80 active:scale-95 relative block">
               <span className="material-symbols-outlined">shopping_cart</span>
-              <span className="absolute top-1 right-1 bg-secondary-container text-white text-[10px] px-1.5 rounded-full font-bold">2</span>
+              {cartCount > 0 && (
+                <span className="absolute top-1 right-1 bg-secondary-container text-white text-[10px] px-1.5 rounded-full font-bold">{cartCount}</span>
+              )}
             </Link>
           </div>
         </nav>

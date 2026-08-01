@@ -7,6 +7,7 @@ import { BASE_URL } from '../../../api/client';
 export default function WishlistTab() {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [addingToCartId, setAddingToCartId] = useState(null);
 
   useEffect(() => {
     fetchWishlist();
@@ -37,9 +38,11 @@ export default function WishlistTab() {
     }
   };
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = async (product) => {
+    setAddingToCartId(product.id);
     cartService.addToCart(product, 1);
-    alert('Added to cart!');
+    await handleRemove(product.id);
+    setAddingToCartId(null);
   };
 
   return (
@@ -98,9 +101,22 @@ export default function WishlistTab() {
                     <div className="font-bold text-secondary text-base">
                       ৳{Number(product.price).toFixed(2)}
                     </div>
-                    <button onClick={() => handleAddToCart(product)} className="flex items-center justify-center gap-1 px-3 py-1.5 border border-outline-variant rounded text-xs font-bold text-on-surface hover:border-secondary hover:text-secondary transition-colors">
-                      <span className="material-symbols-outlined text-[14px]">shopping_cart</span>
-                      ADD TO CART
+                    <button 
+                      onClick={() => handleAddToCart(product)} 
+                      disabled={addingToCartId === product.id}
+                      className="flex items-center justify-center gap-1 px-3 py-1.5 border border-outline-variant rounded text-xs font-bold text-on-surface hover:border-secondary hover:text-secondary transition-colors disabled:opacity-50"
+                    >
+                      {addingToCartId === product.id ? (
+                        <>
+                          <span className="material-symbols-outlined text-[14px] animate-spin">refresh</span>
+                          ADDING...
+                        </>
+                      ) : (
+                        <>
+                          <span className="material-symbols-outlined text-[14px]">shopping_cart</span>
+                          ADD TO CART
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>

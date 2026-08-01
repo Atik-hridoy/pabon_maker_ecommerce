@@ -8,7 +8,7 @@ import OrderSummary from './OrderSummary';
 export default function Shipping() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { product, quantity, displayImage } = location.state || {};
+  const { cartItems } = location.state || {};
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -62,7 +62,7 @@ export default function Shipping() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const subtotal = product ? Number(product.price) * quantity : 0;
+  const subtotal = cartItems ? cartItems.reduce((sum, item) => sum + (Number(item.product.price) * item.quantity), 0) : 0;
   const tax = subtotal * 0.085; // 8.5%
   const shipping = 34.00; // hardcoded for now
   const total = subtotal + tax + shipping;
@@ -145,7 +145,7 @@ export default function Shipping() {
                 <span className="material-symbols-outlined">arrow_back</span>
                 Return to Workspace
               </button>
-              <button onClick={() => navigate('/checkout/payment', { state: { product, quantity, displayImage, shippingFormData: formData } })} className="bg-secondary-container text-white px-8 py-4 rounded-lg font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
+              <button onClick={() => navigate('/checkout/payment', { state: { cartItems, shippingFormData: formData } })} className="bg-secondary-container text-white px-8 py-4 rounded-lg font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2">
                 Continue to Payment
                 <span className="material-symbols-outlined">arrow_forward</span>
               </button>
@@ -153,7 +153,7 @@ export default function Shipping() {
           </div>
 
           {/* Right Column: Order Summary */}
-          <OrderSummary product={product} quantity={quantity} displayImage={displayImage} readonly={true} />
+          <OrderSummary cartItems={cartItems} readonly={true} />
         </div>
       </div>
     </MainLayout>

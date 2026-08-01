@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BASE_URL } from '../../api/client';
 import { calculateCheckout } from '../../api/checkoutService';
 
-export default function OrderSummary({ product, quantity, displayImage, paymentMethod, readonly = false, initialVoucher = null, onVoucherChange, children }) {
+export default function OrderSummary({ cartItems = [], paymentMethod, readonly = false, initialVoucher = null, onVoucherChange, children }) {
   const [totals, setTotals] = useState({
     subtotal: 0,
     discount_amount: 0,
@@ -20,14 +20,14 @@ export default function OrderSummary({ product, quantity, displayImage, paymentM
 
   useEffect(() => {
     const fetchTotals = async () => {
-      if (!product) return;
+      if (!cartItems || cartItems.length === 0) return;
       
       setLoading(true);
       setError(null);
       
       try {
         const payload = {
-          cartItems: [{ price: product.price, quantity: quantity }],
+          cartItems: cartItems.map(item => ({ price: item.product.price, quantity: item.quantity, product_id: item.product.id })),
           paymentMethod: paymentMethod ? paymentMethod.toUpperCase() : "COD"
         };
         if (appliedVoucher) {
@@ -64,7 +64,7 @@ export default function OrderSummary({ product, quantity, displayImage, paymentM
     
     const timeoutId = setTimeout(fetchTotals, 300);
     return () => clearTimeout(timeoutId);
-  }, [product, quantity, paymentMethod, appliedVoucher]);
+  }, [cartItems, paymentMethod, appliedVoucher]);
 
   const handleApplyVoucher = () => {
     if (voucherInput.trim()) {
@@ -88,24 +88,33 @@ export default function OrderSummary({ product, quantity, displayImage, paymentM
         <h3 className="text-xl font-bold text-primary mb-6 border-b border-outline-variant pb-4">Order Summary</h3>
         {/* Item List */}
         <div className="space-y-4 mb-8 max-h-64 overflow-y-auto pr-2">
-          {product ? (
-            <div className="flex gap-4 items-start">
-              <div className="w-16 h-16 bg-surface-container rounded border border-outline-variant flex-shrink-0 relative overflow-hidden p-1">
-                {displayImage ? (
-                  <img className="w-full h-full object-contain" alt={product.name} src={displayImage.startsWith('http') ? displayImage : `${BASE_URL}${displayImage}`} />
-                ) : (
-                  <span className="material-symbols-outlined text-outline-variant flex h-full items-center justify-center">image</span>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-on-surface truncate">{product.name}</p>
-                <p className="text-xs text-on-surface-variant">Category: {product.category_name || 'N/A'}</p>
-                <div className="flex justify-between items-center mt-1">
-                  <span className="text-xs">Qty: {quantity}</span>
-                  <span className="text-xs font-bold">৳{(Number(product.price) * quantity).toFixed(2)}</span>
+          {cartItems.length > 0 ? (
+            cartItems.map((item, idx) => {
+              const imgUrl = item.product.images && item.product.images.length > 0 
+                ? (item.product.images.find(img => img.is_cover)?.image || item.product.images[0].image) 
+                : '';
+              const finalImgUrl = imgUrl ? (imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`) : '';
+              
+              return (
+                <div key={idx} className="flex gap-4 items-start border-b border-outline-variant/30 pb-3 last:border-0 last:pb-0">
+                  <div className="w-16 h-16 bg-surface-container rounded border border-outline-variant flex-shrink-0 relative overflow-hidden p-1">
+                    {finalImgUrl ? (
+                      <img className="w-full h-full object-contain" alt={item.product.name} src={finalImgUrl} />
+                    ) : (
+                      <span className="material-symbols-outlined text-outline-variant flex h-full items-center justify-center">image</span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-on-surface truncate">{item.product.name}</p>
+                    <p className="text-xs text-on-surface-variant">Category: {item.product.category_name || 'N/A'}</p>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-xs">Qty: {item.quantity}</span>
+                      <span className="text-xs font-bold">৳{(Number(item.product.price) * item.quantity).toFixed(2)}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })
           ) : (
             <p className="text-sm text-on-surface-variant">No items in checkout.</p>
           )}

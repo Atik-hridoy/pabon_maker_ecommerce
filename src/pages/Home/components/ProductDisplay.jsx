@@ -1,7 +1,95 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicProducts } from '../../../api/productService';
+import { toggleWishlist, getWishlist } from '../../../api/activityService';
 import { BASE_URL } from '../../../api/client';
+import { cartService } from '../../../utils/cartService';
+
+export function HomeProductCard({ product, initialWishlisted = false }) {
+  const navigate = useNavigate();
+  const [isWishlisted, setIsWishlisted] = useState(initialWishlisted);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const coverImage = product.images?.find(img => img.is_cover)?.image || product.images?.[0]?.image;
+  
+  useEffect(() => {
+    setIsWishlisted(initialWishlisted);
+  }, [initialWishlisted]);
+
+  const handleWishlistClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await toggleWishlist(product.id);
+      setIsWishlisted(!isWishlisted);
+    } catch (error) {
+      console.error('Failed to toggle wishlist', error);
+      alert('Please log in to add items to your wishlist.');
+    }
+  };
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsAddingToCart(true);
+    cartService.addToCart(product, 1);
+    setTimeout(() => {
+      setIsAddingToCart(false);
+    }, 1000);
+  };
+
+  return (
+    <div 
+      onClick={() => navigate(`/product/${product.id}`)}
+      className="product-card-hover group border border-outline-variant p-4 transition-all bg-white relative block cursor-pointer rounded-lg flex flex-col"
+    >
+      {/* Product Image */}
+      <div className="relative h-32 mb-4 overflow-hidden flex items-center justify-center p-2 bg-surface-container-lowest rounded">
+        {coverImage ? (
+          <img 
+            src={coverImage.startsWith('http') ? coverImage : `${BASE_URL}${coverImage}`}
+            alt={product.name}
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" 
+          />
+        ) : (
+          <span className="material-symbols-outlined text-4xl text-outline-variant">image</span>
+        )}
+        
+        <button 
+          onClick={handleWishlistClick}
+          className="absolute top-1 right-1 p-1.5 rounded-full bg-white/80 hover:bg-white text-outline-variant hover:text-error transition-all shadow-sm z-10 flex items-center justify-center"
+        >
+          <span className={`material-symbols-outlined text-[18px] ${isWishlisted ? 'text-error fill-current font-variation-fill' : ''}`} style={isWishlisted ? { fontVariationSettings: "'FILL' 1" } : {}}>
+            favorite
+          </span>
+        </button>
+      </div>
+
+      {/* Product Details */}
+      <div className="space-y-2 flex-grow flex flex-col justify-between">
+        <div>
+          <h3 className="font-bold text-sm text-on-surface line-clamp-2">{product.name}</h3>
+          <p className="hidden md:block text-xs text-on-surface-variant line-clamp-1">{product.description}</p>
+        </div>
+        
+        {/* Price & Cart */}
+        <div className="flex items-center justify-between pt-4 mt-auto">
+          <div className="flex flex-col">
+            <span className="font-bold text-on-surface">
+              ৳ {product.price}
+            </span>
+          </div>
+          <button 
+            disabled={isAddingToCart}
+            className={`hidden md:flex p-1.5 rounded transition-colors items-center justify-center ${isAddingToCart ? 'bg-green-600 text-white' : 'bg-surface-container text-on-surface-variant hover:bg-secondary-container hover:text-white'}`}
+            onClick={handleAddToCart}
+          >
+            <span className="material-symbols-outlined text-[18px]">{isAddingToCart ? 'check_circle' : 'shopping_cart'}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function ProductDisplay({ selectedCategory }) {
   const navigate = useNavigate();
@@ -9,6 +97,20 @@ export default function ProductDisplay({ selectedCategory }) {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [wishlistIds, setWishlistIds] = useState([]);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const res = await getWishlist();
+        const data = Array.isArray(res) ? res : (res.data || []);
+        setWishlistIds(data.map(item => item.id));
+      } catch (e) {
+        console.error("Failed to fetch wishlist", e);
+      }
+    };
+    fetchWishlist();
+  }, []);
 
   // Reset when category changes
   useEffect(() => {
@@ -63,57 +165,13 @@ export default function ProductDisplay({ selectedCategory }) {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {products.map((product) => {
-              const coverImage = product.images?.find(img => img.is_cover)?.image || product.images?.[0]?.image;
-              
-              return (
-                <div 
-                  key={product.id} 
-                  onClick={() => navigate(`/product/${product.id}`)}
-                  className="product-card-hover group border border-outline-variant p-4 transition-all bg-white relative block cursor-pointer rounded-lg"
-                >
-                  
-                  {/* Product Image */}
-                  <div className="h-32 mb-4 overflow-hidden flex items-center justify-center p-2 bg-surface-container-lowest rounded">
-                    {coverImage ? (
-                      <img 
-                        src={coverImage.startsWith('http') ? coverImage : `${BASE_URL}${coverImage}`}
-                        alt={product.name}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" 
-                      />
-                    ) : (
-                      <span className="material-symbols-outlined text-4xl text-outline-variant">image</span>
-                    )}
-                  </div>
-
-                  {/* Product Details */}
-                  <div className="space-y-2">
-                    <h3 className="font-bold text-sm text-on-surface line-clamp-2">{product.name}</h3>
-                    <p className="hidden md:block text-xs text-on-surface-variant line-clamp-1">{product.description}</p>
-                    
-                    {/* Price & Cart */}
-                    <div className="flex items-center justify-between pt-4">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-on-surface">
-                          ৳ {product.price}
-                        </span>
-                      </div>
-                      <button 
-                        className="hidden md:block bg-surface-container text-on-surface-variant p-1.5 rounded hover:bg-secondary-container hover:text-white transition-colors"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          // Add to cart logic here
-                        }}
-                      >
-                        <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              );
-            })}
+            {products.map((product) => (
+              <HomeProductCard 
+                key={product.id} 
+                product={product} 
+                initialWishlisted={wishlistIds.includes(product.id)}
+              />
+            ))}
           </div>
         )}
         

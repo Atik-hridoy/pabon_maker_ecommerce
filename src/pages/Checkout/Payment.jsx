@@ -5,7 +5,7 @@ import OrderSummary from './OrderSummary';
 export default function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { product, quantity, displayImage, shippingFormData } = location.state || {};
+  const { cartItems, shippingFormData } = location.state || {};
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [appliedVoucher, setAppliedVoucher] = useState(null);
 
@@ -96,9 +96,7 @@ export default function Payment() {
 
           {/* Right Column: Order Summary */}
           <OrderSummary 
-            product={product} 
-            quantity={quantity} 
-            displayImage={displayImage} 
+            cartItems={cartItems} 
             paymentMethod={paymentMethod}
             onVoucherChange={setAppliedVoucher}
           >

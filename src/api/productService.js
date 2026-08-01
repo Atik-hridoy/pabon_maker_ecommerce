@@ -106,3 +106,20 @@ export const uploadBanners = async (formData) => {
   }
   return data;
 };
+
+export const getProductReviews = async (productId) => {
+  return apiClient(`/products/${productId}/reviews/`, {
+    method: 'GET'
+  });
+};
+
+export const submitProductReview = async (productId, payload) => {
+  const token = storage.getToken();
+  return apiClient(`/products/${productId}/reviews/`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    body: payload
+  });
+};

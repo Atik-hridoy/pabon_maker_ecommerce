@@ -7,6 +7,7 @@ import { cartService } from '../../../utils/cartService';
 export default function ProductHero({ product }) {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   
   if (!product) return null;
@@ -20,15 +21,24 @@ export default function ProductHero({ product }) {
   };
 
   const handleBuyNow = () => {
-    const checkoutState = { product, quantity, displayImage };
+    const checkoutState = { 
+      cartItems: [
+        { product, quantity, displayImage }
+      ] 
+    };
     handleAuthCheck(() => {
       navigate('/checkout/shipping', { state: checkoutState });
     }, '/checkout/shipping', checkoutState);
   };
 
   const handleAddToCart = () => {
+    setIsAddingToCart(true);
     cartService.addToCart(product, quantity);
-    alert('Added to cart!');
+    
+    // reset visual state after 1 second
+    setTimeout(() => {
+      setIsAddingToCart(false);
+    }, 1000);
   };
 
   const defaultImage = product.images && product.images.length > 0 
@@ -83,12 +93,12 @@ export default function ProductHero({ product }) {
           <div className="flex items-center gap-4">
             <div className="flex text-secondary-container">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className="material-symbols-outlined text-[20px]" style={{fontVariationSettings: i < product.rating ? "'FILL' 1" : "'FILL' 0"}}>
+                <span key={i} className="material-symbols-outlined text-[20px]" style={{fontVariationSettings: i < Math.round(product.average_rating || 0) ? "'FILL' 1" : "'FILL' 0"}}>
                   star
                 </span>
               ))}
             </div>
-            <span className="text-body-sm text-on-surface-variant font-medium">({product.reviews} reviews)</span>
+            <span className="text-body-sm text-on-surface-variant font-medium">({product.reviews_count || 0} reviews)</span>
             <span className="w-[1px] h-4 bg-outline-variant mx-2"></span>
             <span className="text-body-sm font-technical-data text-green-600 flex items-center gap-1">
               <span className="material-symbols-outlined text-[18px]">check_circle</span> In Stock - Ready to Ship
@@ -143,9 +153,13 @@ export default function ProductHero({ product }) {
                 <span className="material-symbols-outlined">bolt</span>
                 BUY NOW
               </button>
-              <button onClick={handleAddToCart} className="flex-1 bg-secondary-container text-white font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined">shopping_cart</span>
-                ADD TO CART
+              <button 
+                onClick={handleAddToCart}
+                disabled={isAddingToCart}
+                className={`flex-1 font-bold h-[56px] rounded shadow-lg transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2 ${isAddingToCart ? 'bg-green-600 text-white' : 'bg-secondary-container text-white'}`}
+              >
+                <span className="material-symbols-outlined">{isAddingToCart ? 'check_circle' : 'shopping_cart'}</span>
+                {isAddingToCart ? 'ADDED' : 'ADD TO CART'}
               </button>
             </div>
           </div>

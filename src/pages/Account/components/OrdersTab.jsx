@@ -3,12 +3,21 @@ import { Link } from 'react-router-dom';
 import { getMyOrders } from '../../../api/checkoutService';
 import { authService } from '../../../api/authService';
 import { getRecentlyViewed } from '../../../api/activityService';
+import { submitProductReview } from '../../../api/productService';
 
 export default function OrdersTab() {
   const [orders, setOrders] = useState([]);
   const [recentItems, setRecentItems] = useState([]);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewError, setReviewError] = useState('');
+  const [reviewSuccess, setReviewSuccess] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +33,7 @@ export default function OrdersTab() {
         } else if (ordersRes.data) {
             setOrders(ordersRes.data);
         } else {
-            setOrders(ordersRes); // Depending on your axios setup, it might just be the array
+            setOrders(ordersRes);
         }
 
         if (Array.isArray(recentRes)) {
@@ -49,6 +58,41 @@ export default function OrdersTab() {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
+  const openReviewModal = (product) => {
+    setSelectedProduct(product);
+    setRating(5);
+    setComment('');
+    setReviewError('');
+    setReviewSuccess('');
+    setReviewModalOpen(true);
+  };
+
+  const closeReviewModal = () => {
+    setReviewModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedProduct) return;
+    
+    setSubmittingReview(true);
+    setReviewError('');
+    
+    try {
+      await submitProductReview(selectedProduct.product, { rating, comment });
+      setReviewSuccess('Review submitted successfully!');
+      setTimeout(() => {
+        closeReviewModal();
+      }, 1500);
+    } catch (err) {
+      setReviewError(err.data?.error || 'Failed to submit review');
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
   return (
     <>
       {/* Account Overview Row */}
@@ -107,19 +151,31 @@ export default function OrdersTab() {
                         <td className="py-3 px-4 border-b border-outline-variant">{formatDate(order.created_at)}</td>
                         <td className="py-3 px-4 border-b border-outline-variant">
                           <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-bold text-[11px] uppercase
-                            ${order.status === 'DELIVERED' ? 'bg-green-500/10 text-green-700' : 
+                            ${order.status === 'DELIVERED' || order.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-700' : 
                               order.status === 'PENDING' ? 'bg-orange-500/10 text-orange-700' : 
                               order.status === 'CANCELLED' ? 'bg-error/10 text-error' : 
                               'bg-secondary-container/10 text-secondary'}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${order.status === 'DELIVERED' ? 'bg-green-600' : 
+                            <span className={`w-1.5 h-1.5 rounded-full ${order.status === 'DELIVERED' || order.status === 'CONFIRMED' ? 'bg-green-600' : 
                               order.status === 'PENDING' ? 'bg-orange-500 animate-pulse' : 
                               order.status === 'CANCELLED' ? 'bg-error' : 
                               'bg-secondary-container'}`}></span>
                             {order.status}
                           </span>
                         </td>
-                        <td className="py-3 px-4 border-b border-outline-variant text-on-surface-variant max-w-[200px] truncate">
-                          {order.items?.map(i => `${i.product_name} (x${i.quantity})`).join(', ') || 'Unknown Items'}
+                        <td className="py-3 px-4 border-b border-outline-variant text-on-surface-variant max-w-[200px]">
+                          {order.items?.map(i => (
+                            <div key={i.product} className="flex justify-between items-center mb-1">
+                                <span className="truncate" title={i.product_name}>{i.product_name} (x{i.quantity})</span>
+                                {(order.status === 'CONFIRMED' || order.status === 'DELIVERED') && (
+                                    <button 
+                                      onClick={() => openReviewModal(i)}
+                                      className="ml-2 px-2 py-0.5 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded text-[10px] uppercase font-bold transition-colors"
+                                    >
+                                      Review
+                                    </button>
+                                )}
+                            </div>
+                          )) || 'Unknown Items'}
                         </td>
                         <td className="py-3 px-4 border-b border-outline-variant whitespace-nowrap">
                           <div className="flex gap-3">
@@ -163,7 +219,7 @@ export default function OrdersTab() {
                     <div className="flex-1">
                       <h4 className="font-bold text-on-surface text-sm line-clamp-1">{item.name}</h4>
                       <div className="text-[11px] text-on-surface-variant line-clamp-1">{item.category_name}</div>
-                      <div className="mt-1 font-bold text-secondary text-sm">{item.price} CC</div>
+                      <div className="mt-1 font-bold text-secondary text-sm">৳{item.price}</div>
                     </div>
                   </Link>
                 ))
@@ -178,6 +234,69 @@ export default function OrdersTab() {
           </section>
         </div>
       </div>
+      
+      {/* Review Modal */}
+      {reviewModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full relative">
+                <button 
+                  onClick={closeReviewModal}
+                  className="absolute top-4 right-4 text-on-surface-variant hover:text-error"
+                >
+                    <span className="material-symbols-outlined">close</span>
+                </button>
+                <h3 className="font-headline-md text-headline-md mb-4">Write a Review</h3>
+                <p className="text-sm text-on-surface-variant mb-6">For: <strong>{selectedProduct?.product_name}</strong></p>
+                
+                {reviewSuccess ? (
+                    <div className="text-center p-6 text-green-600">
+                        <span className="material-symbols-outlined text-4xl mb-2">check_circle</span>
+                        <p className="font-bold">{reviewSuccess}</p>
+                    </div>
+                ) : (
+                    <form onSubmit={handleReviewSubmit} className="space-y-4">
+                        {reviewError && <p className="text-error text-sm bg-error/10 p-2 rounded">{reviewError}</p>}
+                        
+                        <div>
+                            <label className="block text-sm mb-2 font-bold">Rating</label>
+                            <div className="flex gap-2">
+                                {[1, 2, 3, 4, 5].map(star => (
+                                    <span 
+                                        key={star}
+                                        onClick={() => setRating(star)}
+                                        className={`material-symbols-outlined cursor-pointer text-[32px] ${rating >= star ? 'text-secondary-container' : 'text-outline-variant'}`}
+                                        style={{fontVariationSettings: rating >= star ? "'FILL' 1" : "'FILL' 0"}}
+                                    >
+                                        star
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm mb-2 font-bold">Comment</label>
+                            <textarea 
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                className="w-full border border-outline-variant rounded p-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                                rows="4"
+                                placeholder="What did you like or dislike?"
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <button 
+                            type="submit" 
+                            disabled={submittingReview}
+                            className="w-full bg-primary text-white py-3 rounded font-bold transition-opacity hover:opacity-90 disabled:opacity-50"
+                        >
+                            {submittingReview ? 'Submitting...' : 'Submit Review'}
+                        </button>
+                    </form>
+                )}
+            </div>
+        </div>
+      )}
     </>
   );
 }

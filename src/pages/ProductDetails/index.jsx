@@ -72,7 +72,7 @@ export default function ProductDetails() {
         </nav>
 
         <ProductHero product={product} />
-        <ProductTabs />
+        <ProductTabs product={product} />
         <RelatedProducts categoryName={product.category_name} categoryId={product.category} />
       </main>
     </MainLayout>

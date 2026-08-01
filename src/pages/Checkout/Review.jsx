@@ -3,11 +3,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
 import OrderSummary from './OrderSummary';
 import { placeOrder } from '../../api/checkoutService';
+import { cartService } from '../../utils/cartService';
 
 export default function Review() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { product, quantity, displayImage, shippingFormData, paymentMethod, appliedVoucher } = location.state || {};
+  const { cartItems, shippingFormData, paymentMethod, appliedVoucher } = location.state || {};
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -16,8 +17,12 @@ export default function Review() {
     setError(null);
     try {
       const payload = {
-        cart_items: [{ product_id: product?.id, price: product?.price, quantity: quantity }],
-        payment_method: paymentMethod,
+        cartItems: cartItems.map(item => ({
+          price: item.product.price,
+          quantity: item.quantity,
+          product_id: item.product.id
+        })),
+        paymentMethod: paymentMethod ? paymentMethod.toUpperCase() : "COD",
         voucher_code: appliedVoucher,
         shipping_info: shippingFormData
       };
@@ -25,12 +30,17 @@ export default function Review() {
       const res = await placeOrder(payload);
       
       // Navigate to confirmation with the real order_number from backend
+      cartService.clearCart();
+
       navigate('/checkout/confirmation', { 
         state: { 
-          ...location.state, 
-          appliedVoucher,
-          order_number: res.order_number,
-          grand_total: res.grand_total
+          orderId: res.order_number,
+          grandTotal: res.grand_total,
+          email: shippingFormData?.email,
+          cartItems: cartItems,
+          paymentMethod: paymentMethod,
+          appliedVoucher: appliedVoucher,
+          shippingFormData: shippingFormData
         } 
       });
     } catch (err) {
@@ -126,12 +136,10 @@ export default function Review() {
 
           {/* Right Column: Order Summary */}
           <OrderSummary 
-            product={product} 
-            quantity={quantity} 
-            displayImage={displayImage} 
+            cartItems={cartItems} 
             paymentMethod={paymentMethod}
-            initialVoucher={appliedVoucher}
             readonly={true}
+            initialVoucher={appliedVoucher}
           >
             {error && <div className="text-error text-sm font-bold text-center mt-4">{error}</div>}
             <button 

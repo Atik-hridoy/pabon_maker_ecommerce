@@ -6,9 +6,9 @@ import OrderSummary from './OrderSummary';
 export default function Confirmation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { product, quantity, displayImage, shippingFormData, paymentMethod, appliedVoucher, order_number } = location.state || {};
-
-  const orderNumber = order_number || `PB-${Math.floor(Math.random() * 90000) + 10000}`;
+  const { cartItems, shippingFormData, paymentMethod, appliedVoucher, orderId } = location.state || {};
+  
+  const orderNumber = orderId || `PB-${Math.floor(Math.random() * 90000) + 10000}`;
   const orderDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const deliveryStart = new Date();
   deliveryStart.setDate(deliveryStart.getDate() + 4);
@@ -122,9 +122,8 @@ export default function Confirmation() {
           </div>
 
           <OrderSummary 
-            product={product} 
-            quantity={quantity} 
-            displayImage={displayImage} 
+            cartItems={cartItems} 
+            paymentMethod={paymentMethod}
             initialVoucher={appliedVoucher}
             readonly={true}
           >

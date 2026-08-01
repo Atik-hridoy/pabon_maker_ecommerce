@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../../api/client';
 import { toggleWishlist, getWishlist } from '../../../api/activityService';
+import { cartService } from '../../../utils/cartService';
 
 function CategoryProductCard({ product, initialWishlisted = false }) {
   const [isWishlisted, setIsWishlisted] = useState(initialWishlisted);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const imgUrl = product.images && product.images.length > 0 ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) : '';
   const finalImgUrl = imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`;
 
@@ -22,6 +24,16 @@ function CategoryProductCard({ product, initialWishlisted = false }) {
       console.error('Failed to toggle wishlist', error);
       alert('Please log in to add items to your wishlist.');
     }
+  };
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsAddingToCart(true);
+    cartService.addToCart(product, 1);
+    setTimeout(() => {
+      setIsAddingToCart(false);
+    }, 1000);
   };
 
   return (
@@ -80,8 +92,12 @@ function CategoryProductCard({ product, initialWishlisted = false }) {
             <span className="font-bold text-secondary">৳{Number(product.price).toFixed(2)}</span>
             {product.oldPrice && <span className="text-xs text-outline-variant line-through ml-2">৳{Number(product.oldPrice).toFixed(2)}</span>}
           </div>
-          <button className="hidden md:flex w-8 h-8 rounded bg-surface-container hover:bg-secondary-container hover:text-white transition-colors items-center justify-center text-on-surface-variant">
-            <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+          <button 
+            disabled={isAddingToCart}
+            className={`hidden md:flex w-8 h-8 rounded transition-colors items-center justify-center ${isAddingToCart ? 'bg-green-600 text-white' : 'bg-surface-container hover:bg-secondary-container hover:text-white text-on-surface-variant'}`}
+            onClick={handleAddToCart}
+          >
+            <span className="material-symbols-outlined text-[18px]">{isAddingToCart ? 'check_circle' : 'shopping_cart'}</span>
           </button>
         </div>
       </div>
