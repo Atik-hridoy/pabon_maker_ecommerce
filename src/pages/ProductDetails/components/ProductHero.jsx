@@ -32,6 +32,10 @@ export default function ProductHero({ product }) {
   };
 
   const handleAddToCart = () => {
+    if (!storage.isLoggedIn()) {
+      window.dispatchEvent(new CustomEvent('openAuthModal'));
+      return;
+    }
     setIsAddingToCart(true);
     cartService.addToCart(product, quantity);
     

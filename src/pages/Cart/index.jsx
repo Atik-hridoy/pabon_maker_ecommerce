@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
 import { cartService } from '../../utils/cartService';
 import { BASE_URL } from '../../api/client';
+import { storage } from '../../utils/localStorage';
 
 export default function ShoppingCart() {
   const navigate = useNavigate();
@@ -35,6 +36,18 @@ export default function ShoppingCart() {
 
   const handleProceedToCheckout = () => {
     if (cartItems.length === 0) return;
+    
+    // Require login before checkout
+    if (!storage.isLoggedIn()) {
+      window.dispatchEvent(new CustomEvent('openAuthModal', { 
+        detail: { 
+          redirect: '/checkout/shipping', 
+          state: { cartItems } 
+        } 
+      }));
+      return;
+    }
+    
     navigate('/checkout/shipping', { 
       state: { 
         cartItems: cartItems 

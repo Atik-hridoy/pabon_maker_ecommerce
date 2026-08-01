@@ -16,11 +16,10 @@ export const trackProductView = async (productId) => {
 
 export const getRecentlyViewed = async () => {
   const token = storage.getToken();
-  // We can pass empty headers if no token, backend might handle it
-  const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+  if (!token) return []; // Don't fetch if not logged in
   return apiClient('/activity/recently-viewed/', {
     method: 'GET',
-    headers
+    headers: { 'Authorization': `Bearer ${token}` }
   });
 };
 

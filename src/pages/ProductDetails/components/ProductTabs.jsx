@@ -5,7 +5,6 @@ import { storage } from '../../../utils/localStorage';
 export default function ProductTabs({ product }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const isLoggedIn = storage.isLoggedIn();
 
   useEffect(() => {
     if (!product?.id) return;
@@ -26,7 +25,6 @@ export default function ProductTabs({ product }) {
     fetchReviews();
   }, [product?.id]);
 
-
   if (!product) return null;
 
   const avgRating = product.average_rating || 0;
@@ -40,6 +38,8 @@ export default function ProductTabs({ product }) {
       
       <div className="animate-fadeIn">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          {/* Left Column: Rating Summary */}
           <div className="space-y-4">
             <div className="bg-white p-6 rounded-xl border border-outline-variant text-center">
               <p className="text-4xl font-bold text-primary">{avgRating.toFixed(1)}</p>
@@ -52,9 +52,9 @@ export default function ProductTabs({ product }) {
               </div>
               <p className="text-body-sm text-on-surface-variant">Based on {reviewCount} verified purchases</p>
             </div>
-            
-
+          </div>
           
+          {/* Right Column: Review List */}
           <div className="md:col-span-2 space-y-6">
             {loading ? (
               <p className="text-on-surface-variant">Loading reviews...</p>
@@ -81,6 +81,7 @@ export default function ProductTabs({ product }) {
               ))
             )}
           </div>
+
         </div>
       </div>
     </section>

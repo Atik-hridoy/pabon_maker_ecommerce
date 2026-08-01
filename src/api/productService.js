@@ -123,3 +123,9 @@ export const submitProductReview = async (productId, payload) => {
     body: payload
   });
 };
+
+export const getBestSellers = async (limit = 12) => {
+  return apiClient(`/products/best-sellers/?limit=${limit}`, {
+    method: 'GET'
+  });
+};

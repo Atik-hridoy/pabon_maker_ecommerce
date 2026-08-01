@@ -18,18 +18,25 @@ export function HomeProductCard({ product, initialWishlisted = false }) {
   const handleWishlistClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!storage.isLoggedIn()) {
+      window.dispatchEvent(new CustomEvent('openAuthModal'));
+      return;
+    }
     try {
       await toggleWishlist(product.id);
       setIsWishlisted(!isWishlisted);
     } catch (error) {
       console.error('Failed to toggle wishlist', error);
-      alert('Please log in to add items to your wishlist.');
     }
   };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     e.preventDefault();
+    if (!storage.isLoggedIn()) {
+      window.dispatchEvent(new CustomEvent('openAuthModal'));
+      return;
+    }
     setIsAddingToCart(true);
     cartService.addToCart(product, 1);
     setTimeout(() => {
