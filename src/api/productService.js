@@ -7,6 +7,23 @@ export const getCategories = async () => {
   });
 };
 
+export const createCategory = async (formData) => {
+  const token = storage.getToken();
+  const response = await fetch(`${API_BASE_URL}/products/categories/`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    body: formData
+  });
+  
+  const data = await response.json();
+  if (!response.ok) {
+    throw { status: response.status, data };
+  }
+  return data;
+};
+
 export const getProducts = async () => {
   return apiClient('/products/', {
     method: 'GET'

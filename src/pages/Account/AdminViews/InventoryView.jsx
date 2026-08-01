@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import AddProductModal from './AddProductModal';
+import AddCategoryModal from './AddCategoryModal';
 import { BASE_URL, getImageUrl } from '../../../api/client';
-import { getProducts, createProduct, updateProduct, deleteProduct, updateProductStock } from '../../../api/productService';
+import { getProducts, createProduct, updateProduct, deleteProduct, updateProductStock, createCategory } from '../../../api/productService';
 import { toast } from '../../../components/ToastContainer';
 
 export default function InventoryView() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showAddProduct, setShowAddProduct] = useState(false);
+  const [showAddCategory, setShowAddCategory] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
   // Search & KPI Filter States
@@ -58,9 +60,21 @@ export default function InventoryView() {
       setEditingProduct(null);
       fetchProducts();
     } catch (err) {
-      console.error("Error saving product:", err);
-      toast.error("Failed to save product details.", "Save Failed");
-      throw err;
+      console.error(err);
+      toast.error("Failed to save product.", "Error");
+    }
+  };
+
+  const handleSaveCategory = async (formData) => {
+    try {
+      await createCategory(formData);
+      toast.success("Category created successfully!", "Category Created");
+      setShowAddCategory(false);
+      // Since AddProductModal fetches categories on mount, we don't strictly need to refetch here,
+      // but if we were displaying categories in this view we would.
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to create category.", "Error");
     }
   };
 
@@ -158,6 +172,12 @@ export default function InventoryView() {
             className="px-4 py-2 bg-white border border-outline-variant text-on-surface font-label-caps text-[11px] uppercase rounded-xl hover:bg-surface transition-all flex items-center gap-2 font-bold shadow-sm"
           >
             <span className="material-symbols-outlined text-[16px] text-secondary">add_business</span> Bulk Replenish
+          </button>
+          <button 
+            onClick={() => setShowAddCategory(true)}
+            className="px-4 py-2 bg-secondary text-white font-label-caps text-[11px] uppercase rounded-xl hover:bg-secondary/90 transition-all flex items-center gap-2 font-bold shadow-md"
+          >
+            <span className="material-symbols-outlined text-[16px]">add</span> New Category
           </button>
           <button 
             onClick={() => { setEditingProduct(null); setShowAddProduct(true); }}
@@ -365,6 +385,14 @@ export default function InventoryView() {
           )}
         </div>
       </div>
+
+      {/* Modals */}
+      {showAddCategory && (
+        <AddCategoryModal 
+          onClose={() => setShowAddCategory(false)}
+          onSave={handleSaveCategory}
+        />
+      )}
 
       {/* Add / Edit Product Modal */}
       {showAddProduct && (
