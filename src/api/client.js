@@ -1,5 +1,5 @@
 // Base configuration for all API calls
-export const BASE_URL = 'http://127.0.0.1:8000';
+export const BASE_URL = 'https://pobon-meker-backend.onrender.com';
 export const API_BASE_URL = `${BASE_URL}/api`;
 
 /**
