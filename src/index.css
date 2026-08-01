@@ -61,4 +61,101 @@
     .animate-float {
         animation: float 4s ease-in-out infinite;
     }
+
+    /* Glassmorphism & Rich Admin UI Utilities */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
+
+    .glass-card-dark {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-header {
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .glass-sidebar {
+        background: linear-gradient(180deg, #0b132b 0%, #1c2541 100%);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .glow-gradient-orange {
+        background: linear-gradient(135deg, #fe6b00 0%, #ff8e53 100%);
+        box-shadow: 0 10px 25px -5px rgba(254, 107, 0, 0.35);
+    }
+
+    .glow-gradient-blue {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.35);
+    }
+
+    .glow-gradient-emerald {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.35);
+    }
+
+    .glow-gradient-purple {
+        background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.35);
+    }
+
+    .hover-elevate {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Soft 3D Claymorphism & Purple Soft Glass Theme */
+    .purple-sidebar-pill {
+        background: linear-gradient(180deg, #635bff 0%, #4b42e0 100%);
+        box-shadow: 0 20px 40px -10px rgba(99, 91, 255, 0.4);
+        border-radius: 28px;
+    }
+
+    .purple-main-card {
+        background: linear-gradient(135deg, #5846e0 0%, #7b66ff 100%);
+        box-shadow: 0 20px 50px -15px rgba(88, 70, 224, 0.4);
+        border-radius: 28px;
+    }
+
+    .coral-pink-card {
+        background: linear-gradient(135deg, #ff6b8b 0%, #ff5252 100%);
+        box-shadow: 0 20px 40px -12px rgba(255, 107, 139, 0.4);
+        border-radius: 28px;
+    }
+
+    .soft-clay-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .soft-clay-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 22px 45px rgba(0, 0, 0, 0.08);
+    }
+
+    .icon-top-pill {
+        margin-top: -24px;
+        background: linear-gradient(135deg, #635bff 0%, #7b66ff 100%);
+        box-shadow: 0 10px 20px rgba(99, 91, 255, 0.35);
+    }
+
+    .dashboard-bg-canvas {
+        background: #edf0f7;
+    }
 }
+
+

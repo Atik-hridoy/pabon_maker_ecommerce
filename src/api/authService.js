@@ -16,7 +16,8 @@ export const register = async (userData) => {
     email: userData.email,
     phonenumber: userData.phonenumber,
     password: userData.password,
-    re_type_password: userData.re_type_password
+    re_type_password: userData.re_type_password,
+    agreed_terms: userData.agreed_terms !== undefined ? userData.agreed_terms : true
   };
 
   return apiClient('/accounts/register/', {
@@ -67,9 +68,36 @@ export const getAdminUsers = async () => {
   });
 };
 
+export const changePassword = async (current_password, new_password, confirm_password) => {
+  const token = storage.getToken();
+  return apiClient('/accounts/change-password/', {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    body: {
+      current_password,
+      new_password,
+      confirm_password
+    }
+  });
+};
+
+export const userDashboardSearch = async (query) => {
+  const token = storage.getToken();
+  return apiClient(`/accounts/search/?q=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+
 export const authService = {
   register,
   login,
   getProfile,
-  getAdminUsers
+  getAdminUsers,
+  changePassword,
+  userDashboardSearch
 };

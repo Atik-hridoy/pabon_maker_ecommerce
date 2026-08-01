@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { getCategories } from '../../../api/productService';
 
-export default function AddProductModal({ onClose, onSave }) {
+export default function AddProductModal({ onClose, onSave, initialData }) {
   const [formData, setFormData] = useState({
-    name: '',
-    category: '',
-    price: '',
-    stock: '',
-    description: ''
+    name: initialData?.name || '',
+    category: initialData?.category?.id || initialData?.category || '',
+    price: initialData?.price || '',
+    stock: initialData?.stock_count || initialData?.stock || '',
+    description: initialData?.description || ''
   });
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        name: initialData.name || '',
+        category: initialData.category?.id || initialData.category || '',
+        price: initialData.price || '',
+        stock: initialData.stock_count || initialData.stock || '',
+        description: initialData.description || ''
+      });
+    }
+  }, [initialData]);
 
   useEffect(() => {
     const fetchCats = async () => {
@@ -28,6 +40,7 @@ export default function AddProductModal({ onClose, onSave }) {
     };
     fetchCats();
   }, []);
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

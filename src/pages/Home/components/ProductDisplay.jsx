@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 import { getPublicProducts } from '../../../api/productService';
 import { toggleWishlist, getWishlist } from '../../../api/activityService';
 import { BASE_URL } from '../../../api/client';
 import { cartService } from '../../../utils/cartService';
+import { storage } from '../../../utils/localStorage';
 
 export function HomeProductCard({ product, initialWishlisted = false }) {
   const navigate = useNavigate();
@@ -33,10 +38,7 @@ export function HomeProductCard({ product, initialWishlisted = false }) {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (!storage.isLoggedIn()) {
-      window.dispatchEvent(new CustomEvent('openAuthModal'));
-      return;
-    }
+
     setIsAddingToCart(true);
     cartService.addToCart(product, 1);
     setTimeout(() => {
@@ -79,18 +81,19 @@ export function HomeProductCard({ product, initialWishlisted = false }) {
         </div>
         
         {/* Price & Cart */}
-        <div className="flex items-center justify-between pt-4 mt-auto">
+        <div className="flex items-center justify-between pt-3 mt-auto border-t border-outline-variant/30">
           <div className="flex flex-col">
-            <span className="font-bold text-on-surface">
+            <span className="font-bold text-xs sm:text-sm text-on-surface">
               ৳ {product.price}
             </span>
           </div>
           <button 
             disabled={isAddingToCart}
-            className={`hidden md:flex p-1.5 rounded transition-colors items-center justify-center ${isAddingToCart ? 'bg-green-600 text-white' : 'bg-surface-container text-on-surface-variant hover:bg-secondary-container hover:text-white'}`}
+            className={`flex p-1.5 rounded-lg transition-all items-center justify-center active:scale-95 ${isAddingToCart ? 'bg-green-600 text-white' : 'bg-surface-container text-on-surface hover:bg-secondary-container hover:text-white'}`}
             onClick={handleAddToCart}
+            title="Add to Cart"
           >
-            <span className="material-symbols-outlined text-[18px]">{isAddingToCart ? 'check_circle' : 'shopping_cart'}</span>
+            <span className="material-symbols-outlined text-[16px] sm:text-[18px]">{isAddingToCart ? 'check_circle' : 'shopping_cart'}</span>
           </button>
         </div>
       </div>
@@ -153,12 +156,35 @@ export default function ProductDisplay({ selectedCategory }) {
     fetchProducts();
   }, [page, selectedCategory]);
 
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    if (products.length === 0) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".product-grid-card", {
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: "top 90%",
+          once: true,
+        },
+        y: 20,
+        opacity: 0,
+        stagger: 0.04,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    }, gridRef);
+
+    return () => ctx.revert();
+  }, [products]);
+
   return (
-    <section className="py-12 bg-white min-h-[400px]">
+    <section className="py-6 md:py-12 bg-white min-h-[300px] overflow-hidden">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
         
-        <div className="mb-8">
-          <p className="text-secondary font-label-caps text-label-caps tracking-widest mb-2 uppercase">
+        <div className="mb-4 md:mb-8">
+          <p className="text-secondary font-label-caps text-label-caps tracking-widest mb-1 uppercase">
             {selectedCategory ? 'Filtered Products' : 'All Products'}
           </p>
           <h2 className="font-headline-md text-headline-md text-on-surface">
@@ -171,13 +197,14 @@ export default function ProductDisplay({ selectedCategory }) {
             No products found for this category.
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
             {products.map((product) => (
-              <HomeProductCard 
-                key={product.id} 
-                product={product} 
-                initialWishlisted={wishlistIds.includes(product.id)}
-              />
+              <div key={product.id} className="product-grid-card">
+                <HomeProductCard 
+                  product={product} 
+                  initialWishlisted={wishlistIds.includes(product.id)}
+                />
+              </div>
             ))}
           </div>
         )}

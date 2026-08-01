@@ -5,113 +5,7 @@ import { toggleWishlist, getWishlist } from '../../../api/activityService';
 import { cartService } from '../../../utils/cartService';
 import { storage } from '../../../utils/localStorage';
 
-function CategoryProductCard({ product, initialWishlisted = false }) {
-  const [isWishlisted, setIsWishlisted] = useState(initialWishlisted);
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const imgUrl = product.images && product.images.length > 0 ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) : '';
-  const finalImgUrl = imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`;
-
-  useEffect(() => {
-    setIsWishlisted(initialWishlisted);
-  }, [initialWishlisted]);
-
-  const handleWishlistClick = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!storage.isLoggedIn()) {
-      window.dispatchEvent(new CustomEvent('openAuthModal'));
-      return;
-    }
-    try {
-      await toggleWishlist(product.id);
-      setIsWishlisted(!isWishlisted);
-    } catch (error) {
-      console.error('Failed to toggle wishlist', error);
-    }
-  };
-
-  const handleAddToCart = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (!storage.isLoggedIn()) {
-      window.dispatchEvent(new CustomEvent('openAuthModal'));
-      return;
-    }
-    setIsAddingToCart(true);
-    cartService.addToCart(product, 1);
-    setTimeout(() => {
-      setIsAddingToCart(false);
-    }, 1000);
-  };
-
-  return (
-    <div className="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col group hover:border-secondary transition-colors">
-      <Link to={`/product/${product.id}`} className="relative h-48 bg-surface-container-lowest flex items-center justify-center p-4 border-b border-outline-variant block">
-        {imgUrl ? (
-          <img className="max-h-full object-contain" src={finalImgUrl} alt={product.name} />
-        ) : (
-          <span className="material-symbols-outlined text-4xl text-outline-variant">image</span>
-        )}
-        {product.isNew && (
-          <span className="absolute top-2 left-2 bg-secondary-container text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-            New
-          </span>
-        )}
-        {product.isSale && (
-          <span className="absolute top-2 left-2 bg-error text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-            Sale
-          </span>
-        )}
-        <button 
-          onClick={handleWishlistClick}
-          className="absolute top-2 right-2 p-1.5 rounded-full bg-white/80 hover:bg-white text-outline-variant hover:text-error transition-all shadow-sm z-10 flex items-center justify-center"
-        >
-          <span className={`material-symbols-outlined text-[18px] ${isWishlisted ? 'text-error fill-current font-variation-fill' : ''}`} style={isWishlisted ? { fontVariationSettings: "'FILL' 1" } : {}}>
-            favorite
-          </span>
-        </button>
-      </Link>
-      <div className="p-4 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-1">
-          <Link to={`/product/${product.id}`} className="hover:text-secondary transition-colors">
-            <h3 className="font-bold text-sm text-on-surface line-clamp-2" title={product.name}>{product.name}</h3>
-          </Link>
-        </div>
-        
-        <p className="hidden md:block text-xs text-on-surface-variant mb-3 line-clamp-1">{product.description}</p>
-        
-        <div className="hidden md:flex flex-wrap gap-1 mb-4 mt-auto">
-           {product.voltage && product.voltage !== 'N/A' && (
-             <span className="text-[10px] font-technical-data border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant bg-surface-container-low">{product.voltage}</span>
-           )}
-           {product.packageSize && (
-             <span className="text-[10px] font-technical-data border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant bg-surface-container-low">{product.packageSize}</span>
-           )}
-           {product.color && product.color !== 'Multicolor' && product.color !== 'Silver' && product.color !== 'Black' && (
-             <span className="text-[10px] font-technical-data border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant bg-surface-container-low flex items-center gap-1">
-               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: product.color.toLowerCase() }}></span>
-               {product.color}
-             </span>
-           )}
-        </div>
-
-        <div className="flex justify-between items-center pt-3 border-t border-outline-variant">
-          <div>
-            <span className="font-bold text-secondary">৳{Number(product.price).toFixed(2)}</span>
-            {product.oldPrice && <span className="text-xs text-outline-variant line-through ml-2">৳{Number(product.oldPrice).toFixed(2)}</span>}
-          </div>
-          <button 
-            disabled={isAddingToCart}
-            className={`hidden md:flex w-8 h-8 rounded transition-colors items-center justify-center ${isAddingToCart ? 'bg-green-600 text-white' : 'bg-surface-container hover:bg-secondary-container hover:text-white text-on-surface-variant'}`}
-            onClick={handleAddToCart}
-          >
-            <span className="material-symbols-outlined text-[18px]">{isAddingToCart ? 'check_circle' : 'shopping_cart'}</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+import ProductCard from '../../../components/ProductCard';
 
 export default function CategoryProductGrid({ products }) {
   const [wishlistIds, setWishlistIds] = useState([]);
@@ -143,7 +37,7 @@ export default function CategoryProductGrid({ products }) {
     <div className="flex-1">
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map(product => (
-          <CategoryProductCard 
+          <ProductCard 
             key={product.id} 
             product={product} 
             initialWishlisted={wishlistIds.includes(product.id)}

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getBanners } from '../../../api/productService';
 import { BASE_URL } from "../../../api/client";
+import gsap from 'gsap';
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [banners, setBanners] = useState([]);
+  const heroRef = useRef(null);
   const totalSlides = banners.length > 0 ? banners.length : 3;
 
   useEffect(() => {
@@ -25,6 +27,27 @@ export default function Hero() {
     }, 8000);
     return () => clearInterval(timer);
   }, [totalSlides]);
+
+  // GSAP animation on slide change
+  useEffect(() => {
+    if (!heroRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Animate active slide text elements
+      gsap.fromTo(`.hero-text-${currentSlide} > *`, 
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: "power3.out" }
+      );
+
+      // Animate active slide image
+      gsap.fromTo(`.hero-img-${currentSlide}`,
+        { scale: 0.8, rotate: -5, opacity: 0 },
+        { scale: 1, rotate: 0, opacity: 1, duration: 0.9, ease: "back.out(1.4)" }
+      );
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, [currentSlide]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -66,7 +89,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative overflow-hidden min-h-[250px] md:min-h-[600px] flex items-center group bg-surface-container-lowest">
+    <section ref={heroRef} className="relative overflow-hidden min-h-[250px] md:min-h-[600px] flex items-center group bg-surface-container-lowest">
       {/* Dynamic Animated Background */}
       <div className="absolute inset-0 bg-black"></div>
       
@@ -120,36 +143,36 @@ export default function Hero() {
             }`}
           >
             {/* Text Content (Glassmorphism) */}
-            <div className="hidden md:block text-left space-y-6 pt-16 md:pt-0 relative z-30">
-              <div className="inline-block px-3 py-1 rounded-full bg-secondary-container/20 border border-secondary-container/30 backdrop-blur-md">
-                <span className="text-secondary-container text-[11px] font-black uppercase tracking-widest">{slide.badge}</span>
+            <div className={`hero-text-${idx} block text-left space-y-3 md:space-y-6 pt-4 md:pt-0 relative z-30`}>
+              <div className="inline-block px-2.5 py-0.5 md:px-3 md:py-1 rounded-full bg-secondary-container/20 border border-secondary-container/30 backdrop-blur-md">
+                <span className="text-secondary-container text-[10px] md:text-[11px] font-black uppercase tracking-widest">{slide.badge}</span>
               </div>
               
-              <h1 className="font-display-lg text-3xl md:text-5xl lg:text-6xl text-white font-black leading-[1.1] tracking-tight">
-                {slide.title1} <br/>
+              <h1 className="font-display-lg text-xl sm:text-3xl md:text-5xl lg:text-6xl text-white font-black leading-[1.15] tracking-tight">
+                {slide.title1} <br className="hidden sm:inline" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-container to-secondary">
                   {slide.titleHighlight}
-                </span> <br/>
+                </span> <br className="hidden sm:inline" />
                 {slide.title2}
               </h1>
               
-              <p className="text-base md:text-lg text-surface-variant font-medium max-w-lg leading-relaxed">
+              <p className="text-xs sm:text-base md:text-lg text-surface-variant font-medium max-w-lg leading-relaxed line-clamp-3 sm:line-clamp-none">
                 {slide.desc}
               </p>
               
-              <div className="flex flex-wrap gap-4 pt-6">
-                <button className="bg-gradient-to-r from-secondary to-secondary-container text-white px-8 py-3.5 font-bold rounded-lg hover:shadow-[0_0_20px_rgba(254,107,0,0.4)] transition-all active:scale-95 flex items-center gap-2">
+              <div className="flex flex-wrap gap-2.5 md:gap-4 pt-2 md:pt-6">
+                <button className="bg-gradient-to-r from-secondary to-secondary-container text-white px-5 py-2.5 md:px-8 md:py-3.5 text-xs md:text-sm font-bold rounded-lg hover:shadow-[0_0_25px_rgba(254,107,0,0.6)] transition-all active:scale-95 flex items-center gap-1.5">
                   {slide.btn1}
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <span className="material-symbols-outlined text-[16px] md:text-[18px]">arrow_forward</span>
                 </button>
-                <button className="bg-white/5 backdrop-blur-md border border-white/20 text-white px-8 py-3.5 font-bold rounded-lg hover:bg-white/10 transition-all active:scale-95">
+                <button className="bg-white/5 backdrop-blur-md border border-white/20 text-white px-5 py-2.5 md:px-8 md:py-3.5 text-xs md:text-sm font-bold rounded-lg hover:bg-white/10 transition-all active:scale-95">
                   {slide.btn2}
                 </button>
               </div>
             </div>
 
             {/* Image Content (Floating) */}
-            <div className="flex justify-center relative h-[250px] sm:h-[350px] md:h-[500px] w-full">
+            <div className={`hero-img-${idx} flex justify-center relative h-[250px] sm:h-[350px] md:h-[500px] w-full`}>
               <div className="absolute inset-0 flex items-center justify-center">
                 {/* Glowing Base */}
                 <div className="w-72 h-16 bg-white opacity-10 absolute bottom-8 rounded-[100%] blur-xl transition-all duration-1000" style={{backgroundColor: slide.glowColor}}></div>

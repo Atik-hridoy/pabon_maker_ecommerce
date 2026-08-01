@@ -1,20 +1,53 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../api/authService';
+import { getStoreConfig } from '../../api/adminService';
 import { storage } from '../../utils/localStorage';
 
 export default function AuthModal({ isOpen, onClose, redirectPath, redirectState }) {
   const [activeTab, setActiveTab] = useState('signin');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+  
+  // Terms & Privacy Policy States
+  const [termsAgreed, setTermsAgreed] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [termsContent, setTermsContent] = useState({ terms: '', privacy: '' });
+  const [loadingTerms, setLoadingTerms] = useState(false);
+
   const navigate = useNavigate();
+
+  const handleOpenTermsModal = async (e) => {
+    if (e) e.preventDefault();
+    setShowTermsModal(true);
+    setLoadingTerms(true);
+    try {
+      const config = await getStoreConfig();
+      if (config) {
+        setTermsContent({
+          terms: config.terms_and_conditions || 'Welcome to Pabon Maker. By using our website, you agree to abide by the Bangladeshi Consumer Protection Act and store policies.',
+          privacy: config.privacy_policy || 'We respect your privacy and protect all account information according to Digital Security guidelines in Bangladesh.'
+        });
+      }
+    } catch (err) {
+      console.error("Failed to fetch Terms & Conditions", err);
+    } finally {
+      setLoadingTerms(false);
+    }
+  };
+
+  const handleAgreeTerms = () => {
+    setTermsAgreed(true);
+    setShowTermsModal(false);
+    setErrorMsg(null);
+  };
 
   const handleAuth = async (e) => {
     e.preventDefault();
     setErrorMsg(null);
-    setLoading(true);
 
     if (activeTab === 'signin') {
+      setLoading(true);
       const email = e.target.elements.email?.value;
       const password = e.target.elements.password?.value;
 
@@ -43,6 +76,12 @@ export default function AuthModal({ isOpen, onClose, redirectPath, redirectState
         }
       }
     } else {
+      if (!termsAgreed) {
+        setErrorMsg('You must agree to the Terms of Service & Privacy Policy to join.');
+        return;
+      }
+
+      setLoading(true);
       const email = e.target.elements.email?.value;
       const full_name = e.target.elements.name?.value;
       const password = e.target.elements.password?.value;
@@ -57,12 +96,24 @@ export default function AuthModal({ isOpen, onClose, redirectPath, redirectState
       }
 
       try {
-        await authService.register({ email, full_name, phonenumber, password, re_type_password });
-        storage.setLoggedIn('true');
-        storage.setAdmin('false'); // Ensure new users are not admins
+        // Clear any old/expired auth tokens first
+        storage.clearAuth();
+
+        await authService.register({ email, full_name, phonenumber, password, re_type_password, agreed_terms: termsAgreed });
+        
+        // Auto-login to obtain fresh JWT Access token from backend
+        const loginRes = await authService.login(email, password);
+        if (loginRes && loginRes.data && loginRes.data.access) {
+          storage.setToken(loginRes.data.access);
+          storage.setLoggedIn('true');
+          storage.setAdmin(loginRes.data.is_admin ? 'true' : 'false');
+        }
+
         setLoading(false);
         onClose();
-        navigate(redirectPath || '/account', { state: redirectState });
+        // Redirect directly to user profile tab
+        navigate('/account', { state: { tab: 'profile' } });
+        window.dispatchEvent(new CustomEvent('user_logged_in'));
       } catch (err) {
         setLoading(false);
         if (err.data) {
@@ -79,168 +130,171 @@ export default function AuthModal({ isOpen, onClose, redirectPath, redirectState
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-8 overflow-y-auto">
-      {/* Click outside to close - optional, but nice for modals */}
+      {/* Click outside to close */}
       <div className="absolute inset-0" onClick={onClose}></div>
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-[1200px] h-[90vh] min-h-[600px] bg-surface-container-lowest rounded-2xl shadow-2xl flex overflow-hidden z-10">
+      <div className="relative w-full max-w-[1100px] h-[85vh] min-h-[580px] bg-white rounded-3xl shadow-2xl flex overflow-hidden z-10 border border-slate-100">
 
         {/* Left Side: Hero Image */}
         <section className="hidden lg:block relative w-1/2 h-full">
           <img
-            alt="High performance electronics macro"
+            alt="High performance electronics"
             className="w-full h-full object-cover"
             src="https://lh3.googleusercontent.com/aida/AP1WRLuqdbixQloheVo2M60HV0mmezbpeZ2hCNeM9J7ghxObutkrVRAUqgBWQ0-roCbjv8qjbOg5sVCZXmDmt659fxr9X8BD9xwM51nLEqk2T_Usj1yVtsdpyaC8yOZiYtBOLC8RNlynwBaElNk7Y1WZW3ZRETFh2kWeaTd72CZrC9kWd9H5RLA-fEjMmVFLlTrBwy0fo3XzaXUgv-5F11-KoFbIrnYva95j2w1-Se5DaKSLKoZu_vgeOOJVr57G"
           />
-          {/* Watermark */}
-          <div className="absolute bottom-8 left-8 flex items-center gap-3 bg-black/30 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10">
-            <span className="text-white/70 font-bold tracking-tight text-lg">Pabon Maker</span>
+          <div className="absolute bottom-8 left-8 flex items-center gap-3 bg-black/40 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-white/20 shadow-lg">
+            <span className="text-white font-black tracking-tight text-xl">Pabon Maker</span>
           </div>
-          {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20"></div>
         </section>
 
         {/* Right Side: Auth Form */}
-        <section className="w-full lg:w-1/2 h-full flex flex-col bg-surface-container-lowest overflow-y-auto">
+        <section className="w-full lg:w-1/2 h-full flex flex-col bg-white overflow-y-auto">
           {/* Header */}
-          <header className="p-6 flex justify-between items-center border-b border-outline-variant lg:border-none">
-            <div className="font-headline-md text-headline-md font-bold text-on-surface lg:hidden">Pabon Maker</div>
+          <header className="p-6 flex justify-between items-center border-b border-slate-100 lg:border-none">
+            <div className="text-xl font-black text-slate-900 lg:hidden">Pabon Maker</div>
             <button
               onClick={onClose}
-              className="text-on-surface-variant hover:text-secondary flex items-center gap-1 transition-colors ml-auto"
+              className="text-slate-400 hover:text-slate-700 flex items-center gap-1 transition-colors ml-auto font-bold text-xs"
             >
-              <span className="font-label-caps">CLOSE</span>
-              <span className="material-symbols-outlined">close</span>
+              <span>CLOSE</span>
+              <span className="material-symbols-outlined text-[20px]">close</span>
             </button>
           </header>
 
-          <div className="flex-grow flex items-center justify-center p-6 md:p-12">
-            <div className="w-full max-w-md space-y-8">
+          <div className="flex-grow flex items-center justify-center p-6 md:p-10">
+            <div className="w-full max-w-md space-y-6">
 
-              {/* Branding/Title */}
+              {/* Title */}
               <div className="text-left">
-                <h1 className="text-display-lg-mobile md:text-[40px] font-bold text-primary tracking-tight leading-tight">
+                <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
                   {activeTab === 'signin' ? 'Welcome Back' : 'Join the Makers'}
                 </h1>
-                <p className="text-on-surface-variant mt-2">
+                <p className="text-xs text-slate-500 mt-1 font-medium">
                   {activeTab === 'signin'
-                    ? 'Access your professional hardware projects and technical assets.'
-                    : 'Unlock high-precision components and engineering tools.'}
+                    ? 'Access your professional hardware projects & account.'
+                    : 'Create an account to unlock components & order status.'}
                 </p>
               </div>
 
               {/* Tabs */}
-              <div className="flex gap-8 border-b border-outline-variant">
+              <div className="flex gap-6 border-b border-slate-200">
                 <button
-                  className={`pb-4 font-label-caps transition-all ${activeTab === 'signin' ? 'text-secondary border-b-2 border-secondary font-bold' : 'text-on-surface-variant hover:text-secondary'}`}
-                  onClick={() => setActiveTab('signin')}
+                  className={`pb-3 font-bold text-xs transition-all uppercase tracking-wider ${activeTab === 'signin' ? 'text-[#5846e0] border-b-2 border-[#5846e0]' : 'text-slate-400 hover:text-slate-700'}`}
+                  onClick={() => { setActiveTab('signin'); setErrorMsg(null); }}
                 >
                   SIGN IN
                 </button>
                 <button
-                  className={`pb-4 font-label-caps transition-all ${activeTab === 'signup' ? 'text-secondary border-b-2 border-secondary font-bold' : 'text-on-surface-variant hover:text-secondary'}`}
-                  onClick={() => setActiveTab('signup')}
+                  className={`pb-3 font-bold text-xs transition-all uppercase tracking-wider ${activeTab === 'signup' ? 'text-[#5846e0] border-b-2 border-[#5846e0]' : 'text-slate-400 hover:text-slate-700'}`}
+                  onClick={() => { setActiveTab('signup'); setErrorMsg(null); }}
                 >
                   CREATE ACCOUNT
                 </button>
               </div>
 
-              {/* Auth Forms Container */}
-              <div className="space-y-6">
+              {/* Auth Forms */}
+              <div className="space-y-5">
 
                 {errorMsg && (
-                  <div className="p-4 bg-error/10 border border-error/20 rounded-lg text-error text-sm font-bold animate-in fade-in">
-                    {errorMsg}
+                  <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-bold animate-in fade-in flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">error</span>
+                    <span>{errorMsg}</span>
                   </div>
                 )}
 
                 {/* Sign In View */}
                 {activeTab === 'signin' && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <form className="space-y-4" onSubmit={handleAuth}>
-                      <div className="space-y-2">
-                        <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">EMAIL</label>
-                        <input name="email" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="engineer@pabonmaker.com" type="email" required />
+                  <form className="space-y-4" onSubmit={handleAuth}>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold text-slate-600 block uppercase tracking-wider">EMAIL</label>
+                      <input name="email" className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-[#5846e0] focus:bg-white text-xs font-bold text-slate-800 transition-all" placeholder="engineer@pabonmaker.com" type="email" required />
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center">
+                        <label className="text-[11px] font-bold text-slate-600 block uppercase tracking-wider">PASSWORD</label>
+                        <a className="text-[11px] font-bold text-[#5846e0] hover:underline" href="#" onClick={(e) => { e.preventDefault(); alert("Please contact support to reset your password."); }}>FORGOT?</a>
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">PASSWORD</label>
-                          <a className="font-label-caps text-xs text-secondary hover:underline" href="#">FORGOT?</a>
-                        </div>
-                        <input name="password" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="••••••••" type="password" required />
-                      </div>
-                      <button disabled={loading} className="w-full bg-secondary-container text-white py-4 rounded-lg font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-lg text-lg disabled:opacity-70" type="submit">
-                        {loading ? 'SIGNING IN...' : 'SIGN IN'}
-                      </button>
-                    </form>
-                  </div>
+                      <input name="password" className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-[#5846e0] focus:bg-white text-xs font-bold text-slate-800 transition-all" placeholder="••••••••" type="password" required />
+                    </div>
+                    <button disabled={loading} className="w-full bg-[#5846e0] text-white py-3.5 rounded-xl font-black text-sm uppercase tracking-wider hover:bg-[#4b3eef] active:scale-[0.98] transition-all shadow-md disabled:opacity-60 mt-2" type="submit">
+                      {loading ? 'SIGNING IN...' : 'SIGN IN'}
+                    </button>
+                  </form>
                 )}
 
                 {/* Sign Up View */}
                 {activeTab === 'signup' && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <form className="space-y-4" onSubmit={handleAuth}>
-                      <div className="space-y-2">
-                        <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">FULL NAME</label>
-                        <input name="name" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="Alex Rivera" type="text" required />
+                  <form className="space-y-3.5" onSubmit={handleAuth}>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-slate-600 block uppercase tracking-wider">FULL NAME</label>
+                      <input name="name" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-[#5846e0] focus:bg-white text-xs font-bold text-slate-800 transition-all" placeholder="Alex Rivera" type="text" required />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-slate-600 block uppercase tracking-wider">EMAIL</label>
+                      <input name="email" className="w-full px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-[#5846e0] focus:bg-white text-xs font-bold text-slate-800 transition-all" placeholder="dev@circuit.io" type="email" required />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-slate-600 block uppercase tracking-wider">PHONE NUMBER</label>
+                      <div className="flex border border-slate-200 rounded-xl bg-slate-50/50 focus-within:ring-2 focus-within:ring-[#5846e0] transition-all overflow-hidden">
+                        <span className="flex items-center px-3.5 bg-slate-100 text-slate-600 border-r border-slate-200 font-bold text-xs">
+                          +88
+                        </span>
+                        <input name="phone" className="w-full px-3.5 py-2.5 bg-transparent focus:outline-none text-xs font-bold text-slate-800" placeholder="017XXXXXXXX" type="tel" required />
                       </div>
-                      <div className="space-y-2">
-                        <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">EMAIL</label>
-                        <input name="email" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="dev@circuit.io" type="email" required />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-600 block uppercase tracking-wider">PASSWORD</label>
+                        <input name="password" className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-[#5846e0] text-xs font-bold text-slate-800 transition-all" placeholder="Min. 6 chars" type="password" required />
                       </div>
-                      <div className="space-y-2">
-                        <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">PHONE NUMBER</label>
-                        <div className="flex border border-outline-variant rounded-lg bg-surface focus-within:ring-2 focus-within:ring-blue-500 transition-all overflow-hidden">
-                          <span className="flex items-center px-4 bg-surface-container text-on-surface-variant border-r border-outline-variant font-technical-data font-medium">
-                            +88
-                          </span>
-                          <input name="phone" className="w-full px-4 py-3.5 bg-transparent focus:outline-none font-technical-data" placeholder="017XXXXXXXX" type="tel" required />
-                        </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-600 block uppercase tracking-wider">RE-TYPE PASSWORD</label>
+                        <input name="re_type_password" className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-[#5846e0] text-xs font-bold text-slate-800 transition-all" placeholder="Retype password" type="password" required />
                       </div>
-                      <div className="space-y-2">
-                        <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">PASSWORD</label>
-                        <input name="password" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="Min. 6 characters" type="password" required />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="font-label-caps text-xs text-on-surface-variant block tracking-wider">RE-TYPE PASSWORD</label>
-                        <input name="re_type_password" className="w-full px-4 py-3.5 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-blue-500 font-technical-data transition-all" placeholder="Retype your password" type="password" required />
-                      </div>
-                      <div className="flex items-start gap-2 pt-2">
-                        <input className="mt-1 rounded border-outline-variant text-secondary focus:ring-secondary w-4 h-4" id="terms" type="checkbox" required />
-                        <label className="text-xs text-on-surface-variant leading-relaxed" htmlFor="terms">
-                          I agree to the <a className="text-secondary underline hover:text-secondary-container" href="#">Terms of Service</a> for professional hardware sourcing.
-                        </label>
-                      </div>
-                      <button disabled={loading} className="w-full bg-secondary-container text-white py-4 rounded-lg font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-lg text-lg disabled:opacity-70" type="submit">
-                        {loading ? 'CREATING ACCOUNT...' : 'JOIN PABON MAKER'}
-                      </button>
-                    </form>
-                  </div>
-                )}
+                    </div>
 
-                {/* Social Login */}
-                <div className="space-y-4">
-                  <div className="relative flex items-center">
-                    <div className="flex-grow border-t border-outline-variant"></div>
-                    <span className="flex-shrink mx-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">TECHNICAL AUTHENTICATION</span>
-                    <div className="flex-grow border-t border-outline-variant"></div>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <button className="flex items-center justify-center gap-3 border border-outline-variant py-3.5 rounded-lg hover:bg-surface-container transition-all active:scale-[0.98] bg-white">
-                      <span className="material-symbols-outlined text-[20px]">terminal</span>
-                      <span className="font-semibold text-on-surface">Continue with GitHub</span>
+                    {/* Terms Checkbox */}
+                    <div className="flex items-start gap-2 pt-1 bg-slate-50 p-3 rounded-xl border border-slate-200/80">
+                      <input 
+                        className="mt-0.5 rounded border-slate-300 text-[#5846e0] focus:ring-[#5846e0] w-4 h-4 cursor-pointer shrink-0" 
+                        id="terms" 
+                        type="checkbox" 
+                        checked={termsAgreed}
+                        onChange={(e) => setTermsAgreed(e.target.checked)}
+                      />
+                      <label className="text-xs text-slate-600 leading-relaxed cursor-pointer" htmlFor="terms">
+                        I agree to the{' '}
+                        <button 
+                          type="button"
+                          onClick={handleOpenTermsModal}
+                          className="text-[#5846e0] font-bold underline hover:text-[#4b3eef]"
+                        >
+                          Terms of Service & Privacy Policy
+                        </button>
+                        {' '}for hardware ordering.
+                      </label>
+                    </div>
+
+                    <button 
+                      disabled={loading || !termsAgreed} 
+                      className={`w-full py-3.5 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 ${
+                        !termsAgreed 
+                          ? 'bg-slate-200 text-slate-400 cursor-not-allowed' 
+                          : 'bg-[#5846e0] text-white hover:bg-[#4b3eef] active:scale-[0.98]'
+                      }`} 
+                      type="submit"
+                    >
+                      {loading ? 'CREATING ACCOUNT...' : 'JOIN PABON MAKER'}
                     </button>
-                    <button className="flex items-center justify-center gap-3 border border-outline-variant py-3.5 rounded-lg hover:bg-surface-container transition-all active:scale-[0.98] bg-white">
-                      <img alt="Google Logo" className="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAngcjdBSCnkpwFBY8sqpkH8kXQ8qwd4Uqkoy3QIqhv8ESXEQ3v7857mLQwn84N73wiKrUen-1Ic5slDv_ZsA3oTMB4PbpTs2oHxStl97E4HKKaU72wiO_HgPvDNpahPCEJn5phSL1SfQexHawbj_ytuuRnAJKXM-JMN4mO4y1MeVHrPbZWfRtr1Ynt2iKvSam2C60tWBc1dDeptj2t7LnOMaJnVBeS0r21YJPyTQBRGveDwB9V3bZ8Pw" />
-                      <span className="font-semibold text-on-surface">Continue with Google</span>
-                    </button>
-                  </div>
-                </div>
+                  </form>
+                )}
 
               </div>
 
-              <footer className="pt-8 text-center border-t border-outline-variant mt-8">
-                <p className="text-sm text-on-surface-variant">
+              <footer className="pt-4 text-center border-t border-slate-100">
+                <p className="text-xs font-bold text-slate-400">
                   Precision Engineered for Technical Mastery.
                 </p>
               </footer>
@@ -249,6 +303,85 @@ export default function AuthModal({ isOpen, onClose, redirectPath, redirectState
           </div>
         </section>
       </div>
+
+      {/* Terms of Service Backend Data Popup Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-6 md:p-8 space-y-6 max-h-[85vh] flex flex-col border border-slate-100">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-[#5846e0]/10 text-[#5846e0] flex items-center justify-center font-bold">
+                  <span className="material-symbols-outlined text-[24px]">gavel</span>
+                </div>
+                <div>
+                  <h3 className="font-black text-slate-900 text-lg">Terms of Service & Privacy Policy</h3>
+                  <p className="text-xs text-slate-500 font-medium">Store legal policies & Consumer Protection Standards</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowTermsModal(false)}
+                className="p-1.5 hover:bg-slate-100 text-slate-400 hover:text-slate-700 rounded-xl transition-colors"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            {/* Modal Body: Fetched Backend Content */}
+            <div className="overflow-y-auto flex-1 space-y-6 pr-2 font-sans text-xs text-slate-700 leading-relaxed divide-y divide-slate-100">
+              {loadingTerms ? (
+                <div className="py-12 text-center text-[#5846e0] font-bold flex items-center justify-center gap-2">
+                  <span className="material-symbols-outlined animate-spin text-[24px]">progress_activity</span>
+                  <span>Fetching Terms of Service from server...</span>
+                </div>
+              ) : (
+                <>
+                  {/* Terms Section */}
+                  <div className="space-y-2 pt-2">
+                    <h4 className="font-black text-slate-900 text-sm flex items-center gap-2">
+                      <span className="material-symbols-outlined text-[18px] text-[#5846e0]">verified_user</span>
+                      Terms and Conditions (শর্তাবলী)
+                    </h4>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 whitespace-pre-wrap font-medium">
+                      {termsContent.terms}
+                    </div>
+                  </div>
+
+                  {/* Privacy Section */}
+                  <div className="space-y-2 pt-4">
+                    <h4 className="font-black text-slate-900 text-sm flex items-center gap-2">
+                      <span className="material-symbols-outlined text-[18px] text-[#5846e0]">lock</span>
+                      Privacy Policy (গোপনীয়তা নীতি)
+                    </h4>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 whitespace-pre-wrap font-medium">
+                      {termsContent.privacy}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Modal Footer: I Agree Button */}
+            <div className="border-t border-slate-100 pt-4 flex items-center justify-end gap-3 shrink-0">
+              <button 
+                onClick={() => setShowTermsModal(false)}
+                className="px-5 py-3 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition-colors"
+              >
+                Close
+              </button>
+              <button 
+                onClick={handleAgreeTerms}
+                className="px-6 py-3 rounded-xl bg-[#5846e0] hover:bg-[#4b3eef] text-white font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-2 transition-all active:scale-[0.98]"
+              >
+                <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                <span>I AGREE (আমি সম্মত)</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

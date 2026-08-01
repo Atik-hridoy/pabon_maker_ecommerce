@@ -61,14 +61,18 @@ export default function ProductDetails() {
     <MainLayout>
       <main className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8">
         {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 mb-8 text-body-sm text-on-surface-variant">
-          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <Link to="/components" className="hover:text-primary transition-colors">Components</Link>
-          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <span className="text-primary font-semibold">{product.category_name}</span>
-          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <span className="text-primary font-semibold">{product.name}</span>
+        <nav className="flex items-center flex-wrap gap-1.5 sm:gap-2 mb-6 sm:mb-8 text-xs sm:text-body-sm text-on-surface-variant font-medium">
+          <Link to="/" className="hover:text-secondary transition-colors">Home</Link>
+          <span className="material-symbols-outlined text-[14px] sm:text-[16px] text-outline">chevron_right</span>
+          <Link to="/categories" className="hover:text-secondary transition-colors">Explore</Link>
+          {product.category_name && (
+            <>
+              <span className="material-symbols-outlined text-[14px] sm:text-[16px] text-outline">chevron_right</span>
+              <span className="text-on-surface font-semibold truncate max-w-[120px] sm:max-w-none">{product.category_name}</span>
+            </>
+          )}
+          <span className="material-symbols-outlined text-[14px] sm:text-[16px] text-outline">chevron_right</span>
+          <span className="text-primary font-bold truncate max-w-[150px] sm:max-w-none">{product.name}</span>
         </nav>
 
         <ProductHero product={product} />

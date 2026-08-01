@@ -19,10 +19,16 @@ export const getProduct = async (id) => {
   });
 };
 
-export const getPublicProducts = async (page = 1, category = null) => {
+export const getPublicProducts = async (page = 1, categories = null) => {
   let url = `/products/public/?page=${page}`;
-  if (category) {
-    url += `&category=${encodeURIComponent(category)}`;
+  if (categories) {
+    if (Array.isArray(categories) && categories.length > 0) {
+      categories.forEach(cat => {
+        url += `&category=${encodeURIComponent(cat)}`;
+      });
+    } else if (typeof categories === 'string' && categories.trim()) {
+      url += `&category=${encodeURIComponent(categories)}`;
+    }
   }
   return apiClient(url, {
     method: 'GET'
@@ -83,6 +89,25 @@ export const deleteProduct = async (id) => {
   }
   return data;
 };
+
+export const updateProductStock = async (id, stock_count) => {
+  const token = storage.getToken();
+  const response = await fetch(`${API_BASE_URL}/products/${id}/`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ stock_count })
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw { status: response.status, data };
+  }
+  return data;
+};
+
 
 export const getBanners = async () => {
   return apiClient('/products/banners/', {

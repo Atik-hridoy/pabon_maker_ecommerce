@@ -8,6 +8,7 @@ import AddressesTab from './components/AddressesTab';
 import PaymentMethodsTab from './components/PaymentMethodsTab';
 import WishlistTab from './components/WishlistTab';
 import SettingsTab from './components/SettingsTab';
+import DashboardSearch from './components/DashboardSearch';
 import AdminDashboard from './AdminDashboard';
 import { storage } from '../../utils/localStorage';
 
@@ -163,11 +164,8 @@ export default function Account() {
             <h1 className="text-xl md:text-2xl font-bold text-on-surface">{getPageTitle()}</h1>
           </div>
           <div className="flex items-center gap-8">
-            {/* Search */}
-            <div className="hidden sm:flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant">
-              <span className="material-symbols-outlined text-[18px] text-outline">search</span>
-              <input className="bg-transparent border-none focus:ring-0 text-sm font-medium text-on-surface placeholder:text-outline-variant" placeholder="Search..." type="text" />
-            </div>
+            {/* Global Dashboard Search */}
+            <DashboardSearch onNavigateTab={(tab) => { setActiveTab(tab); }} />
             {/* User Avatar */}
             <div className="flex items-center gap-3 border-l border-outline-variant pl-6">
               <div className="text-right hidden md:block">

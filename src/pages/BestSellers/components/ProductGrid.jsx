@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBestSellers } from '../../../api/productService';
 import { getWishlist } from '../../../api/activityService';
 import { HomeProductCard } from '../../Home/components/ProductDisplay';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function ProductGrid() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [wishlistIds, setWishlistIds] = useState([]);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,8 +38,29 @@ export default function ProductGrid() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (products.length === 0) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".bestseller-card", {
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: "top 90%",
+          once: true
+        },
+        y: 20,
+        opacity: 0,
+        stagger: 0.05,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    }, gridRef);
+
+    return () => ctx.revert();
+  }, [products]);
+
   return (
-    <div className="py-8">
+    <div ref={gridRef} className="py-8 overflow-hidden">
       <div className="mb-8">
         <p className="text-secondary font-label-caps text-label-caps tracking-widest mb-2 uppercase">
           Top Picks
@@ -60,7 +86,7 @@ export default function ProductGrid() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {products.map((product, index) => (
-            <div key={product.id} className="relative">
+            <div key={product.id} className="bestseller-card relative">
               {/* Rank Badge */}
               {index < 3 && (
                 <div className={`absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md ${

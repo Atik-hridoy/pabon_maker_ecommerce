@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getRecommendations, getWishlist } from '../../../api/activityService';
 import { HomeProductCard } from './ProductDisplay';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function RecommendedProducts() {
   const [products, setProducts] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
   const [loading, setLoading] = useState(true);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,15 +38,36 @@ export default function RecommendedProducts() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (products.length === 0) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".rec-card", {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 90%",
+          once: true
+        },
+        y: 20,
+        opacity: 0,
+        stagger: 0.05,
+        duration: 0.4,
+        ease: "power2.out"
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [products]);
+
   if (loading) return null;
   if (!products || products.length === 0) return null;
 
   return (
-    <section className="py-12 bg-surface-container-lowest border-t border-outline-variant/30">
+    <section ref={containerRef} className="py-6 md:py-12 bg-surface-container-lowest border-t border-outline-variant/30 overflow-hidden">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-4 md:mb-8 flex items-center justify-between">
           <div>
-            <p className="text-secondary font-label-caps text-label-caps tracking-widest mb-2 uppercase">
+            <p className="text-secondary font-label-caps text-label-caps tracking-widest mb-1 uppercase">
               Based on your activity
             </p>
             <h2 className="font-headline-md text-headline-md text-on-surface">
@@ -50,13 +76,14 @@ export default function RecommendedProducts() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
           {products.map((product) => (
-            <HomeProductCard 
-              key={product.id} 
-              product={product} 
-              initialWishlisted={wishlistIds.includes(product.id)}
-            />
+            <div key={product.id} className="rec-card">
+              <HomeProductCard 
+                product={product} 
+                initialWishlisted={wishlistIds.includes(product.id)}
+              />
+            </div>
           ))}
         </div>
       </div>

@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicVouchers } from '../../../api/checkoutService';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function PromoBanner() {
   const navigate = useNavigate();
   const [vouchers, setVouchers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const bannerRef = useRef(null);
+  const cardRef = useRef(null);
 
   useEffect(() => {
     const fetchVouchers = async () => {
@@ -22,6 +28,24 @@ export default function PromoBanner() {
   }, []);
 
   useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(cardRef.current, {
+        scrollTrigger: {
+          trigger: bannerRef.current,
+          start: "top 90%",
+          once: true
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out"
+      });
+    }, bannerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
     if (vouchers.length > 1) {
       const interval = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % vouchers.length);
@@ -33,7 +57,7 @@ export default function PromoBanner() {
   const activeVoucher = vouchers[currentIndex];
 
   return (
-    <section className="relative overflow-hidden py-24 bg-surface-container-lowest">
+    <section ref={bannerRef} className="relative overflow-hidden py-8 md:py-24 bg-surface-container-lowest">
       {/* Dynamic Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-on-surface to-primary-container"></div>
       {/* Glowing Orbs */}
@@ -47,7 +71,7 @@ export default function PromoBanner() {
       }}></div>
 
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-12 bg-white/10 backdrop-blur-xl p-10 md:p-16 border border-white/20 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] min-h-[300px]">
+        <div ref={cardRef} className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12 bg-white/10 backdrop-blur-xl p-6 md:p-16 border border-white/20 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] min-h-[220px]">
           
           <div className="space-y-6 text-center md:text-left flex-1 relative w-full overflow-hidden h-[180px] md:h-[150px]">
             {vouchers.length === 0 ? (

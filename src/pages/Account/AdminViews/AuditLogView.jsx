@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getAuditLogs, getAuditLogDetails } from '../../../api/billingService';
+import { toast } from '../../../components/ToastContainer';
 
 export default function AuditLogView() {
   const [logs, setLogs] = useState([]);
@@ -40,7 +41,7 @@ export default function AuditLogView() {
       });
     } catch (err) {
       console.error(err);
-      alert('Failed to load log details.');
+      toast.error('Failed to load log details.', 'Log Error');
     } finally {
       setLoadingDiff(null);
     }

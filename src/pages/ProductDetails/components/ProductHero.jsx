@@ -1,16 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../../../api/client';
 import { storage } from '../../../utils/localStorage';
 import { cartService } from '../../../utils/cartService';
+import gsap from 'gsap';
 
 export default function ProductHero({ product }) {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const mainImageRef = useRef(null);
   
   if (!product) return null;
+
+  const handleImageClick = (imgSrc) => {
+    if (selectedImage === imgSrc) return;
+
+    if (mainImageRef.current) {
+      // Shuffle Out
+      gsap.to(mainImageRef.current, {
+        scale: 0.8,
+        rotation: -10,
+        x: -30,
+        opacity: 0.3,
+        duration: 0.2,
+        ease: "power2.in",
+        onComplete: () => {
+          setSelectedImage(imgSrc);
+          // Shuffle In
+          gsap.fromTo(
+            mainImageRef.current,
+            { scale: 0.85, rotation: 10, x: 30, opacity: 0.3 },
+            { scale: 1, rotation: 0, x: 0, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
+          );
+        }
+      });
+    } else {
+      setSelectedImage(imgSrc);
+    }
+  };
 
   const handleAuthCheck = (action, redirect, state) => {
     if (!storage.isLoggedIn()) {
@@ -63,8 +92,8 @@ export default function ProductHero({ product }) {
               return (
                 <button 
                   key={img.id || idx} 
-                  onClick={() => setSelectedImage(img.image)}
-                  className={`w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border-2 rounded-lg overflow-hidden bg-white p-2 transition-all ${isSelected ? 'border-secondary-container' : 'border-outline-variant hover:border-secondary-container'}`}
+                  onClick={() => handleImageClick(img.image)}
+                  className={`w-16 h-16 md:w-20 md:h-20 flex-shrink-0 border-2 rounded-lg overflow-hidden bg-white p-2 transition-all transform active:scale-95 ${isSelected ? 'border-secondary-container shadow-md scale-105' : 'border-outline-variant hover:border-secondary-container'}`}
                 >
                   <img className="w-full h-full object-contain" alt={`${product.name} - ${idx}`} src={imgUrl} />
                 </button>
@@ -76,10 +105,11 @@ export default function ProductHero({ product }) {
             </button>
           )}
         </div>
-        <div className="flex-grow order-1 md:order-2 bg-white rounded-xl border border-outline-variant p-8 flex items-center justify-center part-shadow min-h-[400px]">
+        <div className="flex-grow order-1 md:order-2 bg-white rounded-xl border border-outline-variant p-8 flex items-center justify-center part-shadow min-h-[400px] overflow-hidden">
           {displayImageUrl ? (
             <img 
-              className="max-w-full max-h-[500px] object-contain" 
+              ref={mainImageRef}
+              className="max-w-full max-h-[500px] object-contain transform-gpu" 
               alt={product.name} 
               src={displayImageUrl} 
             />

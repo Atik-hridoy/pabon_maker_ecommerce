@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getAllOrders, updateOrderStatus } from '../../../api/adminService';
+import { toast } from '../../../components/ToastContainer';
 
 const getStatusColor = (status) => {
-  switch(status.toUpperCase()) {
+  switch(status ? status.toUpperCase() : '') {
     case 'PENDING': return 'orange-500';
     case 'CONFIRMED': return 'blue-500';
-    case 'PROCESSING': return 'blue-600';
-    case 'SHIPPED': return 'secondary-container';
     case 'DELIVERED': return 'green-600';
-    case 'CANCELLED': return 'error';
     default: return 'outline';
   }
 };
@@ -32,8 +30,8 @@ export default function OrdersView() {
   const [newStatus, setNewStatus] = useState('');
   const [updating, setUpdating] = useState(false);
 
-  const filters = ['All', 'Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
-  const statusOptions = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
+  const filters = ['All', 'Pending', 'Confirmed', 'Delivered'];
+  const statusOptions = ['PENDING', 'CONFIRMED', 'DELIVERED'];
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -65,16 +63,18 @@ export default function OrdersView() {
     try {
       const res = await updateOrderStatus(selectedOrder.id, newStatus);
       if (res.success) {
+        toast.success(`Order #${selectedOrder.id} status updated to ${newStatus}`, "Order Updated");
         setIsEditModalOpen(false);
         fetchOrders();
       }
     } catch(err) {
       console.error("Failed to update status", err);
-      alert("Failed to update status.");
+      toast.error("Failed to update order status.", "Update Failed");
     } finally {
       setUpdating(false);
     }
   };
+
 
   const handleCancelClick = async (orderId) => {
     if(window.confirm("Are you sure you want to cancel this order?")) {

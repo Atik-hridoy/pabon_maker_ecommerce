@@ -8,17 +8,23 @@ export default function ProfileTab() {
     lastName: '',
     email: '',
     phone: '',
-    shippingAddress: ''
+    shippingAddress: '',
+    agreedTerms: false,
+    agreedTermsAt: null
   });
   const [avatarPreview, setAvatarPreview] = useState("https://lh3.googleusercontent.com/aida-public/AB6AXuAWRGJEuznHoQRceDQv-_QiKQetTa_KyBGBgQi5sDwyeP0jDcV6y5YhkmPkMiRzfU7JS8t8Kq36qs5K3-cppp36vCMHNhobhEAZJQegc-Bi7YsLpbRjKFBVKx0EbBQq1A64NBn0ut_6j0j-DRNUROpuWPNmNlaplIC4ayctzDFwfEXUalsb2mOCbsTgVKdYIkisrPWF7q8ZXEGmyiNtdUv9ZcRQ0Y5xe06Flpo61B_lumYhPi_wj0I5Mw");
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
       const token = storage.getToken();
-      if (!token) return;
+      if (!token) {
+        setLoadingProfile(false);
+        return;
+      }
       try {
         const response = await fetch(`${API_BASE_URL}/accounts/profile/`, {
           method: 'GET',
@@ -33,7 +39,9 @@ export default function ProfileTab() {
             lastName: data.data.last_name || '',
             email: data.data.email || '',
             phone: data.data.phone_number || '',
-            shippingAddress: data.data.shipping_address || ''
+            shippingAddress: data.data.shipping_address || '',
+            agreedTerms: data.data.agreed_terms || false,
+            agreedTermsAt: data.data.agreed_terms_at || null
           });
           if (data.data.avatar) {
             setAvatarPreview(data.data.avatar);
@@ -45,6 +53,8 @@ export default function ProfileTab() {
         }
       } catch (err) {
         console.error("Failed to fetch profile", err);
+      } finally {
+        setLoadingProfile(false);
       }
     };
     fetchProfile();
@@ -211,7 +221,7 @@ export default function ProfileTab() {
                 />
               </div>
             </div>
-            
+
             <div className="pt-4 border-t border-outline-variant flex items-center justify-between">
               {isSaved ? (
                 <span className="text-green-600 font-bold text-sm flex items-center gap-2">

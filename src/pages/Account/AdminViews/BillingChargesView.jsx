@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getBillingSettings, updateBillingSettings, getVouchers, createVoucher } from '../../../api/billingService';
 import VoucherModal from './VoucherModal';
+import { toast } from '../../../components/ToastContainer';
+
 
 export default function BillingChargesView() {
   const [vatEnabled, setVatEnabled] = useState(true);
@@ -91,9 +93,10 @@ export default function BillingChargesView() {
         gateway_fees: { bkash_percentage: Number(bkashFee), nagad_percentage: Number(nagadFee), cod_fee: 0.0 }
       };
       await updateBillingSettings(payload);
-      alert('Settings updated successfully!');
+      toast.success('Global billing, delivery, & VAT settings saved successfully!', 'Settings Saved');
     } catch (err) {
       console.error(err);
+      toast.error(err.data?.detail || 'Failed to save settings. Please try again.', 'Save Error');
       setError(err.data?.detail || 'Failed to save settings. Please try again.');
     } finally {
       setSaving(false);
@@ -358,10 +361,10 @@ export default function BillingChargesView() {
               const newVoucher = await createVoucher(payload);
               setVouchers(prev => [newVoucher, ...prev]);
               setIsVoucherModalOpen(false);
-              alert(`Voucher '${newVoucher.code}' created successfully in the backend!`);
+              toast.success(`Voucher '${newVoucher.code}' created successfully!`, 'Voucher Created');
             } catch (err) {
               console.error(err);
-              alert('Failed to save voucher. Please check inputs.');
+              toast.error('Failed to create voucher. Please check inputs.', 'Creation Error');
             }
           }}
         />
