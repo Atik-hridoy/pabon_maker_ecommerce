@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicProducts } from '../../../api/productService';
-import { BASE_URL } from '../../../api/client';
+import { BASE_URL, getImageUrl } from '../../../api/client';
 
 export default function RelatedProducts({ categoryName }) {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ export default function RelatedProducts({ categoryName }) {
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-gutter overflow-hidden">
         {visibleProducts.map(product => {
           const coverImage = product.images?.find(img => img.is_cover)?.image || product.images?.[0]?.image;
-          const finalImgUrl = coverImage ? (coverImage.startsWith('http') ? coverImage : `${BASE_URL}${coverImage}`) : '';
+          const finalImgUrl = getImageUrl(coverImage);
           
           return (
             <div key={product.id} onClick={() => navigate(`/product/${product.id}`)} className="bg-white border border-outline-variant rounded-xl p-6 part-shadow part-shadow-hover transition-all group flex flex-col cursor-pointer">

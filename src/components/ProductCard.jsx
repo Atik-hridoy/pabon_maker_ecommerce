@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../api/client';
+import { BASE_URL, getImageUrl } from '../api/client';
 import { toggleWishlist } from '../api/activityService';
 import { cartService } from '../utils/cartService';
 import { storage } from '../utils/localStorage';
@@ -10,7 +10,7 @@ export default function ProductCard({ product, initialWishlisted = false }) {
   const [isWishlisted, setIsWishlisted] = useState(initialWishlisted);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const imgUrl = product.images && product.images.length > 0 ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) : '';
-  const finalImgUrl = imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`;
+  const finalImgUrl = getImageUrl(imgUrl);
 
   useEffect(() => {
     setIsWishlisted(initialWishlisted);

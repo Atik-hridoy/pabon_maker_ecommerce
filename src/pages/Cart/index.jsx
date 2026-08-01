@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
 import { cartService } from '../../utils/cartService';
-import { BASE_URL } from '../../api/client';
+import { BASE_URL, getImageUrl } from '../../api/client';
 import { storage } from '../../utils/localStorage';
 
 export default function ShoppingCart() {
@@ -78,7 +78,7 @@ export default function ShoppingCart() {
                 const imgUrl = item.product.images && item.product.images.length > 0 
                   ? (item.product.images.find(img => img.is_cover)?.image || item.product.images[0].image) 
                   : '';
-                const finalImgUrl = imgUrl ? (imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`) : '';
+                const finalImgUrl = getImageUrl(imgUrl);
                 
                 return (
                   <div key={item.product.id} className="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 group transition-all hover:shadow-sm">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AddProductModal from './AddProductModal';
-import { BASE_URL } from '../../../api/client';
+import { BASE_URL, getImageUrl } from '../../../api/client';
 import { getProducts, createProduct, updateProduct, deleteProduct, updateProductStock } from '../../../api/productService';
 import { toast } from '../../../components/ToastContainer';
 
@@ -296,7 +296,7 @@ export default function InventoryView() {
                           <div className="flex items-center gap-3">
                             <div className="w-9 h-9 bg-surface-container rounded-lg border border-outline-variant flex items-center justify-center shrink-0 overflow-hidden">
                               {product.images && product.images.length > 0 ? (
-                                <img src={`${BASE_URL}${product.images.find(i => i.is_cover)?.image || product.images[0].image}`} className="w-full h-full object-cover" alt={product.name}/>
+                                <img src={getImageUrl(product.images.find(i => i.is_cover)?.image || product.images[0].image)} className="w-full h-full object-cover" alt={product.name}/>
                               ) : (
                                 <span className="material-symbols-outlined text-on-surface-variant text-[18px]">category</span>
                               )}

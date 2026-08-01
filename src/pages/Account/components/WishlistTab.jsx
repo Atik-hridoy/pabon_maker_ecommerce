@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getWishlist, toggleWishlist } from '../../../api/activityService';
 import { cartService } from '../../../utils/cartService';
-import { BASE_URL } from '../../../api/client';
+import { BASE_URL, getImageUrl } from '../../../api/client';
 
 export default function WishlistTab() {
   const [wishlist, setWishlist] = useState([]);
@@ -75,7 +75,7 @@ export default function WishlistTab() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
             {wishlist.map(product => {
               const imgUrl = product.images && product.images.length > 0 ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) : '';
-              const finalImgUrl = imgUrl ? (imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`) : '';
+              const finalImgUrl = getImageUrl(imgUrl);
               return (
               <div key={product.id} className="flex gap-4 p-4 border border-outline-variant rounded-lg hover:border-secondary transition-colors group relative">
                 <button 

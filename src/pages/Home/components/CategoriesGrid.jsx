@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCategories } from '../../../api/productService';
-import { BASE_URL } from '../../../api/client';
+import { BASE_URL, getImageUrl } from '../../../api/client';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -78,7 +78,7 @@ export default function CategoriesGrid({ selectedCategory, onSelectCategory }) {
                     <img 
                       className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" 
                       alt={cat.name} 
-                      src={cat.image.startsWith('http') ? cat.image : `${BASE_URL}${cat.image}`} 
+                      src={getImageUrl(cat.image)} 
                     />
                   ) : (
                     <span className="material-symbols-outlined text-[32px] md:text-[48px] text-on-surface-variant transition-transform duration-500 group-hover:scale-110">category</span>

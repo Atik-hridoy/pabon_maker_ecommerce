@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getBanners } from '../../../api/productService';
-import { BASE_URL } from "../../../api/client";
+import { BASE_URL, getImageUrl } from "../../../api/client";
 import gsap from 'gsap';
 
 export default function Hero() {
@@ -125,7 +125,7 @@ export default function Hero() {
              <img 
                key={idx}
                alt={`Banner ${idx + 1}`}
-               src={banner.image?.startsWith('http') ? banner.image : `${BASE_URL}${banner.image || banner}`}
+               src={getImageUrl(banner.image || banner)}
                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentSlide === idx ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
              />
           ))}

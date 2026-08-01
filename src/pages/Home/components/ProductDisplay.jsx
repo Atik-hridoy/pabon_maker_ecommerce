@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 import { getPublicProducts } from '../../../api/productService';
 import { toggleWishlist, getWishlist } from '../../../api/activityService';
-import { BASE_URL } from '../../../api/client';
+import { BASE_URL, getImageUrl } from '../../../api/client';
 import { cartService } from '../../../utils/cartService';
 import { storage } from '../../../utils/localStorage';
 
@@ -55,7 +55,7 @@ export function HomeProductCard({ product, initialWishlisted = false }) {
       <div className="relative h-32 mb-4 overflow-hidden flex items-center justify-center p-2 bg-surface-container-lowest rounded">
         {coverImage ? (
           <img 
-            src={coverImage.startsWith('http') ? coverImage : `${BASE_URL}${coverImage}`}
+            src={getImageUrl(coverImage)}
             alt={product.name}
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" 
           />

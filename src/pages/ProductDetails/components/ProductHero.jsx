@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../../../api/client';
+import { BASE_URL, getImageUrl } from '../../../api/client';
 import { storage } from '../../../utils/localStorage';
 import { cartService } from '../../../utils/cartService';
 import gsap from 'gsap';
@@ -78,7 +78,7 @@ export default function ProductHero({ product }) {
     ? (product.images.find(img => img.is_cover)?.image || product.images[0].image) 
     : '';
   const displayImage = selectedImage || defaultImage;
-  const displayImageUrl = displayImage ? (displayImage.startsWith('http') ? displayImage : `${BASE_URL}${displayImage}`) : '';
+  const displayImageUrl = getImageUrl(displayImage);
 
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start mb-16">
@@ -87,7 +87,7 @@ export default function ProductHero({ product }) {
         <div className="flex md:flex-col order-2 md:order-1 gap-4 overflow-x-auto scrollbar-hide md:w-20">
           {product.images && product.images.length > 0 ? (
             product.images.map((img, idx) => {
-              const imgUrl = img.image.startsWith('http') ? img.image : `${BASE_URL}${img.image}`;
+              const imgUrl = getImageUrl(img.image);
               const isSelected = selectedImage ? selectedImage === img.image : img.is_cover;
               return (
                 <button 

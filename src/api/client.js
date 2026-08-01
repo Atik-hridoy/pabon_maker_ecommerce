@@ -2,6 +2,14 @@
 export const BASE_URL = 'https://pobon-meker-backend.onrender.com';
 export const API_BASE_URL = `${BASE_URL}/api`;
 
+export const getImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http') || path.includes('res.cloudinary.com') || path.startsWith('//')) {
+    return path;
+  }
+  return `${BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+};
+
 /**
  * A wrapper around the native fetch API to handle base URLs, headers, and standard error handling.
  */

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BASE_URL } from '../../api/client';
+import { BASE_URL, getImageUrl } from '../../api/client';
 import { calculateCheckout } from '../../api/checkoutService';
 
 export default function OrderSummary({ cartItems = [], paymentMethod, readonly = false, initialVoucher = null, onVoucherChange, children }) {
@@ -93,7 +93,7 @@ export default function OrderSummary({ cartItems = [], paymentMethod, readonly =
               const imgUrl = item.product.images && item.product.images.length > 0 
                 ? (item.product.images.find(img => img.is_cover)?.image || item.product.images[0].image) 
                 : '';
-              const finalImgUrl = imgUrl ? (imgUrl.startsWith('http') ? imgUrl : `${BASE_URL}${imgUrl}`) : '';
+              const finalImgUrl = getImageUrl(imgUrl);
               
               return (
                 <div key={idx} className="flex gap-4 items-start border-b border-outline-variant/30 pb-3 last:border-0 last:pb-0">
