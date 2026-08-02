@@ -1,4 +1,5 @@
-// Base configuration for all API calls
+import { storage } from '../utils/localStorage';
+
 export const BASE_URL = 'https://pobon-meker-backend.onrender.com';
 export const API_BASE_URL = `${BASE_URL}/api`;
 
@@ -11,24 +12,51 @@ export const getImageUrl = (path) => {
 };
 
 /**
- * A wrapper around the native fetch API to handle base URLs, headers, and standard error handling.
+ * A wrapper around the native fetch API to handle base URLs, headers, token injection, and standard error handling.
  */
 export const apiClient = async (endpoint, { method = 'GET', body, headers = {}, ...customConfig } = {}) => {
+  const token = storage.getToken();
+  
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
+  };
+
+  // Auto-inject token if available
+  if (token) {
+    defaultHeaders['Authorization'] = `Bearer ${token}`;
+  }
+
   const config = {
     method,
     headers: {
-      'Content-Type': 'application/json',
+      ...defaultHeaders,
       ...headers,
     },
     ...customConfig,
   };
 
   if (body) {
-    config.body = JSON.stringify(body);
+    // Handle FormData for file uploads automatically
+    if (body instanceof FormData) {
+      delete config.headers['Content-Type']; // Let browser set boundary
+      config.body = body;
+    } else {
+      config.body = JSON.stringify(body);
+    }
   }
 
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    
+    // Global 401 Unauthorized Handling
+    if (response.status === 401) {
+      storage.clearAuth();
+      // Optionally emit an event or redirect to login here
+    }
+
+    if (response.status === 204) {
+      return true; // No content
+    }
     
     // Attempt to parse JSON regardless of status
     let data;
@@ -39,7 +67,6 @@ export const apiClient = async (endpoint, { method = 'GET', body, headers = {}, 
     }
 
     if (!response.ok) {
-      // If the backend returned field-specific errors, we throw them
       throw {
         status: response.status,
         data: data || { detail: 'An unexpected error occurred' }
@@ -48,7 +75,6 @@ export const apiClient = async (endpoint, { method = 'GET', body, headers = {}, 
 
     return data;
   } catch (error) {
-    // Network errors or thrown errors from above
     return Promise.reject(error);
   }
 };

@@ -1,5 +1,4 @@
-import { apiClient, API_BASE_URL } from './client';
-import { storage } from '../utils/localStorage';
+import { apiClient } from './client';
 
 export const getCategories = async () => {
   return apiClient('/products/categories/', {
@@ -8,20 +7,10 @@ export const getCategories = async () => {
 };
 
 export const createCategory = async (formData) => {
-  const token = storage.getToken();
-  const response = await fetch(`${API_BASE_URL}/products/categories/`, {
+  return apiClient('/products/categories/', {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: formData
   });
-  
-  const data = await response.json();
-  if (!response.ok) {
-    throw { status: response.status, data };
-  }
-  return data;
 };
 
 export const getProducts = async () => {
@@ -53,76 +42,30 @@ export const getPublicProducts = async (page = 1, categories = null) => {
 };
 
 export const createProduct = async (formData) => {
-  const token = storage.getToken();
-  // We use fetch directly here to allow the browser to set the correct multipart/form-data boundary automatically
-  const response = await fetch(`${API_BASE_URL}/products/`, {
+  return apiClient('/products/', {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: formData
   });
-  
-  const data = await response.json();
-  if (!response.ok) {
-    throw { status: response.status, data };
-  }
-  return data;
 };
 
 export const updateProduct = async (id, formData) => {
-  const token = storage.getToken();
-  const response = await fetch(`${API_BASE_URL}/products/${id}/`, {
+  return apiClient(`/products/${id}/`, {
     method: 'PATCH',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: formData
   });
-  
-  const data = await response.json();
-  if (!response.ok) {
-    throw { status: response.status, data };
-  }
-  return data;
 };
 
 export const deleteProduct = async (id) => {
-  const token = storage.getToken();
-  const response = await fetch(`${API_BASE_URL}/products/${id}/`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+  return apiClient(`/products/${id}/`, {
+    method: 'DELETE'
   });
-  
-  if (response.status === 204) {
-    return true;
-  }
-  
-  const data = await response.json();
-  if (!response.ok) {
-    throw { status: response.status, data };
-  }
-  return data;
 };
 
 export const updateProductStock = async (id, stock_count) => {
-  const token = storage.getToken();
-  const response = await fetch(`${API_BASE_URL}/products/${id}/`, {
+  return apiClient(`/products/${id}/`, {
     method: 'PATCH',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ stock_count })
+    body: { stock_count }
   });
-
-  const data = await response.json();
-  if (!response.ok) {
-    throw { status: response.status, data };
-  }
-  return data;
 };
 
 
@@ -133,20 +76,10 @@ export const getBanners = async () => {
 };
 
 export const uploadBanners = async (formData) => {
-  const token = storage.getToken();
-  const response = await fetch(`${API_BASE_URL}/products/banners/`, {
+  return apiClient('/products/banners/', {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: formData
   });
-  
-  const data = await response.json();
-  if (!response.ok) {
-    throw { status: response.status, data };
-  }
-  return data;
 };
 
 export const getProductReviews = async (productId) => {
@@ -156,12 +89,8 @@ export const getProductReviews = async (productId) => {
 };
 
 export const submitProductReview = async (productId, payload) => {
-  const token = storage.getToken();
   return apiClient(`/products/${productId}/reviews/`, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: payload
   });
 };

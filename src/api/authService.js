@@ -1,5 +1,4 @@
 import { apiClient } from './client';
-import { storage } from '../utils/localStorage';
 
 /**
  * Registers a new user.
@@ -10,7 +9,6 @@ import { storage } from '../utils/localStorage';
  * @returns {Promise<Object>}
  */
 export const register = async (userData) => {
-  // Map the payload to match what the Django backend UserSerializer expects
   const payload = {
     full_name: userData.full_name,
     email: userData.email,
@@ -44,12 +42,8 @@ export const login = async (email, password) => {
 };
 
 export const getProfile = async () => {
-  const token = storage.getToken();
   return apiClient('/accounts/profile/', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+    method: 'GET'
   });
 };
 
@@ -59,22 +53,14 @@ export const getProfile = async () => {
  * @returns {Promise<Object>}
  */
 export const getAdminUsers = async () => {
-  const token = storage.getToken();
   return apiClient('/accounts/admin/users/', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+    method: 'GET'
   });
 };
 
 export const changePassword = async (current_password, new_password, confirm_password) => {
-  const token = storage.getToken();
   return apiClient('/accounts/change-password/', {
     method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    },
     body: {
       current_password,
       new_password,
@@ -84,12 +70,8 @@ export const changePassword = async (current_password, new_password, confirm_pas
 };
 
 export const userDashboardSearch = async (query) => {
-  const token = storage.getToken();
   return apiClient(`/accounts/search/?q=${encodeURIComponent(query)}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
+    method: 'GET'
   });
 };
 
